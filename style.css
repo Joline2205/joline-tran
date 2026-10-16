@@ -45,10 +45,23 @@
 
 /* A small musical signature, with familiar pointers on interactive controls. */
 body{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%236B8B9B'><path d='M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z'/></svg>") 4 4,auto}a[href],button,summary,[role=button]{cursor:pointer}
-/* Distribute circles through the full height of the intro's right-hand whitespace. */
-.hero-intro{grid-template-columns:minmax(0,1fr) 380px;gap:40px}.hero-geometry{width:380px;height:340px;align-self:stretch}.orb-large{width:148px;height:148px;left:12px;top:12px;animation:orb-rise 18s ease-in-out -5s infinite alternate}.orb-medium{width:90px;height:90px;right:9px;top:58px;animation:orb-orbit 15s ease-in-out -8s infinite alternate}.orb-outline{width:114px;height:114px;left:178px;top:213px;animation:orb-orbit 17s ease-in-out -11s infinite alternate}.orb-small{width:46px;height:46px;left:32px;bottom:8px;animation:orb-rise 12s ease-in-out -3s infinite alternate}.orb-ice{width:66px;height:66px;left:92px;top:211px;animation:orb-orbit 16s ease-in-out -7s infinite alternate}.orb-ring{width:30px;height:30px;right:7px;top:171px;animation:orb-rise 10s ease-in-out -6s infinite alternate}
-@keyframes orb-rise{from{transform:translate3d(-3px,5px,0)}to{transform:translate3d(5px,-9px,0)}}
-@keyframes orb-orbit{from{transform:translate3d(-5px,4px,0)}to{transform:translate3d(6px,-7px,0)}}
-@media(max-width:1000px){.hero-intro{grid-template-columns:minmax(0,1fr) 270px;gap:24px}.hero-geometry{width:270px;height:350px}.orb-large{width:118px;height:118px;left:0}.orb-medium{width:76px;height:76px;right:5px}.orb-outline{width:100px;height:100px;left:155px;top:236px}.orb-ice{width:58px;height:58px;left:55px;top:198px}.orb-small{left:10px}.orb-ring{right:12px;top:175px}}
-@media(max-width:640px){.hero-intro{grid-template-columns:minmax(0,1fr);gap:22px}.hero-geometry{width:100%;height:220px}.orb-large{width:104px;height:104px;left:5%;top:5px}.orb-medium{width:70px;height:70px;right:6%;top:15px}.orb-outline{width:84px;height:84px;left:auto;right:13%;top:122px}.orb-ice{width:50px;height:50px;left:42%;top:85px}.orb-small{width:36px;height:36px;left:12%;bottom:7px}.orb-ring{width:24px;height:24px;right:0;top:100px}}
+/* Technical texture remains quiet behind navigation in either theme. */
+:root{--header-grid:rgba(107,139,155,.12);--circle-outline:#6b8b9b}
+:root[data-theme=dark]{--header-grid:rgba(255,255,255,.07);--circle-outline:#c8d8e0}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--header-grid:rgba(255,255,255,.07);--circle-outline:#c8d8e0}}
+.site-header{background-image:linear-gradient(to right,var(--header-grid) 1px,transparent 1px),linear-gradient(to bottom,var(--header-grid) 1px,transparent 1px);background-size:24px 24px}
+.orb-outline .orb-surface,.orb-ring .orb-surface{border:2.5px solid var(--circle-outline)}.geo-orb,.orb-surface{opacity:1}
+/* Leave a motion-safe margin around the right-hand composition. */
+.hero-intro{grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:40px}.hero-geometry{width:100%;height:380px;align-self:stretch;pointer-events:none}.hero-geometry>.geo-orb{pointer-events:auto}
+.orb-large{width:148px;height:148px;left:22px;top:36px;animation:orb-vertical 6s ease-in-out 0s infinite alternate both}
+.orb-medium{width:90px;height:90px;right:38px;top:60px;animation:orb-horizontal 7s ease-in-out 1.2s infinite alternate both}
+.orb-outline{width:114px;height:114px;left:auto;right:55px;top:218px;animation:orb-sway 8s ease-in-out 2.5s infinite alternate both}
+.orb-small{width:46px;height:46px;left:45px;bottom:29px;animation:orb-vertical 5s ease-in-out 3.8s infinite alternate both}
+.orb-ice{width:66px;height:66px;left:130px;top:235px;animation:orb-horizontal 6.5s ease-in-out 1.2s infinite alternate both}
+.orb-ring{width:30px;height:30px;right:36px;top:180px;animation:orb-sway 7.5s ease-in-out 3.8s infinite alternate both}
+@keyframes orb-vertical{from{transform:translate3d(0,-24px,0)}to{transform:translate3d(12px,20px,0)}}
+@keyframes orb-horizontal{from{transform:translate3d(-20px,0,0)}to{transform:translate3d(25px,28px,0)}}
+@keyframes orb-sway{0%{transform:translate3d(0,-30px,0)}33%{transform:translate3d(26px,-15px,0)}66%{transform:translate3d(26px,15px,0)}100%{transform:translate3d(0,30px,0)}}
+@media(max-width:1000px){.hero-intro{grid-template-columns:minmax(0,1fr) 270px;gap:24px}.hero-geometry{height:380px}.orb-large{width:118px;height:118px;left:10px}.orb-medium{width:76px;height:76px;right:28px;top:100px}.orb-outline{width:100px;height:100px;right:35px;top:235px}.orb-ice{width:58px;height:58px;left:40px;top:207px}.orb-small{left:25px}.orb-ring{right:35px;top:195px}}
+@media(max-width:640px){.hero-intro{grid-template-columns:minmax(0,1fr);gap:22px}.hero-geometry{width:100%;height:320px}.orb-large{width:104px;height:104px;left:4%;top:30px}.orb-medium{width:70px;height:70px;right:35px;top:50px}.orb-outline{width:84px;height:84px;right:40px;top:192px}.orb-ice{width:50px;height:50px;left:40%;top:155px}.orb-small{width:36px;height:36px;left:10%;bottom:30px}.orb-ring{width:24px;height:24px;right:32px;top:155px}}
 @media(prefers-reduced-motion:reduce){.hero-geometry>.geo-orb{animation:none;will-change:auto}}

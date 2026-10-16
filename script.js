@@ -195,6 +195,10 @@ if (magneticHero) {
 // A throttled hero-only trail: no timers or animation loop while the mouse is idle.
 const noteHero = document.querySelector('#hero');
 if (noteHero) {
+  const particleLayer = document.createElement('div');
+  particleLayer.className = 'hero-particles';
+  particleLayer.setAttribute('aria-hidden', 'true');
+  noteHero.append(particleLayer);
   const reducedNotes = window.matchMedia('(prefers-reduced-motion: reduce)');
   const notePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const glyphs = ['♩', '♪'];
@@ -230,7 +234,8 @@ if (noteHero) {
     note.textContent = glyphs[glyphIndex++ % glyphs.length];
     const duration = 1000;
     const size = 24 + Math.random() * 4;
-    const x = Math.min(bounds.width - size - 16, Math.max(16, event.clientX - bounds.left));
+    // Keep exact tip coordinates even at the screen edges; the layer clips drift.
+    const x = event.clientX - bounds.left;
     // The baton hotspot (27, 5) is its tip, so event coordinates anchor the trail.
     const y = event.clientY - bounds.top;
     note.style.left = `${x}px`;
@@ -242,7 +247,7 @@ if (noteHero) {
     note.style.setProperty('--note-rise', '-40px');
     note.style.setProperty('--note-rotation', `${Math.random() * 36 - 18}deg`);
     note.addEventListener('animationend', () => removeNote(note), { once: true });
-    noteHero.append(note);
+    particleLayer.append(note);
     // A timeout also cleans up if animationend is suppressed by browser settings.
     liveNotes.set(note, setTimeout(() => removeNote(note), duration + 100));
   }, { passive: true });

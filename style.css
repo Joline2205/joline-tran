@@ -177,3 +177,10 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 @keyframes coffee-wash{from{transform:translateX(-110%)}to{transform:translateX(0)}}
 @keyframes waveFlow{0%{transform:translateY(-1.5%) scaleY(1.02)}50%{transform:translateY(1.5%) scaleY(1.04)}100%{transform:translateY(-.5%) scaleY(1.01)}}
 @media(prefers-reduced-motion:reduce){.is-poured .coffee-spill,.is-poured .coffee-wave{animation:none;transform:none}}
+
+/* A quiet cue occupies the clear strip between the bubbles and keyboard. */
+:root{--hint-color:#7a8a99}:root[data-theme=dark]{--hint-color:rgba(220,230,238,.65)}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--hint-color:rgba(220,230,238,.65)}}
+.hero-hint{position:absolute;bottom:20px;right:40px;z-index:5;pointer-events:none;margin:0;font-size:.8rem;font-style:italic;letter-spacing:.03em;line-height:1.5;color:var(--hint-color);animation:hint-breathe 4s ease-in-out infinite alternate}
+@keyframes hint-breathe{from{opacity:.45}to{opacity:.85}}
+@media(max-width:640px){.hero-hint{right:20px}}
+@media(prefers-reduced-motion:reduce){.hero-hint{animation:none;opacity:.75}}

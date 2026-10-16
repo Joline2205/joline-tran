@@ -65,3 +65,8 @@ body{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'
 @media(max-width:1000px){.hero-intro{grid-template-columns:minmax(0,1fr) 270px;gap:24px}.hero-geometry{height:380px}.orb-large{width:118px;height:118px;left:10px}.orb-medium{width:76px;height:76px;right:28px;top:100px}.orb-outline{width:100px;height:100px;right:35px;top:235px}.orb-ice{width:58px;height:58px;left:40px;top:207px}.orb-small{left:25px}.orb-ring{right:35px;top:195px}}
 @media(max-width:640px){.hero-intro{grid-template-columns:minmax(0,1fr);gap:22px}.hero-geometry{width:100%;height:320px}.orb-large{width:104px;height:104px;left:4%;top:30px}.orb-medium{width:70px;height:70px;right:35px;top:50px}.orb-outline{width:84px;height:84px;right:40px;top:192px}.orb-ice{width:50px;height:50px;left:40%;top:155px}.orb-small{width:36px;height:36px;left:10%;bottom:30px}.orb-ring{width:24px;height:24px;right:32px;top:155px}}
 @media(prefers-reduced-motion:reduce){.hero-geometry>.geo-orb{animation:none;will-change:auto}}
+
+/* The invisible full line reserves the final text footprint throughout typing. */
+.hero-title{display:grid;min-height:1.1em;white-space:nowrap}.hero-title::before{content:"Hi, I'm Joline|";visibility:hidden;grid-area:1 / 1;pointer-events:none}.typewriter-line{grid-area:1 / 1}.typing-cursor{color:#6b8b9b;font-weight:300;opacity:0;transition:opacity .35s ease}.is-typing .typing-cursor{animation:blink .8s infinite}.typing-complete .typing-cursor{animation:none;opacity:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.is-typing .typing-cursor{animation:none;opacity:0}.typing-cursor{transition:none}}

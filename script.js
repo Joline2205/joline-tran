@@ -45,3 +45,42 @@ document.querySelectorAll('.company-logo').forEach((logo) => {
   logo.addEventListener('error', hideUnavailableLogo);
   if (logo.complete && logo.naturalWidth === 0) hideUnavailableLogo();
 });
+
+// Type once; the accessible heading and no-JavaScript copy stay complete.
+const typingTitle = document.querySelector('.hero-title');
+if (typingTitle) {
+  const prefix = document.querySelector('#typewriter-prefix');
+  const name = document.querySelector('#typewriter-name');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const segments = [{ element: prefix, text: "Hi, I'm " }, { element: name, text: 'Joline' }];
+  let typingTimer;
+  function finishTyping() {
+    clearTimeout(typingTimer);
+    segments.forEach(({ element, text }) => { element.textContent = text; });
+    typingTitle.classList.remove('is-typing');
+    typingTitle.classList.add('typing-complete');
+  }
+  if (!reducedMotion.matches) {
+    segments.forEach(({ element }) => { element.textContent = ''; });
+    typingTitle.classList.add('is-typing');
+    let segmentIndex = 0;
+    let characterIndex = 0;
+    function typeCharacter() {
+      const segment = segments[segmentIndex];
+      segment.element.textContent += segment.text[characterIndex++];
+      if (characterIndex === segment.text.length) {
+        segmentIndex++;
+        characterIndex = 0;
+      }
+      if (segmentIndex < segments.length) {
+        typingTimer = setTimeout(typeCharacter, 80 + Math.random() * 20);
+      } else {
+        typingTimer = setTimeout(finishTyping, 3000);
+      }
+    }
+    typingTimer = setTimeout(typeCharacter, 300);
+  }
+  reducedMotion.addEventListener('change', (event) => {
+    if (event.matches) finishTyping();
+  });
+}

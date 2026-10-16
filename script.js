@@ -258,3 +258,20 @@ if (noteHero) {
   notePointer.addEventListener('change', clearNotes);
   document.addEventListener('visibilitychange', () => { if (document.hidden) clearNotes(); });
 }
+
+// Pour once at 35% visibility, then disconnect to avoid scroll-triggered resets.
+const coffeeContact = document.querySelector('#contact');
+if (coffeeContact) {
+  const pour = () => coffeeContact.classList.add('is-poured');
+  if ('IntersectionObserver' in window) {
+    const coffeeObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.35)) {
+        pour();
+        coffeeObserver.disconnect();
+      }
+    }, { threshold: 0.35 });
+    coffeeObserver.observe(coffeeContact);
+  } else {
+    pour();
+  }
+}

@@ -38,3 +38,10 @@ if (quiz) {
     selectedOption = null;
   });
 }
+
+// Keep company names visible if a third-party logo is unavailable.
+document.querySelectorAll('.company-logo').forEach((logo) => {
+  const hideUnavailableLogo = () => { logo.hidden = true; };
+  logo.addEventListener('error', hideUnavailableLogo);
+  if (logo.complete && logo.naturalWidth === 0) hideUnavailableLogo();
+});

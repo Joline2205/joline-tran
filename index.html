@@ -7,8 +7,8 @@
   <meta name="color-scheme" content="light dark">
   <title>Joline Tran — Product Strategy & Operations</title>
   <script>try{const theme=localStorage.getItem('theme');if(theme==='light'||theme==='dark')document.documentElement.dataset.theme=theme}catch(error){}</script>
-  <link rel="stylesheet" href="style.css?v=20261016-layered-circles">
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261016-slate-palette">
+  <script src="script.js?v=20261016-slate-palette" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -18,6 +18,7 @@
       <div class="nav-links"><a href="#work">Work</a><a href="#journal">Journal</a><a href="#about">About</a><a href="#contact">Contact</a></div>
       <button class="theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false"><span aria-hidden="true">◐</span><span class="theme-label">Dark mode</span></button>
     </nav>
+    <svg class="nav-wave" viewBox="0 0 1440 12" preserveAspectRatio="none" aria-hidden="true"><path d="M0 0H1440V5C1200 14 1080 0 840 6S480 13 240 6S80 4 0 8Z"/></svg>
   </header>
   <main id="main">
     <section class="hero container" aria-labelledby="hero-title">
@@ -28,19 +29,19 @@
           <div class="hero-bottom"><p>Senior at Georgia Tech studying Economics &amp; Industrial Design. Previously Strategy &amp; Operations Intern at <a href="https://sentry.io/" target="_blank" rel="noopener noreferrer">Sentry</a> in San Francisco.</p>
           <div class="hero-actions"><a class="button primary" href="#work">View Work <span aria-hidden="true">↘</span></a><a class="button" href="#contact">Say Hello <span aria-hidden="true">↗</span></a></div></div>
         </div>
-        <div class="hero-geometry" aria-hidden="true"><span class="geo-backdrop"></span><span class="geo-orb orb-large"></span><span class="geo-orb orb-medium"></span><span class="geo-orb orb-outline"></span><span class="geo-orb orb-small"></span><span class="geo-orb orb-ring"></span></div>
+        <div class="hero-geometry" aria-hidden="true"><span class="geo-orb orb-large"><span class="orb-surface"></span></span><span class="geo-orb orb-medium"><span class="orb-surface"></span></span><span class="geo-orb orb-outline"><span class="orb-surface"></span></span><span class="geo-orb orb-small"><span class="orb-surface"></span></span><span class="geo-orb orb-ring"><span class="orb-surface"></span></span></div>
       </div>
     </section>
     <section class="section container" id="work" aria-labelledby="work-title">
       <div class="section-heading"><p class="section-index">01 / SELECTED WORK</p><h2 id="work-title">Experience &amp; selected projects.</h2></div>
       <div class="work-list">
         <article class="work-card featured">
-          <div class="project-identity"><span class="project-type">STRATEGY &amp; OPERATIONS</span><h3>Sentry — Strategy &amp; Operations Intern</h3><p class="context">San Francisco, CA · May 2026 – Aug 2026</p></div>
+          <div class="project-identity"><span class="project-type">STRATEGY &amp; OPERATIONS INTERN</span><h3 class="company-title"><img class="company-logo sentry-logo" src="https://assets.sentry-cdn.com/_static/ts/sentry-glyph.svg" alt="Sentry" width="28" height="28">Sentry</h3><p class="context">San Francisco, CA · May 2026 – Aug 2026</p></div>
           <div class="project-detail"><p class="project-summary">Built an executive ARR reporting and automated a Claude-powered competitive pricing benchmark across 10 product lines and 35 competitors. Developed an automated weekly customer insights dashboard surfacing high-fit accounts directly to senior leadership and the CFO.</p><p class="tools">Tools: Looker · Hex · Google Sheets · BigQuery</p><div class="tags"><span>BizOps</span><span>Financial KPIs</span><span>Competitive Intelligence</span></div><a class="text-link" href="https://sentry.io/" target="_blank" rel="noopener noreferrer">About Sentry <span aria-hidden="true">↗</span></a></div>
         </article>
         <article class="work-card">
-          <div class="project-identity"><span class="project-type">GO-TO-MARKET STRATEGY</span><h3>QuantHub — Go-To-Market Strategy Intern</h3><p class="context">Remote · Jun 2025 – Apr 2026</p></div>
-          <div class="project-detail"><p class="project-summary">Architected outbound sequencing and inbound MQL qualification across a 60,000+ contact CRM, achieving a 52% open/click and 18% response rate. Built data-driven account segmentation and automated lead enrichment models to scale pipeline generation.</p><p class="tools">Tools: HubSpot · Clay · ZoomInfo</p><div class="tags"><span>RevOps</span><span>CRM Architecture</span><span>Lead Enrichment</span></div></div>
+          <div class="project-identity"><span class="project-type">GO-TO-MARKET STRATEGY INTERN</span><h3 class="company-title"><img class="company-logo" src="https://www.quanthub.com/wp-content/uploads/2021/04/cropped-QuantHub-Favicon-32x32.png" alt="QuantHub" width="28" height="28">QuantHub</h3><p class="context">Remote · Jun 2025 – Apr 2026</p></div>
+          <div class="project-detail"><p class="project-summary">Architected outbound sequencing and inbound MQL qualification across a 60,000+ contact CRM, achieving a 52% open/click and 18% response rate. Built data-driven account segmentation and automated lead enrichment models to scale pipeline generation.</p><p class="tools">Tools: HubSpot · Clay · ZoomInfo</p><div class="tags"><span>RevOps</span><span>CRM Architecture</span><span>Lead Enrichment</span></div><a class="text-link" href="https://www.quanthub.com/" target="_blank" rel="noopener noreferrer">About QuantHub <span aria-hidden="true">↗</span></a></div>
         </article>
         <article class="work-card">
           <div class="project-identity"><span class="project-type">SOLO &amp; COLLABORATIVE PERFORMANCE</span><h3>Junior Piano Recital</h3><p class="context">Florence Kopleff Recital Hall · Classical Repertoire</p></div>
@@ -54,12 +55,10 @@
         <figure class="endorsement-card">
           <blockquote><p>“She was able to pick up a lot of information and tools quickly, completing a variety of cross-functional projects. One thing that really stood out was her presentations—she made them creative and fun, even when the topic itself wasn't.”</p></blockquote>
           <figcaption><span class="recommender">Nina Sohrabi</span><span class="recommender-role">Senior Manager of Strategy &amp; Operations · Sentry</span></figcaption>
-          <a class="text-link" href="https://www.linkedin.com/in/joline-tran/" target="_blank" rel="noopener noreferrer">View on LinkedIn <span aria-hidden="true">↗</span></a>
         </figure>
         <figure class="endorsement-card">
           <blockquote><p>“She requires very little hand-holding and demonstrates strong independence... worked effectively across sales, product, and marketing, showing an impressive ability to adapt and add value in different contexts.”</p></blockquote>
           <figcaption><span class="recommender">Kellie Weed</span><span class="recommender-role">Senior Director of Go-To-Market · QuantHub</span></figcaption>
-          <a class="text-link" href="https://www.linkedin.com/in/joline-tran/" target="_blank" rel="noopener noreferrer">View on LinkedIn <span aria-hidden="true">↗</span></a>
         </figure>
       </div>
     </section>

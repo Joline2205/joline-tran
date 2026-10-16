@@ -34,6 +34,6 @@
 @media(prefers-reduced-motion:reduce){.orb-surface{transition:none}}
 
 /* The inline glyph inherits its heading color without an external asset. */
-.sentry-glyph{fill:currentColor;color:inherit;display:inline-block;vertical-align:middle;flex-shrink:0;align-self:center}.company-title:has(.sentry-glyph){gap:10px}
+.sentry-glyph{width:24px;height:24px;fill:currentColor;color:inherit;display:inline-block;vertical-align:middle;flex-shrink:0;align-self:center}.company-title:has(.sentry-glyph){gap:10px}
 :root[data-theme=dark] .company-title:has(.sentry-glyph){color:#fff}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .company-title:has(.sentry-glyph){color:#fff}}

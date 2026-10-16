@@ -142,12 +142,8 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 @keyframes note-float{from{opacity:.75;transform:translate3d(0,0,0) rotate(0deg)}to{opacity:0;transform:translate3d(var(--note-drift),var(--note-rise),0) rotate(var(--note-rotation))}}
 @media(prefers-reduced-motion:reduce){.music-particle{display:none;animation:none}}
 
-/* Four octaves with natural two/three black-key grouping. */
-:root{--piano-white:#fdfcfa}:root[data-theme=dark]{--piano-white:#e8ecef}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--piano-white:#e8ecef}}
-.piano-divider{position:absolute;bottom:0;left:0;width:100%;height:64px;display:flex;z-index:3;border-top:1px solid #d1d5db;isolation:isolate}.piano-white{display:block;position:relative;flex:1;min-width:0;height:100%;background:var(--piano-white);border:1px solid #d1d5db;border-top:0;transition:transform .2s ease,border-color .2s ease}.piano-black{position:absolute;top:0;right:-29%;width:58%;height:63%;background:#22252a;border:1px solid #22252a;border-radius:2px 2px 0 0;z-index:2;transition:transform .2s ease,border-color .2s ease}.hero-geometry{bottom:80px}
-@media(max-width:640px){.piano-divider{height:56px}.hero{min-height:1180px}.hero-geometry{bottom:72px}}
-@media(prefers-reduced-motion:reduce){.piano-white,.piano-black{transition:none}}
-
-/* The divider lives outside the constrained hero, directly in full-width page flow. */
-.piano-divider{position:relative;bottom:auto;left:0;right:auto;width:100%;max-width:none;margin:0;overflow:hidden;pointer-events:none}.piano-divider *{pointer-events:none}.piano-white{position:relative;z-index:1;transition:none;transform:none}.piano-black{position:absolute;z-index:3;right:auto;width:2.071428%;background:#1c1e22;border:1px solid #1c1e22;border-top-color:#41454b;transition:none;transform:none;display:block;visibility:visible}
+/* A fixed-scale SVG octave repeats without stretching at any viewport width. */
+:root{--piano-white:#fbfbfa;--piano-separator:#e2e5e9}:root[data-theme=dark]{--piano-white:#e5e9ec;--piano-separator:#2a2d32}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--piano-white:#e5e9ec;--piano-separator:#2a2d32}}
+.piano-divider{position:relative;width:100%;max-width:none;height:68px;margin:0;overflow:hidden;pointer-events:none}.piano-divider *{pointer-events:none}.piano-pattern{display:block;width:100%;height:68px}.piano-key-white{fill:var(--piano-white)}.piano-key-separators{fill:none;stroke:var(--piano-separator);stroke-width:1;shape-rendering:crispEdges}.piano-key-black{fill:#1e2024}.hero-geometry{bottom:80px}
+@media(max-width:640px){.hero{min-height:1180px}.hero-geometry{bottom:72px}}
 #hero a[href],#hero button,#hero input,.site-header a[href],.site-header button,.site-header input{cursor:pointer}

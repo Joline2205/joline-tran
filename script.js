@@ -275,3 +275,15 @@ if (coffeeContact) {
     pour();
   }
 }
+
+// Touch and keyboard users can hold a photo open; hover remains the default preview.
+document.querySelectorAll('.photo-bubble').forEach((bubble) => {
+  bubble.addEventListener('click', () => {
+    const reveal = bubble.getAttribute('aria-pressed') !== 'true';
+    document.querySelectorAll('.photo-bubble').forEach((other) => other.setAttribute('aria-pressed', 'false'));
+    bubble.setAttribute('aria-pressed', String(reveal));
+  });
+  bubble.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') bubble.setAttribute('aria-pressed', 'false');
+  });
+});

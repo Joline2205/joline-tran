@@ -39,7 +39,7 @@
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .company-title:has(.sentry-glyph){color:#fff}}
 
 /* Consistent company marks across experience and manager attribution. */
-.quanthub-glyph{width:24px;height:24px;display:inline-block;vertical-align:middle;flex-shrink:0;border-radius:2px}.endorsement-card .endorsement-author{display:flex;align-items:center;gap:12px}.author-info{min-width:0}.endorsement-author .sentry-glyph{color:var(--ink)}
+.quanthub-logo{width:24px;height:24px;display:inline-block;vertical-align:middle;flex-shrink:0}.endorsement-card .endorsement-author{display:flex;align-items:center;gap:12px}.author-info{min-width:0}.endorsement-author .sentry-glyph{color:var(--ink)}
 :root[data-theme=dark] .endorsement-author .sentry-glyph{color:#fff}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .endorsement-author .sentry-glyph{color:#fff}}
 

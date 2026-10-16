@@ -84,3 +84,14 @@ if (typingTitle) {
     if (event.matches) finishTyping();
   });
 }
+
+// Measure the actual sticky header so the opening hero fills the remaining viewport.
+const siteHeader = document.querySelector('.site-header');
+if (siteHeader) {
+  const syncHeaderHeight = () => {
+    root.style.setProperty('--nav-height', `${siteHeader.getBoundingClientRect().height}px`);
+  };
+  syncHeaderHeight();
+  if ('ResizeObserver' in window) new ResizeObserver(syncHeaderHeight).observe(siteHeader);
+}
+// Native anchors keep URLs and no-JavaScript navigation; CSS supplies smooth scrolling.

@@ -17,3 +17,24 @@ themeButton.addEventListener('click', () => {
   syncThemeButton();
 });
 document.querySelector('#year').textContent = new Date().getFullYear();
+
+// Each answer reveals the same twist; reset restores the initial state and focus.
+const quiz = document.querySelector('.truth-quiz');
+if (quiz) {
+  const options = [...quiz.querySelectorAll('.quiz-option')];
+  const result = quiz.querySelector('.quiz-result');
+  let selectedOption = null;
+  options.forEach((option) => {
+    option.addEventListener('click', () => {
+      options.forEach((other) => other.setAttribute('aria-pressed', String(other === option)));
+      selectedOption = option;
+      result.hidden = false;
+    });
+  });
+  quiz.querySelector('.quiz-reset').addEventListener('click', () => {
+    result.hidden = true;
+    options.forEach((option) => option.setAttribute('aria-pressed', 'false'));
+    if (selectedOption) selectedOption.focus();
+    selectedOption = null;
+  });
+}

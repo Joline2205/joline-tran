@@ -124,3 +124,14 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 /* Individual translate composes with the existing ambient transform keyframes. */
 .hero-geometry>.geo-orb{translate:var(--magnet-x,0px) var(--magnet-y,0px);will-change:transform,translate}
 @media(prefers-reduced-motion:reduce){.animated-strike::after{transition:none}.hero-geometry>.geo-orb{translate:none;will-change:auto}}
+
+/* Contrast-aware fills and their opposing hover tones. */
+:root{--circle-core:#6b8b9b;--circle-mineral:#afc2cd;--circle-slate:#7a96a6;--circle-ink:#25282c;--circle-core-hover:#afc2cd;--circle-mineral-hover:#25282c;--circle-slate-hover:#6b8b9b;--circle-ink-hover:#afc2cd;--tape-fill:#23272a;--eyebrow-ink:#4a5560}
+:root[data-theme=dark]{--circle-core:#8aaab8;--circle-mineral:#d0dfe8;--circle-slate:#4e6875;--circle-ink:#edefe9;--circle-core-hover:#d0dfe8;--circle-mineral-hover:#4e6875;--circle-slate-hover:#8aaab8;--circle-ink-hover:#8aaab8;--tape-fill:#edebe4;--eyebrow-ink:#c1cbd2}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--circle-core:#8aaab8;--circle-mineral:#d0dfe8;--circle-slate:#4e6875;--circle-ink:#edefe9;--circle-core-hover:#d0dfe8;--circle-mineral-hover:#4e6875;--circle-slate-hover:#8aaab8;--circle-ink-hover:#8aaab8;--tape-fill:#edebe4;--eyebrow-ink:#c1cbd2}}
+.photo-headshot{--photo-color:var(--circle-core);--photo-hover:var(--circle-core-hover)}.photo-recital,.photo-travel{--photo-color:var(--circle-mineral);--photo-hover:var(--circle-mineral-hover)}.photo-running{--photo-color:var(--circle-slate);--photo-hover:var(--circle-slate-hover)}.photo-coffee{--photo-color:var(--circle-ink);--photo-hover:var(--circle-ink-hover)}
+.geo-orb .orb-surface{background:var(--photo-color);transition:background-color 300ms ease}.geo-orb:hover .orb-surface{background:var(--photo-hover)}
+.site-header,.site-header .nav{overflow:visible}.nav-tape{background:var(--tape-fill);opacity:.42;z-index:15}.tape-right{right:28px;overflow:visible}
+.hero .eyebrow{font-size:.85rem;letter-spacing:.06em;font-weight:500;color:var(--eyebrow-ink)}.animated-strike::after{height:1px;top:50%;transform:translateY(-50%)}
+.scroll-cue,.scroll-track,.scroll-label{display:none!important}
+@media(prefers-reduced-motion:reduce){.geo-orb .orb-surface{transition:none}}

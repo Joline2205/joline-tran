@@ -197,7 +197,7 @@ const noteHero = document.querySelector('#hero');
 if (noteHero) {
   const reducedNotes = window.matchMedia('(prefers-reduced-motion: reduce)');
   const notePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const glyphs = ['♩', '♪', '♫', '♬'];
+  const glyphs = ['♩', '♪'];
   const liveNotes = new Map();
   let glyphIndex = 0;
   let lastNoteTime = -Infinity;
@@ -217,7 +217,7 @@ if (noteHero) {
   noteHero.addEventListener('mousemove', (event) => {
     if (reducedNotes.matches || !notePointer.matches || document.hidden) return;
     const now = performance.now();
-    if (now - lastNoteTime < 50) return;
+    if (now - lastNoteTime < 200 || liveNotes.size >= 4) return;
     const bounds = noteHero.getBoundingClientRect();
     const headerBottom = siteHeader ? siteHeader.getBoundingClientRect().bottom : 0;
     if (bounds.bottom <= headerBottom || event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < Math.max(bounds.top, headerBottom) || event.clientY > bounds.bottom) return;
@@ -228,8 +228,8 @@ if (noteHero) {
     note.className = 'music-particle';
     note.setAttribute('aria-hidden', 'true');
     note.textContent = glyphs[glyphIndex++ % glyphs.length];
-    const duration = 700 + Math.random() * 200;
-    const size = 14 + Math.random() * 6;
+    const duration = 1000;
+    const size = 24 + Math.random() * 4;
     const x = Math.min(bounds.width - size - 16, Math.max(16, event.clientX - bounds.left));
     const y = event.clientY - bounds.top;
     note.style.left = `${x}px`;
@@ -237,8 +237,8 @@ if (noteHero) {
     note.style.fontSize = `${size}px`;
     note.style.color = palette[Math.floor(Math.random() * palette.length)];
     note.style.setProperty('--note-duration', `${duration}ms`);
-    note.style.setProperty('--note-drift', `${Math.random() * 28 - 14}px`);
-    note.style.setProperty('--note-rise', `${-(30 + Math.random() * 20)}px`);
+    note.style.setProperty('--note-drift', `${Math.random() * 24 - 12}px`);
+    note.style.setProperty('--note-rise', '-40px');
     note.style.setProperty('--note-rotation', `${Math.random() * 36 - 18}deg`);
     note.addEventListener('animationend', () => removeNote(note), { once: true });
     noteHero.append(note);

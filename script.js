@@ -52,11 +52,13 @@ if (typingTitle) {
   const prefix = document.querySelector('#typewriter-prefix');
   const name = document.querySelector('#typewriter-name');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const strike = document.querySelector('.animated-strike');
   const segments = [{ element: prefix, text: "Hi, I'm " }, { element: name, text: 'Joline' }];
   let typingTimer;
   function finishTyping() {
     clearTimeout(typingTimer);
     segments.forEach(({ element, text }) => { element.textContent = text; });
+    if (strike) strike.classList.add('is-struck');
     typingTitle.classList.remove('is-typing');
     typingTitle.classList.add('typing-complete');
   }
@@ -70,6 +72,7 @@ if (typingTitle) {
       segment.element.textContent += segment.text[characterIndex++];
       if (characterIndex === segment.text.length) {
         segmentIndex++;
+        if (segmentIndex === 1 && strike) strike.classList.add('is-struck');
         characterIndex = 0;
       }
       if (segmentIndex < segments.length) {
@@ -80,6 +83,7 @@ if (typingTitle) {
     }
     typingTimer = setTimeout(typeCharacter, 300);
   }
+  if (reducedMotion.matches) finishTyping();
   reducedMotion.addEventListener('change', (event) => {
     if (event.matches) finishTyping();
   });
@@ -102,3 +106,88 @@ document.querySelectorAll('.orb-surface img').forEach((image) => {
   image.addEventListener('error', hideMissingPhoto);
   if (image.complete && image.naturalWidth === 0) hideMissingPhoto();
 });
+
+// Magnetic offsets compose with ambient transforms rather than replacing them.
+const magneticHero = document.querySelector('.hero');
+if (magneticHero) {
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const circles = [...magneticHero.querySelectorAll('.geo-orb')].map((element) => ({
+    element, x: 0, y: 0,
+    easing: Math.max(0.045, Math.min(0.11, 16 / element.offsetWidth))
+  }));
+  const cursor = { x: 0, y: 0, active: false };
+  let frame = 0;
+  let previousTime = 0;
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  function animateMagnet(time) {
+    frame = 0;
+    const elapsed = previousTime ? Math.min(40, time - previousTime) : 16.67;
+    previousTime = time;
+    const heroBounds = magneticHero.getBoundingClientRect();
+    let settling = false;
+    // Read all bounds before writing offsets to avoid repeated style/layout work.
+    const updates = circles.map((circle) => {
+      const bounds = circle.element.getBoundingClientRect();
+      const baseLeft = bounds.left - circle.x;
+      const baseTop = bounds.top - circle.y;
+      const dx = cursor.x - (baseLeft + bounds.width / 2);
+      const dy = cursor.y - (baseTop + bounds.height / 2);
+      const distance = Math.hypot(dx, dy);
+      const radius = 220;
+      const pull = cursor.active && distance < radius ? (1 - distance / radius) * 0.35 : 0;
+      let targetX = clamp(dx * pull, -32, 32);
+      let targetY = clamp(dy * pull, -32, 32);
+      // Retain padding inside the viewport and the hero, even near its perimeter.
+      targetX = clamp(targetX, Math.min(0, 12 - baseLeft), Math.max(0, innerWidth - 12 - baseLeft - bounds.width));
+      targetY = clamp(targetY, Math.min(0, heroBounds.top + 12 - baseTop), Math.max(0, heroBounds.bottom - 12 - baseTop - bounds.height));
+      const easing = 1 - Math.pow(1 - circle.easing, elapsed / 16.67);
+      circle.x += (targetX - circle.x) * easing;
+      circle.y += (targetY - circle.y) * easing;
+      if (!cursor.active && Math.abs(circle.x) < 0.05 && Math.abs(circle.y) < 0.05) {
+        circle.x = 0;
+        circle.y = 0;
+      }
+      if (circle.x !== 0 || circle.y !== 0) settling = true;
+      return circle;
+    });
+    updates.forEach(({ element, x, y }) => {
+      element.style.setProperty('--magnet-x', `${x}px`);
+      element.style.setProperty('--magnet-y', `${y}px`);
+    });
+    if (cursor.active || settling) frame = requestAnimationFrame(animateMagnet);
+    else previousTime = 0;
+  }
+  function wakeMagnet() {
+    if (!frame && !motionPreference.matches && !document.hidden) frame = requestAnimationFrame(animateMagnet);
+  }
+  function releaseMagnet() {
+    cursor.active = false;
+    wakeMagnet();
+  }
+  magneticHero.addEventListener('mousemove', (event) => {
+    if (motionPreference.matches || !finePointer.matches || document.hidden) return;
+    cursor.x = event.clientX;
+    cursor.y = event.clientY;
+    cursor.active = true;
+    wakeMagnet();
+  }, { passive: true });
+  magneticHero.addEventListener('mouseleave', releaseMagnet);
+  window.addEventListener('scroll', releaseMagnet, { passive: true });
+  window.addEventListener('blur', releaseMagnet);
+  function resetMagnet() {
+    cancelAnimationFrame(frame);
+    frame = 0;
+    previousTime = 0;
+    cursor.active = false;
+    circles.forEach((circle) => {
+      circle.x = circle.y = 0;
+      circle.element.style.removeProperty('--magnet-x');
+      circle.element.style.removeProperty('--magnet-y');
+    });
+  }
+  motionPreference.addEventListener('change', resetMagnet);
+  finePointer.addEventListener('change', resetMagnet);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) resetMagnet(); });
+  window.addEventListener('resize', resetMagnet, { passive: true });
+}

@@ -44,7 +44,7 @@
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .endorsement-author .sentry-glyph{color:#fff}}
 
 /* A small musical signature, with familiar pointers on interactive controls. */
-body{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='%236B8B9B'><path d='M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z'/></svg>") 4 4,auto}a[href],button,summary,[role=button]{cursor:pointer}
+body{cursor:auto}a[href],button,summary,[role=button]{cursor:pointer}
 /* Technical texture remains quiet behind navigation in either theme. */
 :root{--header-grid:rgba(107,139,155,.12);--circle-outline:#6b8b9b}
 :root[data-theme=dark]{--header-grid:rgba(255,255,255,.07);--circle-outline:#c8d8e0}
@@ -135,3 +135,9 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 .hero .eyebrow{font-size:.85rem;letter-spacing:.06em;font-weight:500;color:var(--eyebrow-ink)}.animated-strike::after{height:1px;top:50%;transform:translateY(-50%)}
 .scroll-cue,.scroll-track,.scroll-label{display:none!important}
 @media(prefers-reduced-motion:reduce){.geo-orb .orb-surface{transition:none}}
+
+/* The musical cursor and ephemeral notes belong only to the hero. */
+#hero{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='36' viewBox='0 0 28 36' fill='%236B8B9B'><path d='M14.5 0c-.8 0-1.5.7-1.5 1.5 0 3.8-1.7 6.4-3.5 8.9-1.8 2.5-3.5 5.2-3.5 9.6 0 4.8 3.2 8.5 7.5 9.7V34c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5v-4.4c3.8-.9 6.5-4.3 6.5-8.6 0-5.2-4.1-8.5-7-10.7V4.5c2.1 1.2 4 2.8 5 4.8.4.8 1.4 1.1 2.2.7.8-.4 1.1-1.4.7-2.2C23.6 4.6 20.5 1.9 16 0.2c-.5-.1-1-.2-1.5-.2z'/></svg>") 8 18,auto}#hero a[href],#hero button{cursor:pointer}
+.music-particle{position:absolute;z-index:10;pointer-events:none;user-select:none;line-height:1;opacity:.85;font-family:Georgia,"Times New Roman",serif;animation:note-float var(--note-duration,800ms) ease-out both;will-change:transform,opacity}
+@keyframes note-float{from{opacity:.85;transform:translate3d(0,0,0) rotate(0deg)}to{opacity:0;transform:translate3d(var(--note-drift),var(--note-rise),0) rotate(var(--note-rotation))}}
+@media(prefers-reduced-motion:reduce){.music-particle{display:none;animation:none}}

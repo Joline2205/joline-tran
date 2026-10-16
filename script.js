@@ -191,3 +191,64 @@ if (magneticHero) {
   document.addEventListener('visibilitychange', () => { if (document.hidden) resetMagnet(); });
   window.addEventListener('resize', resetMagnet, { passive: true });
 }
+
+// A throttled hero-only trail: no timers or animation loop while the mouse is idle.
+const noteHero = document.querySelector('#hero');
+if (noteHero) {
+  const reducedNotes = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const notePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const glyphs = ['♩', '♪', '♫', '♬'];
+  const liveNotes = new Map();
+  let glyphIndex = 0;
+  let lastNoteTime = -Infinity;
+  function removeNote(note) {
+    clearTimeout(liveNotes.get(note));
+    liveNotes.delete(note);
+    note.remove();
+  }
+  function clearNotes() {
+    liveNotes.forEach((timeout, note) => {
+      clearTimeout(timeout);
+      note.remove();
+    });
+    liveNotes.clear();
+    lastNoteTime = -Infinity;
+  }
+  noteHero.addEventListener('mousemove', (event) => {
+    if (reducedNotes.matches || !notePointer.matches || document.hidden) return;
+    const now = performance.now();
+    if (now - lastNoteTime < 50) return;
+    const bounds = noteHero.getBoundingClientRect();
+    const headerBottom = siteHeader ? siteHeader.getBoundingClientRect().bottom : 0;
+    if (bounds.bottom <= headerBottom || event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < Math.max(bounds.top, headerBottom) || event.clientY > bounds.bottom) return;
+    lastNoteTime = now;
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : systemTheme.matches;
+    const palette = dark ? ['#C5D5DF', '#EDEFE9'] : ['#6B8B9B', '#AFC2CD', '#333B42'];
+    const note = document.createElement('span');
+    note.className = 'music-particle';
+    note.setAttribute('aria-hidden', 'true');
+    note.textContent = glyphs[glyphIndex++ % glyphs.length];
+    const duration = 700 + Math.random() * 200;
+    const size = 14 + Math.random() * 6;
+    const x = Math.min(bounds.width - size - 16, Math.max(16, event.clientX - bounds.left));
+    const y = event.clientY - bounds.top;
+    note.style.left = `${x}px`;
+    note.style.top = `${y}px`;
+    note.style.fontSize = `${size}px`;
+    note.style.color = palette[Math.floor(Math.random() * palette.length)];
+    note.style.setProperty('--note-duration', `${duration}ms`);
+    note.style.setProperty('--note-drift', `${Math.random() * 28 - 14}px`);
+    note.style.setProperty('--note-rise', `${-(30 + Math.random() * 20)}px`);
+    note.style.setProperty('--note-rotation', `${Math.random() * 36 - 18}deg`);
+    note.addEventListener('animationend', () => removeNote(note), { once: true });
+    noteHero.append(note);
+    // A timeout also cleans up if animationend is suppressed by browser settings.
+    liveNotes.set(note, setTimeout(() => removeNote(note), duration + 100));
+  }, { passive: true });
+  noteHero.addEventListener('mouseleave', clearNotes);
+  window.addEventListener('scroll', clearNotes, { passive: true });
+  window.addEventListener('blur', clearNotes);
+  reducedNotes.addEventListener('change', clearNotes);
+  notePointer.addEventListener('change', clearNotes);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) clearNotes(); });
+}

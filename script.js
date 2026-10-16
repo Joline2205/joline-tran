@@ -16,26 +16,4 @@ themeButton.addEventListener('click', () => {
   try { localStorage.setItem('theme', root.dataset.theme); } catch (error) { /* The toggle also works without storage. */ }
   syncThemeButton();
 });
-document.querySelectorAll('.bubble').forEach((bubble) => {
-  bubble.addEventListener('click', () => {
-    const open = bubble.getAttribute('aria-pressed') !== 'true';
-    document.querySelectorAll('.bubble').forEach((other) => other.setAttribute('aria-pressed', 'false'));
-    bubble.setAttribute('aria-pressed', String(open));
-  });
-  bubble.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') bubble.setAttribute('aria-pressed', 'false');
-  });
-});
-if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
-  root.classList.add('js-motion');
-}
 document.querySelector('#year').textContent = new Date().getFullYear();

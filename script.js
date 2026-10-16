@@ -262,7 +262,25 @@ if (noteHero) {
 // Pour once at 35% visibility, then disconnect to avoid scroll-triggered resets.
 const coffeeContact = document.querySelector('#contact');
 if (coffeeContact) {
-  const pour = () => coffeeContact.classList.add('is-poured');
+  const reducedPour = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let settleTimer;
+  const settle = () => {
+    clearTimeout(settleTimer);
+    coffeeContact.classList.add('is-settled');
+  };
+  const pour = () => {
+    if (coffeeContact.classList.contains('is-poured')) return;
+    coffeeContact.classList.add('is-poured');
+    if (reducedPour.matches) settle();
+    else settleTimer = setTimeout(settle, 3100);
+  };
+  // The finite ripple completes after the 1.4s fill, leaving a static flooded state.
+  coffeeContact.querySelector('.coffee-wave').addEventListener('animationend', (event) => {
+    if (event.animationName === 'waveFlow') settle();
+  });
+  reducedPour.addEventListener('change', (event) => {
+    if (event.matches && coffeeContact.classList.contains('is-poured')) settle();
+  });
   if ('IntersectionObserver' in window) {
     const coffeeObserver = new IntersectionObserver((entries) => {
       if (entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.35)) {

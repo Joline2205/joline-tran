@@ -231,6 +231,7 @@ if (noteHero) {
     const duration = 1000;
     const size = 24 + Math.random() * 4;
     const x = Math.min(bounds.width - size - 16, Math.max(16, event.clientX - bounds.left));
+    // The baton hotspot (27, 5) is its tip, so event coordinates anchor the trail.
     const y = event.clientY - bounds.top;
     note.style.left = `${x}px`;
     note.style.top = `${y}px`;

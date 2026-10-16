@@ -305,3 +305,114 @@ document.querySelectorAll('.photo-bubble').forEach((bubble) => {
     if (event.key === 'Escape') bubble.setAttribute('aria-pressed', 'false');
   });
 });
+
+// Eastern clock uses the visitor-independent IANA zone, including EST/EDT changes.
+const atlantaClock = document.querySelector('#atlanta-clock');
+if (atlantaClock) {
+  const clockFormat = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: true, timeZoneName: 'short'
+  });
+  const dateFormat = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York', month: 'short', day: '2-digit', year: 'numeric'
+  });
+  function updateAtlantaClock() {
+    const now = new Date();
+    atlantaClock.dateTime = now.toISOString();
+    atlantaClock.textContent = `${clockFormat.format(now)} · ${dateFormat.format(now)}`;
+  }
+  updateAtlantaClock();
+  setInterval(updateAtlantaClock, 1000);
+}
+
+// The map runs entirely locally; its native select also exposes tightly grouped cities.
+const travelMap = document.querySelector('.travel-map');
+if (travelMap) {
+  const canvas = travelMap.querySelector('.map-canvas');
+  const geography = travelMap.querySelector('.world-geography');
+  const pins = [...travelMap.querySelectorAll('.map-pin')];
+  const tooltip = travelMap.querySelector('.map-tooltip');
+  const picker = travelMap.querySelector('#travel-place');
+  const selection = travelMap.querySelector('.map-selection p');
+  const views = { world: [0, 0, 1000, 420], europe: [400, 40, 360, 151.2] };
+  let selectedPin = null;
+  let tooltipPin = null;
+  function hideTooltip() {
+    tooltip.hidden = true;
+    tooltipPin = null;
+    pins.forEach((pin) => pin.removeAttribute('aria-describedby'));
+  }
+  function positionTooltip(pin) {
+    const board = canvas.getBoundingClientRect();
+    const point = pin.getBoundingClientRect();
+    const width = tooltip.offsetWidth;
+    const height = tooltip.offsetHeight;
+    const left = Math.max(8, Math.min(board.width - width - 8, point.left - board.left + 17));
+    const top = Math.max(8, Math.min(board.height - height - 8, point.top - board.top - height - 6));
+    tooltip.style.left = `${left}px`;
+    tooltip.style.top = `${top}px`;
+  }
+  function showTooltip(pin) {
+    hideTooltip();
+    tooltipPin = pin;
+    tooltip.querySelector('strong').textContent = pin.dataset.city;
+    tooltip.querySelector('.tooltip-country').textContent = pin.dataset.country;
+    tooltip.querySelector('.tooltip-context').textContent = pin.dataset.context;
+    tooltip.hidden = false;
+    pin.setAttribute('aria-describedby', 'map-tooltip');
+    positionTooltip(pin);
+  }
+  function setView(name) {
+    const [x, y, width, height] = views[name];
+    geography.setAttribute('viewBox', views[name].join(' '));
+    pins.forEach((pin) => {
+      const px = (Number(pin.dataset.x) - x) / width * 100;
+      const py = (Number(pin.dataset.y) - y) / height * 100;
+      pin.hidden = px < 0 || px > 100 || py < 0 || py > 100;
+      pin.style.left = `${px}%`;
+      pin.style.top = `${py}%`;
+    });
+    travelMap.querySelectorAll('[data-map-view]').forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.dataset.mapView === name));
+    });
+    hideTooltip();
+  }
+  function selectPin(pin) {
+    selectedPin = pin;
+    pins.forEach((other) => other.setAttribute('aria-pressed', String(other === pin)));
+    picker.value = String(pins.indexOf(pin));
+    selection.textContent = `${pin.dataset.city}, ${pin.dataset.country} · ${pin.dataset.context}`;
+    showTooltip(pin);
+  }
+  pins.forEach((pin) => {
+    pin.addEventListener('mouseenter', () => showTooltip(pin));
+    pin.addEventListener('focus', () => showTooltip(pin));
+    pin.addEventListener('mouseleave', () => { if (document.activeElement !== pin && selectedPin !== pin) hideTooltip(); });
+    pin.addEventListener('blur', () => { if (selectedPin !== pin) hideTooltip(); });
+    pin.addEventListener('click', () => selectPin(pin));
+    pin.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        hideTooltip();
+        selectedPin = null;
+        pins.forEach((other) => other.setAttribute('aria-pressed', 'false'));
+      }
+    });
+  });
+  picker.addEventListener('change', () => {
+    if (picker.value === '') {
+      hideTooltip();
+      selectedPin = null;
+      pins.forEach((pin) => pin.setAttribute('aria-pressed', 'false'));
+      selection.textContent = 'Select a pin or choose a city above.';
+      return;
+    }
+    const pin = pins[Number(picker.value)];
+    if (pin.hidden) setView('world');
+    selectPin(pin);
+  });
+  travelMap.querySelectorAll('[data-map-view]').forEach((button) => {
+    button.addEventListener('click', () => setView(button.dataset.mapView));
+  });
+  canvas.addEventListener('mouseleave', () => { if (!selectedPin) hideTooltip(); });
+  window.addEventListener('resize', () => { if (tooltipPin && !tooltipPin.hidden) positionTooltip(tooltipPin); });
+}

@@ -28,7 +28,12 @@
 
 /* Slate-toned header with a shallow organic edge. */
 .site-header{border-bottom:0}.nav-wave{position:absolute;left:0;top:calc(100% - 1px);width:100%;height:10px;overflow:visible;pointer-events:none;fill:var(--header)}.nav-wave path{stroke:var(--line);stroke-width:1;vector-effect:non-scaling-stroke;stroke-linejoin:round}
-.company-title{display:flex;align-items:center;gap:12px}.company-logo{display:block;flex-shrink:0;object-fit:contain}.company-logo[hidden]{display:none}.sentry-logo{background:#fff;border-radius:3px;padding:2px}.work-card .project-type{color:var(--accent)}
+.company-title{display:flex;align-items:center;gap:12px}.company-logo{display:block;flex-shrink:0;object-fit:contain}.company-logo[hidden]{display:none}.work-card .project-type{color:var(--accent)}
 /* Float the outer wrapper; scale the inner surface so hover never interrupts drift. */
 .geo-orb{pointer-events:auto}.orb-surface{display:block;width:100%;height:100%;border-radius:50%;border:1px solid transparent;transition:transform 300ms ease,background-color 300ms ease,border-color 300ms ease}.orb-large .orb-surface{background:var(--orb-indigo)}.orb-medium .orb-surface{background:var(--orb-white)}.orb-small .orb-surface{background:var(--orb-slate)}.orb-outline .orb-surface,.orb-ring .orb-surface{border-color:var(--orb-line)}.geo-orb:hover .orb-surface{transform:scale(1.08);background:#c8d8e0;border-color:#c8d8e0}.orb-outline:hover .orb-surface,.orb-medium:hover .orb-surface,.orb-ring:hover .orb-surface{background:#6b8b9b;border-color:#6b8b9b}
 @media(prefers-reduced-motion:reduce){.orb-surface{transition:none}}
+
+/* The inline glyph inherits its heading color without an external asset. */
+.sentry-glyph{fill:currentColor;color:inherit;display:inline-block;vertical-align:middle;flex-shrink:0;align-self:center}.company-title:has(.sentry-glyph){gap:10px}
+:root[data-theme=dark] .company-title:has(.sentry-glyph){color:#fff}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .company-title:has(.sentry-glyph){color:#fff}}

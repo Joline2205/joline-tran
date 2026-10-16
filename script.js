@@ -95,3 +95,10 @@ if (siteHeader) {
   if ('ResizeObserver' in window) new ResizeObserver(syncHeaderHeight).observe(siteHeader);
 }
 // Native anchors keep URLs and no-JavaScript navigation; CSS supplies smooth scrolling.
+
+// Photo paths are ready for personal assets; retain solid fills until files exist.
+document.querySelectorAll('.orb-surface img').forEach((image) => {
+  const hideMissingPhoto = () => { image.hidden = true; };
+  image.addEventListener('error', hideMissingPhoto);
+  if (image.complete && image.naturalWidth === 0) hideMissingPhoto();
+});

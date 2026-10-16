@@ -7,12 +7,13 @@
   <meta name="color-scheme" content="light dark">
   <title>Joline Tran — Product Strategy & Operations</title>
   <script>try{const theme=localStorage.getItem('theme');if(theme==='light'||theme==='dark')document.documentElement.dataset.theme=theme}catch(error){}</script>
-  <link rel="stylesheet" href="style.css?v=20261016-paper-hero">
-  <script src="script.js?v=20261016-paper-hero" defer></script>
+  <link rel="stylesheet" href="style.css?v=20261016-photo-orbs">
+  <script src="script.js?v=20261016-photo-orbs" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
+    <span class="nav-tape tape-left" aria-hidden="true"></span><span class="nav-tape tape-right" aria-hidden="true"></span>
     <nav class="container nav" aria-label="Main navigation">
       <a class="wordmark" href="#">Joline Tran<span class="accent">.</span></a>
       <div class="nav-links"><a href="#work">Work</a><a href="#journal">Journal</a><a href="#about">About</a><a href="#contact">Contact</a></div>
@@ -29,9 +30,15 @@
           <div class="hero-bottom"><p>Senior at Georgia Tech studying Economics &amp; Industrial Design.</p>
           <div class="hero-actions"><a class="button primary" href="#work">View Work <span aria-hidden="true">↘</span></a><a class="button" href="#contact">Say Hello <span aria-hidden="true">↗</span></a></div></div>
         </div>
-        <div class="hero-geometry" aria-hidden="true"><span class="geo-orb orb-large"><span class="orb-surface"></span></span><span class="geo-orb orb-medium"><span class="orb-surface"></span></span><span class="geo-orb orb-outline"><span class="orb-surface"></span></span><span class="geo-orb orb-small"><span class="orb-surface"></span></span><span class="geo-orb orb-ice"><span class="orb-surface"></span></span><span class="geo-orb orb-ring"><span class="orb-surface"></span></span></div>
+        <!-- Add your photos at these paths; missing images leave the solid colors intact. -->
+        <div class="hero-geometry" aria-hidden="true">
+          <span class="geo-orb photo-headshot"><span class="orb-surface"><img src="headshot.jpg" alt="" decoding="async"></span></span>
+          <span class="geo-orb photo-recital"><span class="orb-surface"><img src="recital.jpg" alt="" decoding="async"></span></span>
+          <span class="geo-orb photo-travel"><span class="orb-surface"><img src="travel.jpg" alt="" decoding="async"></span></span>
+          <span class="geo-orb photo-coffee"><span class="orb-surface"><img src="coffee.jpg" alt="" decoding="async"></span></span>
+          <span class="geo-orb photo-running"><span class="orb-surface"><img src="running.jpg" alt="" decoding="async"></span></span>
+        </div>
       </div>
-      <a class="scroll-cue" href="#work" aria-label="Scroll to selected work"><span class="scroll-track" aria-hidden="true"><span></span></span><span class="scroll-label">Selected work</span></a>
     </section>
     <section class="section container" id="work" aria-labelledby="work-title">
       <div class="section-heading"><p class="section-index">01 / SELECTED WORK</p><h2 id="work-title">Experience &amp; selected projects.</h2></div>

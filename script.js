@@ -490,3 +490,14 @@ if (travelStats) {
     if (event.matches) { started = true; lockCounters(); }
   });
 }
+
+// Match the invitation to the mobile photo controls, including viewport changes.
+const circleHint = document.querySelector('.hero-hint em');
+if (circleHint) {
+  const mobileHero = window.matchMedia('(max-width: 768px)');
+  const updateCircleHint = () => {
+    circleHint.textContent = mobileHero.matches ? 'tap the circles' : 'hover over the circles';
+  };
+  updateCircleHint();
+  mobileHero.addEventListener('change', updateCircleHint);
+}

@@ -332,8 +332,10 @@ if (travelMap) {
   const geography = travelMap.querySelector('.world-geography');
   const pins = [...travelMap.querySelectorAll('.map-pin')];
   const tooltip = travelMap.querySelector('.map-tooltip');
-  const picker = travelMap.querySelector('#travel-place');
-  const selection = travelMap.querySelector('.map-selection p');
+  const travelSection = travelMap.closest('.travel-section');
+  const picker = travelSection.querySelector('#travel-place');
+  const cityDetails = travelSection.querySelector('.city-detail-content');
+  const emptyDetails = travelSection.querySelector('.city-empty');
   const views = { world: [0, 0, 1000, 420], europe: [400, 40, 360, 151.2] };
   let selectedPin = null;
   let tooltipPin = null;
@@ -381,7 +383,12 @@ if (travelMap) {
     selectedPin = pin;
     pins.forEach((other) => other.setAttribute('aria-pressed', String(other === pin)));
     picker.value = String(pins.indexOf(pin));
-    selection.textContent = `${pin.dataset.city}, ${pin.dataset.country} · ${pin.dataset.context}`;
+    emptyDetails.hidden = true;
+    cityDetails.hidden = false;
+    cityDetails.querySelector('.city-detail-title').textContent = `${pin.dataset.city}, ${pin.dataset.country}`;
+    cityDetails.querySelector('.city-category').textContent = pin.dataset.kind === 'lived' ? `Lived · ${pin.dataset.duration}` : 'Explored';
+    cityDetails.querySelector('.city-year').textContent = pin.dataset.year ? `Year: ${pin.dataset.year}` : 'Year not recorded';
+    cityDetails.querySelector('.city-context').textContent = pin.dataset.context;
     showTooltip(pin);
   }
   pins.forEach((pin) => {
@@ -403,7 +410,8 @@ if (travelMap) {
       hideTooltip();
       selectedPin = null;
       pins.forEach((pin) => pin.setAttribute('aria-pressed', 'false'));
-      selection.textContent = 'Select a pin or choose a city above.';
+      cityDetails.hidden = true;
+      emptyDetails.hidden = false;
       return;
     }
     const pin = pins[Number(picker.value)];

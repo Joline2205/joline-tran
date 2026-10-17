@@ -240,3 +240,11 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 @media(max-width:768px) and (hover:none){.photo-bubble:hover:not([aria-pressed=true]) img{opacity:0;transform:scale(1.1)}.photo-bubble:hover:not([aria-pressed=true]) .orb-surface{transform:none}}
 @media(max-width:768px) and (prefers-reduced-motion:reduce){.hero-geometry>.geo-orb{animation:none;will-change:auto}}
 @media(max-width:768px){.photo-bubble{-webkit-tap-highlight-color:transparent;touch-action:manipulation}}
+
+/* Architectural manuscript rests: decorative, quiet, independent of cursor physics. */
+:root{--rest-color:#7a92a2;--rest-opacity:.55}:root[data-theme=dark]{--rest-color:#c8d8e2;--rest-opacity:.45}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--rest-color:#c8d8e2;--rest-opacity:.45}}
+.hero-rests{position:absolute;inset:0;z-index:1;pointer-events:none;user-select:none}.music-rest{position:absolute;display:block;fill:currentColor;color:var(--rest-color);opacity:var(--rest-opacity);pointer-events:none;user-select:none;animation:rest-drift 14s ease-in-out infinite alternate}.rest-quarter{right:12px;top:26%;animation-duration:16s;animation-delay:-4s}.rest-eighth{right:26%;bottom:33%;animation-duration:13s;animation-delay:-7s}.rest-half{left:13%;bottom:35px;animation-duration:15s;animation-delay:-9s}.rest-sixteenth{right:38%;top:25px;animation-duration:12s;animation-delay:-2s}
+@keyframes rest-drift{from{transform:translateY(-6px)}to{transform:translateY(6px)}}
+@media(max-width:1000px){.rest-quarter{right:22px;top:460px}.rest-eighth{right:auto;left:35%;bottom:220px}.rest-half{left:40px;bottom:30px}.rest-sixteenth{right:auto;left:55%;top:435px}}
+@media(max-width:768px){.rest-quarter{right:140px;top:30px}.rest-eighth{left:48%;bottom:70px}.rest-half{left:30%;bottom:20px}.rest-sixteenth{left:35%;top:20px}}
+@media(prefers-reduced-motion:reduce){.music-rest{animation:none}}

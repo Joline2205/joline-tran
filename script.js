@@ -424,3 +424,69 @@ if (travelMap) {
   canvas.addEventListener('mouseleave', () => { if (!selectedPin) hideTooltip(); });
   window.addEventListener('resize', () => { if (tooltipPin && !tooltipPin.hidden) positionTooltip(tooltipPin); });
 }
+
+// Count only on first entry; the accessible and no-JavaScript totals stay final.
+const travelStats = document.querySelector('.travel-metrics');
+if (travelStats) {
+  const reduceCounters = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const counters = [...travelStats.querySelectorAll('.travel-counter')].map((element) => ({
+    element, value: element.querySelector('.counter-value'), target: Number(element.dataset.target),
+    displayed: Number(element.dataset.target), roll: null
+  }));
+  let counterFrame = 0;
+  let counterObserver;
+  let started = false;
+  function lockCounters() {
+    cancelAnimationFrame(counterFrame);
+    counterFrame = 0;
+    counters.forEach((counter) => {
+      if (counter.roll) counter.roll.cancel();
+      counter.value.textContent = String(counter.target);
+      counter.displayed = counter.target;
+    });
+    travelStats.dataset.counterState = 'done';
+    if (counterObserver) counterObserver.disconnect();
+  }
+  function startCounters() {
+    if (started) return;
+    started = true;
+    if (counterObserver) counterObserver.disconnect();
+    if (reduceCounters.matches) { lockCounters(); return; }
+    travelStats.dataset.counterState = 'running';
+    counters.forEach((counter) => { counter.displayed = 0; counter.value.textContent = '0'; });
+    const start = performance.now();
+    const duration = 1400;
+    function tick(now) {
+      const progress = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      counters.forEach((counter) => {
+        const next = progress === 1 ? counter.target : Math.min(counter.target - 1, Math.floor(counter.target * eased));
+        if (next === counter.displayed) return;
+        counter.displayed = next;
+        counter.value.textContent = String(next);
+        if (counter.roll) counter.roll.cancel();
+        if (typeof counter.value.animate === 'function') {
+          counter.roll = counter.value.animate([
+            { transform: 'translateY(35%)', opacity: 0.45 },
+            { transform: 'translateY(0)', opacity: 1 }
+          ], { duration: 90, easing: 'ease-out' });
+        }
+      });
+      if (progress < 1) counterFrame = requestAnimationFrame(tick);
+      else lockCounters();
+    }
+    counterFrame = requestAnimationFrame(tick);
+  }
+  if (reduceCounters.matches || !('IntersectionObserver' in window)) {
+    started = true;
+    lockCounters();
+  } else {
+    counterObserver = new IntersectionObserver((entries) => {
+      if (entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.3)) startCounters();
+    }, { threshold: 0.3 });
+    counterObserver.observe(travelStats);
+  }
+  reduceCounters.addEventListener('change', (event) => {
+    if (event.matches) { started = true; lockCounters(); }
+  });
+}

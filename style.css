@@ -205,3 +205,6 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 @media(max-width:900px){.travel-layout{grid-template-columns:minmax(0,1fr);gap:24px}.map-canvas{min-height:0}.travel-sidebar{display:grid;grid-template-columns:1fr 1fr;align-items:start}.travel-sidebar .travel-metrics{grid-column:1 / -1}}
 @media(max-width:560px){.travel-sidebar{grid-template-columns:minmax(0,1fr)}.travel-sidebar .travel-metrics{grid-column:auto}.map-canvas{min-height:180px}.lived-timeline,.city-explorer{padding:20px}.map-toolbar{flex-direction:row}.travel-layout{gap:20px}}
 @media(prefers-reduced-motion:reduce){.pin-lived>span::after{animation:none;opacity:.4}.button,.theme-toggle{transition:none}}
+
+/* Reserve the final numeral footprint; each incoming value rolls within its mask. */
+.travel-metrics .travel-counter{display:inline-grid;place-items:center;min-inline-size:2ch;line-height:1.2;overflow:hidden;font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}.travel-metrics .travel-counter[data-target="2"]{min-inline-size:1ch}.travel-metrics .travel-counter .counter-value{display:block;font:inherit;letter-spacing:inherit;color:inherit;white-space:nowrap}

@@ -367,3 +367,20 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 #work .quanthub-graphic-overlap{mask-image:linear-gradient(to left,#000 60%,transparent 100%),linear-gradient(to bottom,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(to left,#000 60%,transparent 100%),linear-gradient(to bottom,#000 70%,transparent 100%);margin-left:auto;justify-self:end;transform:translateX(50px)}
 #work .sentry-row .experience-story>.work-endorsement{position:relative;z-index:3}
 @media(max-width:800px){#work .quanthub-graphic-overlap{transform:none}}
+
+/* Let the artboard bleed beyond its guides, without making the page pan sideways. */
+html{overflow-x:clip}.work-canvas,#work.work-section,#work .experience-rows,#work .experience-row,#work .experience-story{overflow:visible}
+#work .sentry-graphic-overlap,#work .quanthub-graphic-overlap{width:145%;max-height:none;position:relative;z-index:1;opacity:.42;overflow:visible}
+#work .sentry-graphic-overlap{margin-left:-80px;transform:translateX(80px)}
+#work .quanthub-graphic-overlap{margin-top:-320px;margin-left:0;margin-right:0;transform:translateX(-60px)}
+/* Accent-paper endorsements stay legible above the oversized interface layers. */
+:root{--quote-fill:#dce6ec;--quote-border:rgba(107,139,155,.35);--quote-ink:#1f2428;--quote-secondary:#465966}
+:root[data-theme=dark]{--quote-fill:rgba(42,54,63,.95);--quote-border:rgba(200,216,224,.2);--quote-ink:#f1f5f9;--quote-secondary:#c8d8e0}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--quote-fill:rgba(42,54,63,.95);--quote-border:rgba(200,216,224,.2);--quote-ink:#f1f5f9;--quote-secondary:#c8d8e0}}
+#work .work-endorsement{background:var(--quote-fill);border:1px solid var(--quote-border);color:var(--quote-ink);box-shadow:0 16px 36px -8px rgba(0,0,0,.12);position:relative;z-index:4}
+#work .work-endorsement figcaption{color:var(--quote-secondary)}#work .work-endorsement .sentry-glyph{color:var(--quote-ink)}
+#work .sentry-row .experience-story>.work-endorsement{margin-top:-140px;position:relative;z-index:4}
+#work .quanthub-row .experience-story>.work-endorsement{margin-top:-160px;position:relative;z-index:4}
+@media(max-width:800px){#work .sentry-graphic-overlap,#work .quanthub-graphic-overlap{width:100%;margin:0;transform:none}#work .sentry-row .experience-story>.work-endorsement{margin-top:-35px}#work .quanthub-row .experience-story>.work-endorsement{margin-top:-40px}}
+/* Clip only the document's horizontal paint boundary, not the artboard or sticky content. */
+body{overflow-x:clip}

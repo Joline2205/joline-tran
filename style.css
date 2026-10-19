@@ -437,3 +437,15 @@ body{overflow-x:clip}
     transform: none;
   }
 }
+
+/* Transparent-center paper reinforcements straddle each testimonial's lower edge. */
+:root{--reinforcement-band:rgba(140,155,168,.45);--reinforcement-rim:rgba(107,125,140,.48)}
+:root[data-theme=dark]{--reinforcement-band:rgba(200,215,225,.25);--reinforcement-rim:rgba(200,215,225,.38)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--reinforcement-band:rgba(200,215,225,.25);--reinforcement-rim:rgba(200,215,225,.38)}}
+#work .work-endorsement{overflow:visible}.reinforcement-sticker{position:absolute;bottom:-12px;right:28px;z-index:5;pointer-events:none;user-select:none;opacity:.6;fill:none}.sticker-band{stroke:var(--reinforcement-band)}.sticker-rim{stroke:var(--reinforcement-rim)}
+/* Link the identity itself; reserve arrow space so hover doesn't move the heading. */
+#work .company-heading-link{display:inline-flex;align-items:center;gap:13px;color:inherit;text-decoration:none;transition:color .25s ease}.company-heading-arrow{font-size:.5em;line-height:1;opacity:0;transform:translate(-3px,3px);transition:opacity .25s ease,transform .25s ease}#work .company-heading-link:hover,#work .company-heading-link:focus-visible{color:#6b8b9b}#work .company-heading-link:hover .company-heading-arrow,#work .company-heading-link:focus-visible .company-heading-arrow{opacity:1;transform:translate(0,0)}
+/* Only foreground tiles lift; the ambient graphics remain in their original positions. */
+#work .sentry-row>.experience-copy,#work .quanthub-row .experience-copy{background:var(--card-bg);border:1px solid var(--border-color,var(--line));transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s cubic-bezier(.16,1,.3,1),box-shadow .3s cubic-bezier(.16,1,.3,1)}
+#work .sentry-row>.experience-copy:hover,#work .sentry-row>.experience-copy:focus-within,#work .quanthub-row .experience-copy:hover,#work .quanthub-row .experience-copy:focus-within{border-color:#6b8b9b;transform:translateY(-4px);box-shadow:0 20px 40px -12px rgba(107,139,155,.16)}
+@media(prefers-reduced-motion:reduce){#work .experience-copy,#work .company-heading-link,.company-heading-arrow{transition:none}#work .sentry-row>.experience-copy:hover,#work .sentry-row>.experience-copy:focus-within,#work .quanthub-row .experience-copy:hover,#work .quanthub-row .experience-copy:focus-within{transform:none}}

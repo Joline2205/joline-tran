@@ -319,8 +319,26 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 /* The dashboard recedes behind the narrative; fades combine at both outer edges. */
 #work .sentry-graphic-overlap{width:calc(100% + 110px);margin-left:-110px;z-index:1;opacity:.38;mask-image:linear-gradient(to bottom,#000 60%,transparent 100%),linear-gradient(to right,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(to bottom,#000 60%,transparent 100%),linear-gradient(to right,#000 70%,transparent 100%);mask-composite:intersect;-webkit-mask-composite:source-in}
 #work .sentry-row>.experience-copy{position:relative;z-index:2;box-shadow:0 12px 36px rgba(0,0,0,.06);align-self:stretch;display:flex;flex-direction:column}#work .sentry-row>.experience-copy .tools{margin-top:auto;padding-top:23px}#work .sentry-row .experience-story>.work-endorsement{margin:16px 0 0 32px}
-.credential-tile{margin:16px 0 0 32px;padding:20px 23px;border:1px solid var(--line);border-radius:4px;background:var(--surface)}.credential-tile h4{font-size:13px;line-height:1.5;font-weight:500;letter-spacing:-.25px;margin:0 0 7px}.credential-tile p{font-size:10px;line-height:1.8;color:var(--muted);margin:0 0 12px}.credential-status{display:inline-block;font-size:9px;line-height:1.7;padding:5px 8px;background:var(--wash);color:var(--accent);border:1px solid var(--line);border-radius:3px}
-@media(max-width:800px){#work .sentry-graphic-overlap{width:100%;margin-left:0}#work .sentry-row .experience-story>.work-endorsement{margin:16px 0 0 18px}.credential-tile{margin:16px 0 0 18px}#work .sentry-row>.experience-copy .tools{margin-top:23px;padding-top:0}}
-@media(max-width:480px){#work.work-section::before{inset-inline:12px}.credential-tile{padding:20px}}
+
+@media(max-width:800px){#work .sentry-graphic-overlap{width:100%;margin-left:0}#work .sentry-row .experience-story>.work-endorsement{margin:16px 0 0 18px}#work .sentry-row>.experience-copy .tools{margin-top:23px;padding-top:0}}
+@media(max-width:480px){#work.work-section::before{inset-inline:12px}}
 /* Keep the decorative viewport compact so equal column bottoms don't create a tall empty card. */
 #work .sentry-graphic-overlap{max-height:clamp(180px,18vw,260px);overflow:hidden}#work .sentry-row>.experience-copy .company-link{align-self:flex-start}
+
+/* Cold-press paper remains continuous; only the narrow outside strips retain dots. */
+:root{--work-gutter:clamp(16px,2.5vw,36px)}
+body{background-color:var(--bg);background-image:radial-gradient(var(--paper-tooth) 1px,transparent 0),var(--paper-grain);background-size:5px 5px,300px 300px}
+.work-canvas{background-color:var(--bg);background-image:radial-gradient(circle,var(--work-dot) 1px,transparent 1px),var(--paper-grain);background-size:20px 20px,300px 300px;overflow:visible}
+#work.work-section{width:100%;max-width:1680px;margin:0 auto;padding-inline:var(--work-gutter);overflow:visible}
+#work.work-section::before{inset:0 var(--work-gutter);background-color:var(--bg);background-image:radial-gradient(var(--paper-tooth) 1px,transparent 0),var(--paper-grain);background-size:5px 5px,300px 300px;border-inline:1px solid var(--work-guide)}
+/* The larger UI bleeds past the guide, with a viewport-safe cap rather than clipping. */
+#work .sentry-row>.experience-story{z-index:auto;overflow:visible}
+#work .sentry-graphic-overlap{width:min(120%,calc(100% + 80px + var(--work-gutter) - 8px + max(0px,calc((100vw - 1680px)/2))));margin-left:-80px;opacity:.54;max-height:none;height:auto;overflow:visible;position:relative;z-index:1}
+#work .sentry-row .experience-story>.work-endorsement{margin:-65px 0 0 24px;position:relative;z-index:3}
+/* Content-height narrative card: tools follow the paragraphs without a flex spacer. */
+#work .sentry-row>.experience-copy{align-self:start;display:block;min-height:0;height:auto;position:relative;z-index:2}
+#work .sentry-row .experience-narrative{padding-top:12px;margin-top:22px}
+#work .sentry-row .experience-narrative p{margin:0 0 12px}
+#work .sentry-row>.experience-copy .tools{margin:12px 0 0;padding-top:0}
+#work .sentry-row>.experience-copy .tags{margin-top:18px}
+@media(max-width:800px){#work .sentry-graphic-overlap{width:100%;margin-left:0}#work .sentry-row .experience-story>.work-endorsement{margin:-35px 0 0 12px}}

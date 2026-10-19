@@ -306,23 +306,23 @@ document.querySelectorAll('.photo-bubble').forEach((bubble) => {
   });
 });
 
-// Eastern clock uses the visitor-independent IANA zone, including EST/EDT changes.
+// Two live local clocks, with automatic daylight-saving changes in each zone.
 const atlantaClock = document.querySelector('#atlanta-clock');
-if (atlantaClock) {
-  const clockFormat = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/New_York', hour: '2-digit', minute: '2-digit', second: '2-digit',
-    hour12: true, timeZoneName: 'short'
-  });
-  const dateFormat = new Intl.DateTimeFormat('en-US', {
-    timeZone: 'America/New_York', month: 'short', day: '2-digit', year: 'numeric'
-  });
-  function updateAtlantaClock() {
+const glasgowClock = document.querySelector('#glasgow-clock');
+if (atlantaClock && glasgowClock) {
+  const clockOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true, timeZoneName: 'short' };
+  const atlantaFormat = new Intl.DateTimeFormat('en-US', { ...clockOptions, timeZone: 'America/New_York' });
+  // en-GB names the UK zone BST/GMT instead of a generic GMT+1 offset.
+  const glasgowFormat = new Intl.DateTimeFormat('en-GB', { ...clockOptions, timeZone: 'Europe/London' });
+  const dateFormat = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', month: 'short', day: '2-digit', year: 'numeric' });
+  function updateLocalClocks() {
     const now = new Date();
-    atlantaClock.dateTime = now.toISOString();
-    atlantaClock.textContent = `${clockFormat.format(now)} · ${dateFormat.format(now)}`;
+    atlantaClock.dateTime = glasgowClock.dateTime = now.toISOString();
+    atlantaClock.textContent = `${atlantaFormat.format(now)} · ${dateFormat.format(now)}`;
+    glasgowClock.textContent = glasgowFormat.format(now).replace(/\b(am|pm)\b/g, (period) => period.toUpperCase());
   }
-  updateAtlantaClock();
-  setInterval(updateAtlantaClock, 1000);
+  updateLocalClocks();
+  setInterval(updateLocalClocks, 1000);
 }
 
 // The map runs entirely locally; its native select also exposes tightly grouped cities.

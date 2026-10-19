@@ -306,6 +306,30 @@ document.querySelectorAll('.photo-bubble').forEach((bubble) => {
   });
 });
 
+// Count elapsed Glasgow calendar days so DST changes cannot add or remove a day.
+const glasgowDayFormat = new Intl.DateTimeFormat('en-GB', {
+  timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit'
+});
+function updateGlasgowProgress(now = new Date()) {
+  const parts = Object.fromEntries(glasgowDayFormat.formatToParts(now).map((part) => [part.type, part.value]));
+  const currentDay = Date.UTC(Number(parts.year), Number(parts.month) - 1, Number(parts.day));
+  const elapsed = Math.max(0, Math.min(106, Math.floor((currentDay - Date.UTC(2026, 8, 10)) / 86400000)));
+  const label = `Day ${elapsed} of 106`;
+  document.querySelectorAll('[data-glasgow-progress]').forEach((badge) => {
+    if (badge.textContent !== label) badge.textContent = label;
+    badge.style.setProperty('--stay-progress', `${elapsed / 106 * 100}%`);
+  });
+  const pin = document.querySelector('.map-pin[data-city="Glasgow"]');
+  if (pin) {
+    pin.dataset.duration = label;
+    pin.setAttribute('aria-label', `Glasgow, ${pin.dataset.country} · ${label} · ${pin.dataset.context}`);
+    if (pin.getAttribute('aria-pressed') === 'true') {
+      const category = document.querySelector('.city-category');
+      if (category && category.textContent !== `Lived · ${label}`) category.textContent = `Lived · ${label}`;
+    }
+  }
+}
+
 // Two live local clocks, with automatic daylight-saving changes in each zone.
 const atlantaClock = document.querySelector('#atlanta-clock');
 const glasgowClock = document.querySelector('#glasgow-clock');
@@ -314,12 +338,12 @@ if (atlantaClock && glasgowClock) {
   const atlantaFormat = new Intl.DateTimeFormat('en-US', { ...clockOptions, timeZone: 'America/New_York' });
   // en-GB names the UK zone BST/GMT instead of a generic GMT+1 offset.
   const glasgowFormat = new Intl.DateTimeFormat('en-GB', { ...clockOptions, timeZone: 'Europe/London' });
-  const dateFormat = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', month: 'short', day: '2-digit', year: 'numeric' });
   function updateLocalClocks() {
     const now = new Date();
     atlantaClock.dateTime = glasgowClock.dateTime = now.toISOString();
-    atlantaClock.textContent = `${atlantaFormat.format(now)} · ${dateFormat.format(now)}`;
+    atlantaClock.textContent = atlantaFormat.format(now);
     glasgowClock.textContent = glasgowFormat.format(now).replace(/\b(am|pm)\b/g, (period) => period.toUpperCase());
+    updateGlasgowProgress(now);
   }
   updateLocalClocks();
   setInterval(updateLocalClocks, 1000);

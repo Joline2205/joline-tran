@@ -342,3 +342,12 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 #work .sentry-row>.experience-copy .tools{margin:12px 0 0;padding-top:0}
 #work .sentry-row>.experience-copy .tags{margin-top:18px}
 @media(max-width:800px){#work .sentry-graphic-overlap{width:100%;margin-left:0}#work .sentry-row .experience-story>.work-endorsement{margin:-35px 0 0 12px}}
+
+/* The calculator bridges the two rows, beneath the foreground tiles and quotes. */
+#work .experience-rows{gap:clamp(24px,3vw,40px)}
+#work .quanthub-row>.experience-story{position:relative;z-index:auto;overflow:visible}
+#work .quanthub-graphic-overlap{width:calc(100% + 70px);margin-top:-80px;margin-right:-70px;position:relative;z-index:1;opacity:.54;overflow:visible}
+.calculators-graphic{width:100%;height:auto;border-radius:12px;border:1px solid var(--border-color,var(--line,#e2e8f0))}
+#work .quanthub-row .experience-story>.work-endorsement{position:relative;z-index:3;margin:-50px 24px 0 0}
+#work .quanthub-row .experience-copy{position:relative;z-index:2;box-shadow:0 12px 36px rgba(0,0,0,.06)}
+@media(max-width:800px){#work .quanthub-graphic-overlap{width:100%;margin-top:0;margin-right:0}#work .quanthub-row .experience-story>.work-endorsement{margin:-25px 12px 0 0}}

@@ -1,21 +1,5 @@
 'use strict';
 const root = document.documentElement;
-const themeButton = document.querySelector('.theme-toggle');
-const systemTheme = window.matchMedia('(prefers-color-scheme: dark)');
-function syncThemeButton() {
-  const dark = root.dataset.theme ? root.dataset.theme === 'dark' : systemTheme.matches;
-  themeButton.setAttribute('aria-pressed', String(dark));
-  themeButton.setAttribute('aria-label', `Switch to ${dark ? 'light' : 'dark'} mode`);
-  themeButton.querySelector('.theme-label').textContent = dark ? 'Light mode' : 'Dark mode';
-}
-syncThemeButton();
-systemTheme.addEventListener('change', syncThemeButton);
-themeButton.addEventListener('click', () => {
-  const dark = themeButton.getAttribute('aria-pressed') === 'true';
-  root.dataset.theme = dark ? 'light' : 'dark';
-  try { localStorage.setItem('theme', root.dataset.theme); } catch (error) { /* The toggle also works without storage. */ }
-  syncThemeButton();
-});
 document.querySelector('#year').textContent = new Date().getFullYear();
 
 // Each answer reveals the same twist; reset restores the initial state and focus.
@@ -226,8 +210,7 @@ if (noteHero) {
     const headerBottom = siteHeader ? siteHeader.getBoundingClientRect().bottom : 0;
     if (bounds.bottom <= headerBottom || event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < Math.max(bounds.top, headerBottom) || event.clientY > bounds.bottom) return;
     lastNoteTime = now;
-    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : systemTheme.matches;
-    const palette = dark ? ['#C5D5DF', '#EDEFE9'] : ['#6B8B9B', '#AFC2CD', '#333B42'];
+    const palette = ['#6B8B9B', '#AFC2CD', '#333B42'];
     const note = document.createElement('span');
     note.className = 'music-particle';
     note.setAttribute('aria-hidden', 'true');
@@ -524,4 +507,23 @@ if (circleHint) {
   };
   updateCircleHint();
   mobileHero.addEventListener('change', updateCircleHint);
+}
+
+// YouTube may omit max-resolution artwork; retain a useful link if remote images fail.
+const recitalThumbnail = document.querySelector('.youtube-thumb-img');
+if (recitalThumbnail) {
+  function thumbnailFallback() {
+    if (!recitalThumbnail.dataset.fallbackTried) {
+      recitalThumbnail.dataset.fallbackTried = 'true';
+      recitalThumbnail.src = 'https://img.youtube.com/vi/0lXD4k-HBIo/hqdefault.jpg';
+    } else {
+      recitalThumbnail.hidden = true;
+      recitalThumbnail.closest('.youtube-thumb-wrapper').classList.add('thumbnail-unavailable');
+    }
+  }
+  recitalThumbnail.addEventListener('error', thumbnailFallback);
+  recitalThumbnail.addEventListener('load', () => {
+    if (recitalThumbnail.naturalWidth <= 120) thumbnailFallback();
+  });
+  if (recitalThumbnail.complete && recitalThumbnail.naturalWidth === 0) thumbnailFallback();
 }

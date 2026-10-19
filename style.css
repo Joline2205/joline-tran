@@ -385,12 +385,55 @@ html{overflow-x:clip}.work-canvas,#work.work-section,#work .experience-rows,#wor
 /* Clip only the document's horizontal paint boundary, not the artboard or sticky content. */
 body{overflow-x:clip}
 
-/* Neutral architectural diagrams; only foreground cards retain accent color. */
-:root{--card-bg:var(--surface)}:root[data-theme=dark]{--quote-fill:#2a363f}@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--quote-fill:#2a363f}}
-#work .work-graphic-img,#work .calculators-graphic{filter:grayscale(100%) contrast(95%);-webkit-filter:grayscale(100%) contrast(95%)}
-#work .sentry-graphic-overlap,#work .quanthub-graphic-overlap{width:155%;opacity:.44}
-#work .sentry-graphic-overlap{margin-left:-140px;transform:none}
-#work .quanthub-graphic-overlap{margin-top:-340px;margin-left:0;margin-right:-130px;transform:translateX(110px)}
-#work .work-endorsement{border:none;outline:none;box-shadow:0 14px 30px -10px rgba(0,0,0,.08);background:var(--quote-fill)}
-#work .sentry-row>.experience-copy,#work .quanthub-row .experience-copy{position:relative;z-index:2;box-shadow:0 16px 36px -12px rgba(0,0,0,.08);background:var(--card-bg)}
-@media(max-width:800px){#work .sentry-graphic-overlap,#work .quanthub-graphic-overlap{width:100%;margin:0;transform:none}}
+/* Neutral architectural diagrams; foreground cards retain the accent palette. */
+:root { --card-bg: var(--surface); }
+:root[data-theme="dark"] { --quote-fill: #2A363F; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --quote-fill: #2A363F; }
+}
+
+#work {
+  --graphic-scale: 155%;
+  --graphic-opacity: 0.44;
+}
+#work .work-graphic-img,
+#work .calculators-graphic {
+  filter: grayscale(100%) contrast(95%);
+  -webkit-filter: grayscale(100%) contrast(95%);
+}
+#work .sentry-graphic-overlap,
+#work .quanthub-graphic-overlap {
+  width: var(--graphic-scale);
+  opacity: var(--graphic-opacity);
+}
+#work .sentry-graphic-overlap {
+  margin-left: -140px;
+  transform: none;
+}
+#work .quanthub-graphic-overlap {
+  margin-top: -340px;
+  margin-left: 0;
+  margin-right: -130px;
+  transform: translateX(110px);
+}
+#work .work-endorsement {
+  border: none;
+  outline: none;
+  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.08);
+  background: var(--quote-fill);
+}
+#work .sentry-row > .experience-copy,
+#work .quanthub-row .experience-copy {
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 16px 36px -12px rgba(0, 0, 0, 0.08);
+  background: var(--card-bg);
+}
+@media (max-width: 800px) {
+  #work .sentry-graphic-overlap,
+  #work .quanthub-graphic-overlap {
+    width: 100%;
+    margin: 0;
+    transform: none;
+  }
+}

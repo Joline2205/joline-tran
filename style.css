@@ -290,3 +290,14 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 @media(max-height:760px){.flagship-project{position:static}}
 @media(max-width:480px){.flagship-media{height:220px}.reflection-card{padding:24px}.reflection-card h3{font-size:23px}.reflection-meta{font-size:9px}.nav-links{gap:10px}}
 @media(prefers-reduced-motion:reduce){.reflection-card,.flagship-link{transition:none}}
+
+/* Compact icon-only toggle; the hidden label remains available to existing theme logic. */
+.theme-toggle{width:36px;height:36px;min-width:36px;padding:0;display:flex;align-items:center;justify-content:center;gap:0}.theme-label[hidden]{display:none}.theme-symbol{font-size:18px;line-height:1}
+/* One editorial measure and spacing scale for the four primary sections. */
+:root{--section-rhythm:clamp(48px,6vw,72px);--section-gutter:clamp(24px,4vw,56px)}
+#work.work-section,#projects.projects-reflections,#about.section,#contact.contact-section{width:100%;max-width:1520px;margin:0 auto;padding:var(--section-rhythm) var(--section-gutter)}
+#contact .contact-grid{width:100%;max-width:none;margin:0;padding:0}.experience-rows{gap:64px}.section-heading{margin-bottom:28px}.experience-section .section-index,.projects-reflections>.section-heading .section-index,#about>.section-heading .section-index,.contact-kicker .section-index{letter-spacing:.08em;font-variant-numeric:tabular-nums}
+#work .quanthub-row>.experience-main{margin-top:42px}#work .quanthub-row .experience-story>.work-endorsement{margin:28px 32px 0 0}#work .quanthub-row .experience-main>.work-endorsement{margin:0}
+#projects .reflections-layout{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:32px}#projects .reflection-articles{gap:28px}#projects .reflection-card{padding:32px}#projects .flagship-copy{padding:32px 32px 24px}#projects .flagship-link{padding-inline:32px}
+@media(max-width:800px){#work .quanthub-row>.experience-main{margin-top:0}#work .quanthub-row .experience-story>.work-endorsement{margin:20px 18px 0 0}#projects .reflections-layout{grid-template-columns:minmax(0,1fr);gap:24px}.experience-rows{gap:48px}}
+@media(max-width:480px){#projects .reflection-card{padding:24px}#projects .flagship-copy{padding:24px}#projects .flagship-link{padding-inline:24px}#projects .reflection-articles{gap:24px}.nav{gap:16px}}

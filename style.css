@@ -351,3 +351,12 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 #work .quanthub-row .experience-story>.work-endorsement{position:relative;z-index:3;margin:-50px 24px 0 0}
 #work .quanthub-row .experience-copy{position:relative;z-index:2;box-shadow:0 12px 36px rgba(0,0,0,.06)}
 @media(max-width:800px){#work .quanthub-graphic-overlap{width:100%;margin-top:0;margin-right:0}#work .quanthub-row .experience-story>.work-endorsement{margin:-25px 12px 0 0}}
+
+/* Preserve original vector proportions and remove the decorative softening layers. */
+.work-graphic-img,.sentry-graphic-overlap img,.quanthub-graphic-overlap img,.calculators-graphic{image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;shape-rendering:geometricPrecision;text-rendering:geometricPrecision;transform:translateZ(0);backface-visibility:hidden;max-width:none;filter:none;backdrop-filter:none}
+#work .sentry-graphic-overlap,#work .quanthub-graphic-overlap{opacity:.86;filter:none;backdrop-filter:none;mask-image:none;-webkit-mask-image:none;overflow:visible;z-index:1}
+#work .quanthub-row,#work .quanthub-row>.experience-story{overflow:visible}
+#work .quanthub-graphic-overlap{margin-top:-190px;margin-left:auto;margin-right:-70px;justify-self:end;position:relative;transform:translateX(45px)}
+#work .quanthub-row .experience-story>.work-endorsement{margin-top:-40px;position:relative;z-index:3}
+#work .quanthub-row .experience-copy{position:relative;z-index:2;box-shadow:0 12px 36px rgba(0,0,0,.06)}
+@media(max-width:800px){#work .quanthub-graphic-overlap{width:100%;margin:0;transform:none}#work .quanthub-row .experience-story>.work-endorsement{margin-top:-25px}}

@@ -360,3 +360,10 @@ body{background-color:var(--bg);background-image:radial-gradient(var(--paper-too
 #work .quanthub-row .experience-story>.work-endorsement{margin-top:-40px;position:relative;z-index:3}
 #work .quanthub-row .experience-copy{position:relative;z-index:2;box-shadow:0 12px 36px rgba(0,0,0,.06)}
 @media(max-width:800px){#work .quanthub-graphic-overlap{width:100%;margin:0;transform:none}#work .quanthub-row .experience-story>.work-endorsement{margin-top:-25px}}
+
+/* Opposing feathered edges keep the unfiltered vectors quiet against the paper. */
+#work .sentry-graphic-overlap,#work .quanthub-graphic-overlap{opacity:.45;overflow:visible;filter:none;backdrop-filter:none;mask-composite:intersect;-webkit-mask-composite:source-in}
+#work .sentry-graphic-overlap{mask-image:linear-gradient(to right,#000 65%,transparent 100%),linear-gradient(to bottom,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(to right,#000 65%,transparent 100%),linear-gradient(to bottom,#000 70%,transparent 100%)}
+#work .quanthub-graphic-overlap{mask-image:linear-gradient(to left,#000 60%,transparent 100%),linear-gradient(to bottom,#000 70%,transparent 100%);-webkit-mask-image:linear-gradient(to left,#000 60%,transparent 100%),linear-gradient(to bottom,#000 70%,transparent 100%);margin-left:auto;justify-self:end;transform:translateX(50px)}
+#work .sentry-row .experience-story>.work-endorsement{position:relative;z-index:3}
+@media(max-width:800px){#work .quanthub-graphic-overlap{transform:none}}

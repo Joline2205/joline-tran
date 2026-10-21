@@ -546,21 +546,25 @@ if (recitalThumbnail) {
     const cards = [...work.querySelectorAll('.experience-copy, .work-endorsement, .section-heading')].map(rect);
     const [sentry, nina, quant, kellie] = cards.slice(1);
     if (!kellie) return;
-    const goals = [
-      [sentry.x + sentry.w * .7, sentry.y + sentry.h + 24],
-      [nina.x + nina.w - 75, nina.y - 85],
-      [quant.x - 85, quant.y + 30],
-      [kellie.x - 75, kellie.y + 35],
-      [quant.x + quant.w * .6, quant.y + quant.h + 25]
-    ];
+    // Match each illustration to its requested landmark rather than its DOM order.
+    const tam = [sentry.x + sentry.w * .32, sentry.y + sentry.h + 24];
+    const envelope = [nina.x + 18, nina.y - 66];
+    const goals = {
+      'sticker-tam': tam,
+      'sticker-bottom-up': [(tam[0] + envelope[0]) / 2, (tam[1] + envelope[1]) / 2],
+      'sticker-envelope': envelope,
+      'sticker-icp': [quant.x - 70, quant.y - 26],
+      'sticker-hello': [kellie.x - 72, kellie.y + 24]
+    };
     const occupied = [...cards];
     stickers.forEach((sticker, i) => {
       const w = sticker.offsetWidth, h = sticker.offsetHeight;
+      const goal = goals[[...sticker.classList].find(name => name in goals)];
       let best, score = Infinity;
       for (let y = 18; y + h < bounds.height - 18; y += 12) {
         for (let x = 18; x + w < bounds.width - 18; x += 12) {
           if (occupied.some(r => x < r.x + r.w + 14 && x + w + 14 > r.x && y < r.y + r.h + 14 && y + h + 14 > r.y)) continue;
-          const distance = (x - goals[i][0]) ** 2 + (y - goals[i][1]) ** 2;
+          const distance = (x - goal[0]) ** 2 + (y - goal[1]) ** 2;
           if (distance < score) { score = distance; best = { x, y, w, h }; }
         }
       }

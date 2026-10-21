@@ -817,9 +817,11 @@ if (recitalThumbnail) {
       const visualHeight = height * Math.cos(angle) + width * Math.sin(angle);
       const x = left + fractions[i] * (available - visualWidth);
       const y = dashboard.top - gaps[i] - visualHeight;
-      tool.style.width = `${width}px`;
-      tool.style.left = `${x - section.left + (visualWidth - width) / 2}px`;
-      tool.style.top = `${y - section.top + (visualHeight - height) / 2}px`;
+      // Retain each existing center/rotation; shrink only the rendered artwork.
+      const sizeFactor = .75;
+      tool.style.width = `${width * sizeFactor}px`;
+      tool.style.left = `${x - section.left + (visualWidth - width * sizeFactor) / 2}px`;
+      tool.style.top = `${y - section.top + (visualHeight - height * sizeFactor) / 2}px`;
       tool.classList.add('is-placed');
     });
   }

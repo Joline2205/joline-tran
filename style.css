@@ -1327,7 +1327,7 @@ body { overflow-x: clip; }
 }
 
 /* Four independent annotations, positioned from the dashboard by script. */
-.work-tool-doodle { visibility: hidden; }
+.work-tool-doodle { visibility: hidden; --sticker-opacity: .6; }
 .work-tool-doodle.is-placed { visibility: visible; }
 @media (max-width: 800px) {
   /* The existing stacked gap is too short for legible hand-drawn icons. */
@@ -1347,6 +1347,7 @@ body { overflow-x: clip; }
 }
 .quanthub-annotation.is-positioned { visibility: visible; }
 .quanthub-annotation.revealed { opacity: 1; }
+.annotation-prospecting.revealed { opacity: .6; }
 @media (prefers-reduced-motion: reduce) {
   .quanthub-annotation { transition: none; }
 }

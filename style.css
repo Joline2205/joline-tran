@@ -342,9 +342,6 @@ body { background-image: var(--paper-grain); background-size: 200px 200px; }
 }
 .site-header { isolation: isolate; }
 .nav { position: relative; z-index: 2; }
-.nav-tape { position: absolute; z-index: 1; top: -9px; width: 110px; height: 31px; background: rgb(35, 39, 42); opacity: 0.7; mix-blend-mode: multiply; pointer-events: none; clip-path: polygon(3% 0px, 97% 0px, 94% 12%, 100% 24%, 95% 37%, 100% 51%, 95% 65%, 99% 80%, 95% 100%, 3% 100%, 6% 86%, 0px 73%, 5% 58%, 0px 43%, 5% 28%, 0px 13%); }
-.tape-left { left: 12px; transform: rotate(-3deg); }
-.tape-right { right: 12px; transform: rotate(4deg); }
 .hero { padding-block: 45px 65px; }
 .hero-intro { grid-template-columns: minmax(0px, 1.65fr) minmax(0px, 1fr); gap: 30px; }
 .hero-geometry { height: 620px; width: 100%; position: relative; pointer-events: none; --travel: 1; }
@@ -379,9 +376,6 @@ body { background-image: var(--paper-grain); background-size: 200px 200px; }
 .photo-running { left: 35px; top: 30px; }
 }
 @media (max-width: 640px) {
-.nav-tape { width: 72px; height: 24px; top: -7px; }
-.tape-left { left: 5px; }
-.tape-right { right: 5px; }
 .hero { padding-block: 45px 65px; }
 .hero-geometry { height: 570px; --travel: .4; }
 .photo-headshot { width: 260px; height: 260px; right: 0px; top: 45px; }
@@ -396,9 +390,6 @@ body { background-image: var(--paper-grain); background-size: 200px 200px; }
 }
 :root { --bg: #f7f6f2; --paper-grain: url("data:image/svg+xml,%3Csvg%20viewBox%3D%270%200%20300%20300%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%3E%3Cfilter%20id%3D%27paperNoise%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.65%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27matrix%27%20values%3D%270%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%200%20.085%200%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%23paperNoise%29%27%2F%3E%3C%2Fsvg%3E"); --paper-tooth: rgba(0,0,0,.03); }
 body { background-color: var(--bg); background-image: radial-gradient(var(--paper-tooth) 1px,transparent 0),var(--paper-grain); background-size: 5px 5px, 300px 300px; background-repeat: repeat; }
-.nav-tape { opacity: 0.42; }
-.tape-left { top: -12px; left: 32px; transform: rotate(-5deg); }
-.tape-right { top: auto; bottom: -14px; right: 48px; transform: rotate(4deg); }
 .hero { overflow: visible; isolation: isolate; min-height: max(760px,calc(100svh - var(--nav-height))); padding-block: 70px 180px; }
 .hero-intro { display: block; }
 .hero-heading { position: relative; z-index: 2; max-width: 720px; }
@@ -486,7 +477,7 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--pape
 .animated-strike::after { transition: none; }
 .hero-geometry > .geo-orb { translate: none; will-change: auto; }
 }
-:root { --circle-core: #6b8b9b; --circle-mineral: #afc2cd; --circle-slate: #7a96a6; --circle-ink: #25282c; --circle-core-hover: #afc2cd; --circle-mineral-hover: #25282c; --circle-slate-hover: #6b8b9b; --circle-ink-hover: #afc2cd; --tape-fill: #23272a; --eyebrow-ink: #4a5560; }
+:root { --circle-core: #6b8b9b; --circle-mineral: #afc2cd; --circle-slate: #7a96a6; --circle-ink: #25282c; --circle-core-hover: #afc2cd; --circle-mineral-hover: #25282c; --circle-slate-hover: #6b8b9b; --circle-ink-hover: #afc2cd; --eyebrow-ink: #4a5560; }
 .photo-headshot { --photo-color: var(--circle-core); --photo-hover: var(--circle-core-hover); }
 .photo-recital, .photo-travel { --photo-color: var(--circle-mineral); --photo-hover: var(--circle-mineral-hover); }
 .photo-running { --photo-color: var(--circle-slate); --photo-hover: var(--circle-slate-hover); }
@@ -494,8 +485,6 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--pape
 .geo-orb .orb-surface { background: var(--photo-color); transition: background-color 300ms; }
 .geo-orb:hover .orb-surface { background: var(--photo-hover); }
 .site-header, .site-header .nav { overflow: visible; }
-.nav-tape { background: var(--tape-fill); opacity: 0.42; z-index: 15; }
-.tape-right { right: 28px; overflow: visible; }
 .hero .eyebrow { font-size: 0.85rem; letter-spacing: 0.06em; font-weight: 500; color: var(--eyebrow-ink); }
 .animated-strike::after { height: 1px; top: 50%; transform: translateY(-50%); }
 .scroll-cue, .scroll-track, .scroll-label { display: none !important; }
@@ -536,7 +525,7 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--pape
 }
 .site-footer { position: relative; background: transparent; border: 0; }
 .site-footer .footer { position: relative; color: var(--ink); padding-block: 29px; }
-:root { --coffee-fill: #6b8b9b; }
+:root { --contact-blue: #6b8b9b; }
 .contact-section { position: relative; isolation: isolate; overflow: hidden; transition: background-color 1.2s ease-out; }
 .contact-grid { position: relative; z-index: 1; }
 .contact-kicker { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
@@ -1377,40 +1366,41 @@ body { overflow-x: clip; }
 }
 
 
-/* The supplied irregular outline forms the top of one continuous blue pour. */
+/* Contact is already blue underneath the stationary watercolor paper sheet. */
 #contact.contact-section {
-  --spill-x: 20%;
-  --spill-y: 300px;
-  --spill-height: clamp(140px, 16vw, 230px);
-  padding-top: calc(var(--spill-height) + 48px);
+  padding-top: calc(clamp(140px, 16vw, 230px) + 48px);
   border: 0;
-  background: none;
+  background: var(--contact-blue);
   transition: none;
+  isolation: isolate;
 }
-#contact .contact-backdrop {
+.paper-rip-defs { position: absolute; pointer-events: none; }
+.contact-paper-cover, .contact-tear-fibers { display: none; pointer-events: none; }
+#contact.paper-rip-enabled .contact-paper-cover {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background-color: var(--bg);
+  background-image: radial-gradient(var(--paper-tooth) 1px,transparent 0),var(--paper-grain);
+  background-size: 5px 5px, 300px 300px;
+  clip-path: url(#contact-paper-clip);
+}
+#contact.paper-rip-enabled .contact-tear-fibers {
+  display: block;
   position: absolute;
   inset: 0;
   width: 100%;
+  height: 100%;
+  z-index: 5;
   overflow: hidden;
-  color: var(--coffee-fill);
-  pointer-events: none;
-  z-index: 0;
+  fill: none;
 }
-#contact .contact-backdrop::after {
-  content: "";
-  position: absolute;
-  inset: calc(var(--spill-height) - 2px) 0 0;
-  background: var(--coffee-fill);
-}
-#contact .contact-paper-edge {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: var(--spill-height);
-  fill: currentColor;
-}
+.tear-shadow { stroke: rgba(40,47,48,.16); stroke-width: 3px; }
+.tear-fiber { stroke: #f4f2eb; stroke-width: 1.2px; }
+#contact.paper-rip-complete .contact-paper-cover,
+#contact.paper-rip-complete .contact-tear-fibers { visibility: hidden; }
+#contact.paper-rip-unstarted .contact-tear-fibers { visibility: hidden; }
 .contact-cup-illustration {
   position: relative;
   flex: 0 0 76px;
@@ -1421,18 +1411,6 @@ body { overflow-x: clip; }
   transform-origin: 65% 75%;
 }
 .contact-cup-illustration img { display: block; width: 100%; height: auto; filter: brightness(0) invert(1); }
-#contact.spill-ready .contact-backdrop { clip-path: ellipse(0% 0% at var(--spill-x) var(--spill-y)); }
-#contact.spill-ready.is-poured .contact-backdrop {
-  clip-path: ellipse(160% 180% at var(--spill-x) var(--spill-y));
-  transition: clip-path 2.8s cubic-bezier(.18,.65,.25,1);
-}
-#contact.spill-ready .contact-cup-illustration { transition: transform 1.4s ease; }
-#contact.spill-ready.is-poured .contact-cup-illustration { transform: rotate(48deg); }
-#contact.spill-ready .contact-grid, #contact.spill-ready .contact-signoff { opacity: 0; }
-#contact.spill-ready.is-poured .contact-grid, #contact.spill-ready.is-poured .contact-signoff {
-  opacity: 1;
-  transition: opacity .65s .65s ease;
-}
 /* Complete supplied sign-off, in normal flow below the Contact content. */
 #contact.contact-section { padding-bottom: 24px; }
 .contact-signoff {
@@ -1654,17 +1632,12 @@ body {
 .social-doodle-link:nth-child(4) img { animation-duration: 9s; animation-delay: -1.5s; }
 @keyframes social-float { from { transform: translateY(-2px); } to { transform: translateY(2px); } }
 @media (max-width: 600px) {
-  /* Show a broader portion of the supplied curve instead of compressing every crest. */
-  #contact .contact-paper-edge { width: 220%; left: -25%; }
   .contact-beli-note { gap: 14px; }
   .contact-beli-link { flex-basis: 48px; }
   .contact-beli-link img { width: 48px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .social-doodle-link img { animation: none; }
-  #contact.spill-ready .contact-backdrop { clip-path: none; transition: none; }
-  #contact.spill-ready .contact-grid, #contact.spill-ready .contact-signoff { opacity: 1; transition: none; }
-  #contact.spill-ready .contact-cup-illustration { transition: none; }
 }
 
 /* The cup belongs to the heading; the drawing remains the supplied SVG. */
@@ -1676,4 +1649,27 @@ body {
 }
 @media (min-width: 769px) {
   .hero-actions .mobile-decorative-arrow { display: none; }
+}
+
+/* Only the three physical-paper boundaries get a shallow, static fiber edge.
+   The grid remains inside the header/footer; there is no stroked divider. */
+.site-header {
+  mask-image: linear-gradient(#000 0 0), url("paper-edges/matte-bottom-edge.svg");
+  mask-size: 100% calc(100% - 6px), 100% 6px;
+  mask-position: top, bottom;
+  mask-repeat: no-repeat;
+}
+.site-footer, #contact {
+  mask-image: linear-gradient(#000 0 0), url("paper-edges/matte-top-edge.svg");
+  mask-size: 100% calc(100% - 6px), 100% 6px;
+  mask-position: bottom, top;
+  mask-repeat: no-repeat;
+}
+@media (max-width: 768px) {
+  .tear-shadow { stroke-width: 2px; }
+  .tear-fiber { stroke-width: 1px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #contact.paper-rip-enabled .contact-paper-cover,
+  #contact.paper-rip-enabled .contact-tear-fibers { display: none; }
 }

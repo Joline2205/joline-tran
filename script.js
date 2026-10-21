@@ -896,33 +896,47 @@ if (recitalThumbnail) {
 })();
 
 
-// One calm pour: the uploaded wave silhouette and solid fill are the same layer.
-const coffeeContact = document.querySelector('#contact');
-if (coffeeContact && 'IntersectionObserver' in window) {
-  const cup = coffeeContact.querySelector('.contact-cup-illustration');
-  const syncSpillOrigin = () => {
-    const section = coffeeContact.getBoundingClientRect();
-    const bounds = cup.getBoundingClientRect();
-    coffeeContact.style.setProperty('--spill-x', `${bounds.left + bounds.width / 2 - section.left}px`);
-    coffeeContact.style.setProperty('--spill-y', `${bounds.top + bounds.height / 2 - section.top}px`);
-  };
-  syncSpillOrigin();
-  window.addEventListener('resize', syncSpillOrigin, { passive: true });
-  const reducedPour = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (!reducedPour.matches) {
-    coffeeContact.classList.add('spill-ready');
-    const pourObserver = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        coffeeContact.classList.add('is-poured');
-        pourObserver.disconnect();
-      }
-    }, { threshold: 0, rootMargin: '0px 0px -80px 0px' });
-    pourObserver.observe(coffeeContact);
-    reducedPour.addEventListener('change', () => {
-      if (reducedPour.matches) {
-        coffeeContact.classList.add('is-poured');
-        pourObserver.disconnect();
-      }
-    });
+// Reveal the blue beneath a stationary sheet: only its rough tear boundary moves.
+const paperContact = document.querySelector('#contact');
+if (paperContact && window.CSS && CSS.supports('clip-path', 'url(#contact-paper-clip)')) {
+  const reducedRip = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const cut = document.querySelector('#contact-paper-cut');
+  const edge = document.querySelector('#contact-tear-edge');
+  const sheet = paperContact.querySelector('.contact-paper-cover');
+  let ripFrame = 0;
+  let lastRip = -1;
+  function renderRip() {
+    ripFrame = 0;
+    if (reducedRip.matches) {
+      paperContact.classList.remove('paper-rip-enabled');
+      return;
+    }
+    const bounds = paperContact.getBoundingClientRect();
+    const start = innerHeight * .94;
+    // Short tablet layouts can reach the document bottom before the header line.
+    const reachableEnd = innerHeight - (document.documentElement.scrollHeight - (bounds.top + scrollY)) + 4;
+    const end = Math.max(siteHeader ? siteHeader.offsetHeight + 24 : 100, innerHeight * .22, reachableEnd);
+    const progress = Math.max(0, Math.min(1, (start - bounds.top) / (start - end)));
+    const rounded = Math.round(progress * 10000) / 10000;
+    paperContact.classList.add('paper-rip-enabled');
+    if (rounded === lastRip) return;
+    lastRip = rounded;
+    const x = -.12 + progress * 1.24;
+    cut.setAttribute('transform', `translate(${x} 0)`);
+    edge.setAttribute('transform', `translate(${x} 0)`);
+    paperContact.classList.toggle('paper-rip-complete', progress === 1);
+    paperContact.classList.toggle('paper-rip-unstarted', progress === 0);
   }
+  const queueRip = () => { if (!ripFrame) ripFrame = requestAnimationFrame(renderRip); };
+  const alignPaperGrain = () => {
+    const canvas = document.querySelector('.work-canvas');
+    const offset = canvas ? canvas.getBoundingClientRect().top - paperContact.getBoundingClientRect().top : 0;
+    sheet.style.backgroundPosition = `0 ${offset}px`;
+    lastRip = -1;
+    queueRip();
+  };
+  window.addEventListener('scroll', queueRip, { passive: true });
+  window.addEventListener('resize', alignPaperGrain, { passive: true });
+  reducedRip.addEventListener('change', () => { lastRip = -1; queueRip(); });
+  alignPaperGrain();
 }

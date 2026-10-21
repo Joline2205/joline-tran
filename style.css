@@ -1673,11 +1673,32 @@ body {
 
 /* Only the three physical-paper boundaries get a shallow, static fiber edge.
    The grid remains inside the header/footer; there is no stroked divider. */
-.site-header {
+/* Mask the grid surface, not the entire header: its cutouts reveal grid-blue
+   ink over the same header tint instead of exposing a white paper strip. */
+.site-header { background: none; }
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--header);
+  background-image: linear-gradient(to right,var(--header-grid) 1px,transparent 1px),linear-gradient(to bottom,var(--header-grid) 1px,transparent 1px);
+  background-size: 24px 24px;
   mask-image: linear-gradient(#000 0 0), url("paper-edges/matte-bottom-edge.svg");
   mask-size: 100% calc(100% - 6px), 100% 6px;
   mask-position: top, bottom;
   mask-repeat: no-repeat;
+}
+.site-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 6px;
+  z-index: -2;
+  pointer-events: none;
+  background-color: var(--header);
+  background-image: linear-gradient(var(--header-grid), var(--header-grid));
 }
 .site-footer {
   mask-image: linear-gradient(#000 0 0), url("paper-edges/matte-top-edge.svg");
@@ -1740,3 +1761,8 @@ body {
   }
   #contact .contact-signoff img { width: clamp(108px, 31vw, 132px); }
 }
+
+/* Atlanta alone shares the hero-name source of truth, including its quiet halo. */
+.map-pin[data-city="Atlanta"] { --pin-lived: var(--name-accent); }
+.map-pin[data-city="Atlanta"] > span { box-shadow: 0 0 0 3px color-mix(in srgb, var(--name-accent) 12.5%, transparent); }
+.map-pin[data-city="Atlanta"]:is(:hover, :focus-visible, [aria-pressed="true"]) > span { box-shadow: 0 0 0 4px color-mix(in srgb, var(--name-accent) 14.5%, transparent); }

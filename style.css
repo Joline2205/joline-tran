@@ -1350,6 +1350,7 @@ body { overflow-x: clip; }
 /* The page guides frame sections 01–03, leaving the coffee wash unbordered. */
 .framed-sections { position: relative; }
 .contact-socials {
+  --social-icon-height: calc(44px / 3);
   display: flex;
   align-items: center;
   gap: 32px;
@@ -1368,7 +1369,8 @@ body { overflow-x: clip; }
   transform: translateY(var(--social-offset)) rotate(var(--social-angle));
   transition: transform .2s ease, opacity .2s ease;
 }
-.social-doodle-link img { display: block; height: calc(44px / 3); width: auto; }
+.social-doodle-link img { display: block; height: var(--social-icon-height); width: auto; filter: brightness(0) invert(1); }
+.social-substack img { height: calc(var(--social-icon-height) * 1.05); }
 .contact-socials .social-doodle-link:hover,
 .contact-socials .social-doodle-link:focus-visible {
   opacity: 1;
@@ -1501,7 +1503,7 @@ body { overflow-x: clip; }
 /* Desktop refinements leave the dedicated phone composition intact. */
 .about-dumb-strike { position: relative; display: inline-block; text-decoration: none; }
 @media (min-width: 769px) {
-  .social-doodle-link img { height: 22px; filter: brightness(0) invert(1); }
+  .contact-socials { --social-icon-height: 22px; }
 }
 @media (max-width: 768px) {
   .about-dumb-insertion { display: none; }
@@ -1606,4 +1608,29 @@ body { overflow-x: clip; }
   .rest-sixteenth { left: 23%; right: auto; top: 70px; }
   #contact .contact-paper-edge, #contact .contact-cup-connection { display: none; }
   #contact .contact-backdrop::after { inset: 0; }
+}
+
+
+/* The original handwritten email drawings are the links, not supplementary labels. */
+.contact-links > .handwritten-email {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 44px;
+  border: 0;
+  opacity: .9;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.handwritten-email img {
+  display: block;
+  width: 165px;
+  max-width: 100%;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+.handwritten-gatech-email img { width: 160px; }
+.contact-links > .handwritten-email:hover,
+.contact-links > .handwritten-email:focus-visible { opacity: 1; transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) {
+  .contact-links > .handwritten-email { transition: none; }
 }

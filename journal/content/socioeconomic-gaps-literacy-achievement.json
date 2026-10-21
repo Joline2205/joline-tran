@@ -1,0 +1,23 @@
+{
+  "slug": "socioeconomic-gaps-literacy-achievement",
+  "title": "Socioeconomic Gaps in Literacy Achievement",
+  "title_break_after": "Socioeconomic Gaps",
+  "description": "",
+  "metadata": [],
+  "sections": [
+    {
+      "type": "embed",
+      "heading": "Material 01",
+      "title": "Socioeconomic Gaps in Literacy Achievement — first project material",
+      "src": "https://drive.google.com/file/d/1ZRBIYVXLi2zqlqF7f3KFM-RMBCwjGYUi/preview",
+      "link": "https://drive.google.com/file/d/1ZRBIYVXLi2zqlqF7f3KFM-RMBCwjGYUi/view"
+    },
+    {
+      "type": "embed",
+      "heading": "Material 02",
+      "title": "Socioeconomic Gaps in Literacy Achievement — second project material",
+      "src": "https://drive.google.com/file/d/1Z5QUmwFkalhvhROkpVhRScwsT_2xFEr5/preview",
+      "link": "https://drive.google.com/file/d/1Z5QUmwFkalhvhROkpVhRScwsT_2xFEr5/view"
+    }
+  ]
+}

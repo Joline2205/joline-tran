@@ -1,0 +1,78 @@
+/* Shared dark-paper journal layout. Homepage styles are deliberately separate. */
+:root {
+  color-scheme: dark;
+  --paper: #1e2124;
+  --ink: #f1f0e9;
+  --muted: #aebac1;
+  --accent: #a6c0cd;
+  --line: rgba(200,216,224,.2);
+  --gutter: clamp(20px, 4vw, 64px);
+  --paper-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)'/%3E%3C/svg%3E");
+  font-family: Helvetica, Arial, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 28px; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: radial-gradient(circle, rgba(220,230,238,.085) 1px, transparent 1px), var(--paper-grain);
+  background-size: 20px 20px, 300px 300px;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; transition: color .2s ease; }
+a:hover, a:focus-visible { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
+::selection { background: #536e7b; color: #fff; }
+.detail-canvas {
+  width: min(1280px, 100%);
+  margin-inline: auto;
+  padding: 0 var(--gutter);
+  background-color: var(--paper);
+  background-image: var(--paper-grain);
+  background-size: 300px 300px;
+  min-height: 100svh;
+}
+.detail-topbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 32px; }
+.wordmark { font-size: 20px; font-weight: 650; letter-spacing: -.04em; }
+.back-link { display: inline-flex; align-items: center; min-height: 44px; gap: 10px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+.back-link span { color: var(--accent); }
+.detail-intro { padding: clamp(56px, 9vw, 128px) 0 clamp(64px, 9vw, 128px); }
+h1 { margin: 0; max-width: 1100px; font-size: clamp(2.5rem, 5.6vw, 5.6rem); line-height: 1.06; letter-spacing: -.045em; font-weight: 600; text-wrap: balance; }
+.detail-description { max-width: 720px; margin: 28px 0 0; font-size: clamp(1.05rem, 1.5vw, 1.25rem); line-height: 1.7; color: var(--muted); }
+.detail-metadata { display: flex; flex-wrap: wrap; gap: 10px 20px; list-style: none; padding: 0; margin: 28px 0 0; color: var(--accent); font-size: 12px; }
+.detail-materials { scroll-margin-top: 28px; }
+.material + .material { margin-top: clamp(64px, 8vw, 112px); }
+.material-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding: 0 0 16px; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.material h2 { font-size: 12px; font-weight: 500; letter-spacing: .08em; color: var(--accent); margin: 0; }
+.material-link { font-size: 12px; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 4px; }
+.document-viewer { background: #262b30; min-width: 0; }
+.document-viewer iframe { width: 100%; height: clamp(640px, 80svh, 1000px); border: 0; display: block; }
+.material-text { max-width: 760px; }
+.material-text h2 { font-size: 24px; letter-spacing: -.025em; color: var(--ink); margin-bottom: 24px; }
+.material p { font-size: 17px; line-height: 1.8; }
+.material p a { text-decoration: underline; text-underline-offset: 4px; }
+figure { margin: 0; }
+.content-image { display: block; width: 100%; height: auto; }
+figcaption { color: var(--muted); font-size: 12px; line-height: 1.6; margin-top: 12px; }
+.detail-return { margin-top: clamp(64px, 8vw, 112px); padding-block: 28px; border-top: 1px solid var(--line); }
+.detail-footer { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; padding: 24px 0 32px; color: var(--muted); font-size: 11px; }
+.detail-footer img { width: 190px; height: auto; filter: brightness(0) invert(1); opacity: .75; }
+.skip-link { position: fixed; top: 12px; left: 12px; z-index: 2; padding: 12px 16px; background: var(--paper); transform: translateY(-200%); }
+.skip-link:focus { transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  html, body, body *, body *::before, body *::after { cursor: url("../treble-clef-cursor-white.png") 17 3, auto !important; }
+}
+@media (max-width: 600px) {
+  .detail-topbar { align-items: flex-start; flex-direction: column; gap: 20px; padding-block: 24px; }
+  .detail-intro { padding: 44px 0 64px; }
+  h1 { font-size: clamp(2.25rem, 8.5vw, 3rem); }
+  .material-heading { gap: 12px; margin-bottom: 16px; }
+  .document-viewer iframe { height: clamp(520px, 76svh, 760px); }
+  .detail-footer { align-items: center; }
+  .detail-footer img { width: 150px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  a { transition: none; }
+}

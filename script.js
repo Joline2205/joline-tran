@@ -176,13 +176,12 @@ if (magneticHero) {
   window.addEventListener('resize', resetMagnet, { passive: true });
 }
 
-// A throttled hero-only trail: no timers or animation loop while the mouse is idle.
-const noteHero = document.querySelector('#hero');
-if (noteHero) {
+// One throttled site-wide trail; the original note timing and motion stay unchanged.
+{
   const particleLayer = document.createElement('div');
-  particleLayer.className = 'hero-particles';
+  particleLayer.className = 'cursor-particles';
   particleLayer.setAttribute('aria-hidden', 'true');
-  noteHero.append(particleLayer);
+  document.body.append(particleLayer);
   const reducedNotes = window.matchMedia('(prefers-reduced-motion: reduce)');
   const notePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   const noteAssets = [
@@ -216,26 +215,24 @@ if (noteHero) {
     liveNotes.clear();
     lastNoteTime = -Infinity;
   }
-  noteHero.addEventListener('mousemove', (event) => {
+  document.addEventListener('mousemove', (event) => {
     if (reducedNotes.matches || !notePointer.matches || document.hidden) return;
     const now = performance.now();
     if (now - lastNoteTime < 200 || liveNotes.size >= 4) return;
-    const bounds = noteHero.getBoundingClientRect();
-    const headerBottom = siteHeader ? siteHeader.getBoundingClientRect().bottom : 0;
-    if (bounds.bottom <= headerBottom || event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < Math.max(bounds.top, headerBottom) || event.clientY > bounds.bottom) return;
+    if (event.clientX < 0 || event.clientX > innerWidth || event.clientY < 0 || event.clientY > innerHeight) return;
+    const inContact = Boolean(event.target instanceof Element && event.target.closest('#contact'));
     lastNoteTime = now;
     const note = document.createElement('img');
-    note.className = 'music-particle';
+    note.className = `music-particle${inContact ? ' is-contact-note' : ''}`;
     note.setAttribute('aria-hidden', 'true');
     note.alt = '';
     note.src = noteAssets[noteIndex++ % noteAssets.length];
     note.decoding = 'async';
     const duration = 1000;
     const size = 24 + Math.random() * 4;
-    // Start just beside the treble clef's visible edge, close to its hotspot.
-    // The existing layer still clips drift at the hero boundaries.
-    const x = event.clientX - bounds.left + 10;
-    const y = event.clientY - bounds.top + 8;
+    // Start beside the same hotspot; the viewport layer prevents edge overflow.
+    const x = event.clientX + 10;
+    const y = event.clientY + 8;
     note.style.left = `${x}px`;
     note.style.top = `${y}px`;
     note.style.height = `${size}px`;
@@ -248,7 +245,7 @@ if (noteHero) {
     // A timeout also cleans up if animationend is suppressed by browser settings.
     liveNotes.set(note, setTimeout(() => removeNote(note), duration + 100));
   }, { passive: true });
-  noteHero.addEventListener('mouseleave', clearNotes);
+  document.documentElement.addEventListener('mouseleave', clearNotes);
   window.addEventListener('scroll', clearNotes, { passive: true });
   window.addEventListener('blur', clearNotes);
   reducedNotes.addEventListener('change', clearNotes);

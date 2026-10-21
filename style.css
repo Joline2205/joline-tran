@@ -1392,9 +1392,12 @@ body { overflow-x: clip; }
 }
 
 
-/* Same artwork, dimensions and hotspot; the blue contact canvas needs white ink. */
+/* Pre-rendered original artwork avoids SVG-filter cursor support differences. */
 @media (hover: hover) and (pointer: fine) {
-  #contact { --site-cursor: url("treble-clef-cursor-white.svg") 17 3, auto; }
+  #contact, #contact *, #contact::before, #contact::after,
+  #contact *::before, #contact *::after {
+    cursor: url("treble-clef-cursor-white.png") 17 3, auto !important;
+  }
 }
 
 
@@ -1465,3 +1468,24 @@ body { overflow-x: clip; }
   .contact-cup-illustration { transition: none; }
   #contact.is-poured .coffee-spill { animation: none; clip-path: none; }
 }
+
+
+/* Complete supplied sign-off, in normal flow below the Contact content. */
+#contact.contact-section { padding-bottom: 24px; }
+.contact-signoff {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 48px;
+}
+.contact-signoff img {
+  display: block;
+  width: clamp(260px, 24vw, 340px);
+  max-width: 100%;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+/* Reuse the existing short-lived notes; never create a cursor-following element. */
+.cursor-particles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 20; }
+.music-particle.is-contact-note { filter: brightness(0) invert(1); }

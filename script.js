@@ -258,19 +258,27 @@ if (noteHero) {
   document.addEventListener('visibilitychange', () => { if (document.hidden) clearNotes(); });
 }
 
-// Match the hero's custom line, drawing only across the visible desktop word once.
+// Reuse the hero's left-to-right pseudo-element transition, once clearly in view.
 const aboutStrike = document.querySelector('.about-dumb-strike');
 if (aboutStrike) {
+  const reducedStrike = window.matchMedia('(prefers-reduced-motion: reduce)');
   const strikeOnce = () => aboutStrike.classList.add('is-struck');
-  if ('IntersectionObserver' in window) {
+  if (reducedStrike.matches || !('IntersectionObserver' in window)) {
+    strikeOnce();
+  } else {
     const observer = new IntersectionObserver(entries => {
       if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= .6)) {
-        strikeOnce();
+        // Wait until the word is comfortably above the bottom edge, then paint
+        // its uncrossed state before starting the same transition as DELUSIONAL.
+        requestAnimationFrame(() => requestAnimationFrame(strikeOnce));
         observer.disconnect();
       }
-    }, { threshold: .6 });
+    }, { threshold: .6, rootMargin: `-112px 0px -${Math.round(innerHeight * .2)}px 0px` });
     observer.observe(aboutStrike);
-  } else strikeOnce();
+    reducedStrike.addEventListener('change', () => {
+      if (reducedStrike.matches) { strikeOnce(); observer.disconnect(); }
+    });
+  }
 }
 
 // Touch and keyboard users can hold a photo open; hover remains the default preview.
@@ -891,6 +899,15 @@ if (recitalThumbnail) {
 // One calm pour: the uploaded wave silhouette and solid fill are the same layer.
 const coffeeContact = document.querySelector('#contact');
 if (coffeeContact && 'IntersectionObserver' in window) {
+  const cup = coffeeContact.querySelector('.contact-cup-illustration');
+  const syncSpillOrigin = () => {
+    const section = coffeeContact.getBoundingClientRect();
+    const bounds = cup.getBoundingClientRect();
+    coffeeContact.style.setProperty('--spill-x', `${bounds.left + bounds.width / 2 - section.left}px`);
+    coffeeContact.style.setProperty('--spill-y', `${bounds.top + bounds.height / 2 - section.top}px`);
+  };
+  syncSpillOrigin();
+  window.addEventListener('resize', syncSpillOrigin, { passive: true });
   const reducedPour = window.matchMedia('(prefers-reduced-motion: reduce)');
   if (!reducedPour.matches) {
     coffeeContact.classList.add('spill-ready');

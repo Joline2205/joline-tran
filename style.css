@@ -1373,8 +1373,8 @@ body { overflow-x: clip; }
   transition: none;
   isolation: isolate;
 }
-/* Only a shallow horizontal paper lip is drawn across Contact's top edge.
-   The blue rectangle and all Contact content remain unmasked at every stage. */
+/* The full-height sheet is removed by a CLEAN clip, never a vertical tear path.
+   Torn geometry belongs exclusively to the completed horizontal top boundary. */
 .contact-horizontal-tear {
   position: absolute;
   top: 0;
@@ -1385,14 +1385,25 @@ body { overflow-x: clip; }
   pointer-events: none;
   clip-path: inset(0 var(--tear-unrevealed, 0%) 0 0);
 }
-.contact-torn-paper {
+.contact-torn-paper, .contact-paper-cover {
   position: absolute;
   inset: 0;
   background-color: var(--bg);
   background-image: radial-gradient(var(--paper-tooth) 1px,transparent 0),var(--paper-grain);
   background-size: 5px 5px, 300px 300px;
-  mask: url("paper-edges/matte-bottom-edge.svg") center / 100% 100% no-repeat;
 }
+.contact-torn-paper { mask: url("paper-edges/matte-bottom-edge.svg") center / 100% 100% no-repeat; }
+.contact-paper-cover {
+  display: none;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 1;
+  border: 0;
+  box-shadow: none;
+  clip-path: inset(0 0 0 var(--paper-removed, 100%));
+}
+#contact.paper-reveal-ready .contact-paper-cover { display: block; }
+#contact.paper-reveal-complete .contact-paper-cover { visibility: hidden; }
 .contact-cup-illustration {
   position: relative;
   flex: 0 0 76px;
@@ -1659,6 +1670,7 @@ body {
 }
 @media (prefers-reduced-motion: reduce) {
   .contact-horizontal-tear { clip-path: none; }
+  #contact.paper-reveal-ready .contact-paper-cover { display: none; }
 }
 
 /* City Notes keeps one native selector, with short, clearly grouped option lists. */

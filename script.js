@@ -936,11 +936,11 @@ if (recitalThumbnail) {
 })();
 
 
-// Scroll draws the torn boundary across Contact's TOP, never down either side.
+// Remove the opaque sheet with a straight clip; only the horizontal lip is torn.
 const paperContact = document.querySelector('#contact');
 if (paperContact && window.CSS && CSS.supports('clip-path', 'inset(0)')) {
   const reducedTear = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const paperLip = paperContact.querySelector('.contact-torn-paper');
+  const paperLayers = paperContact.querySelectorAll('.contact-torn-paper, .contact-paper-cover');
   let tearFrame = 0;
   let lastTear = -1;
   function renderTear() {
@@ -953,16 +953,20 @@ if (paperContact && window.CSS && CSS.supports('clip-path', 'inset(0)')) {
       const end = Math.max(siteHeader ? siteHeader.offsetHeight + 24 : 100, innerHeight * .22, reachableEnd);
       progress = Math.max(0, Math.min(1, (start - bounds.top) / (start - end)));
     }
-    const rounded = Math.round(progress * 10000) / 10000;
+    // Snap endpoints so fractional scroll pixels cannot leave a one-pixel sliver.
+    const rounded = progress < .002 ? 0 : progress > .998 ? 1 : Math.round(progress * 10000) / 10000;
     if (rounded === lastTear) return;
     lastTear = rounded;
     paperContact.style.setProperty('--tear-unrevealed', `${(1 - rounded) * 100}%`);
+    paperContact.style.setProperty('--paper-removed', `${rounded * 100}%`);
+    paperContact.classList.toggle('paper-reveal-ready', !reducedTear.matches);
+    paperContact.classList.toggle('paper-reveal-complete', rounded === 1);
   }
   const queueTear = () => { if (!tearFrame) tearFrame = requestAnimationFrame(renderTear); };
   const alignPaperGrain = () => {
     const canvas = document.querySelector('.work-canvas');
     const offset = canvas ? canvas.getBoundingClientRect().top - paperContact.getBoundingClientRect().top : 0;
-    paperLip.style.backgroundPosition = `0 ${offset}px`;
+    paperLayers.forEach(layer => { layer.style.backgroundPosition = `0 ${offset}px`; });
     lastTear = -1;
     queueTear();
   };

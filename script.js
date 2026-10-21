@@ -818,7 +818,7 @@ if (recitalThumbnail) {
       const x = left + fractions[i] * (available - visualWidth);
       const y = dashboard.top - gaps[i] - visualHeight;
       // Retain each existing center/rotation; shrink only the rendered artwork.
-      const sizeFactor = .75;
+      const sizeFactor = .375;
       tool.style.width = `${width * sizeFactor}px`;
       tool.style.left = `${x - section.left + (visualWidth - width * sizeFactor) / 2}px`;
       tool.style.top = `${y - section.top + (visualHeight - height * sizeFactor) / 2}px`;

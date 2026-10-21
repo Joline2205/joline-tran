@@ -675,10 +675,14 @@ if (recitalThumbnail) {
     const calculator = work.querySelector('.quanthub-graphic-overlap').getBoundingClientRect();
     const quote = work.querySelector('.sentry-row .work-endorsement').getBoundingClientRect();
     const clearance = 24;
-    const ratio = 247 / 430;
+    const ratio = 251 / 698;
+    const previousRatio = 247 / 430;
     const end = quote.left >= card.right ? calculator.top : Math.min(calculator.top, quote.top);
     const height = end - card.bottom - clearance * 2;
-    const maxWidth = Math.min(288, card.width - clearance * 2, height / ratio);
+    // The replacement has a wider composition. Preserve roughly the previous
+    // visual area while fitting its original aspect ratio into the same gap.
+    const previousWidth = Math.min(288, card.width - clearance * 2, height / previousRatio);
+    const maxWidth = Math.min(previousWidth * Math.sqrt(previousRatio / ratio), card.width - clearance * 2, height / ratio);
     // No fallback above or beside Sentry: if the fixed screenshots close this
     // gap completely, omit this one decoration until there is room again.
     note.hidden = true;

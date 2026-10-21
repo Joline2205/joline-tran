@@ -1280,7 +1280,7 @@ body { overflow-x: clip; }
 }
 
 /* Independent addition: its positioning never participates in card layout. */
-.work-gap-note { position: absolute; width: 288px; height: auto; aspect-ratio: 430 / 247; z-index: 5; pointer-events: none; user-select: none; }
+.work-gap-note { position: absolute; width: 364px; height: auto; aspect-ratio: 698 / 251; z-index: 5; pointer-events: none; user-select: none; }
 
 /* Soften only the three requested annotations, including after scroll reveal. */
 .work-gap-note { opacity: .7; }

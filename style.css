@@ -1258,3 +1258,19 @@ body { overflow-x: clip; }
   mask-image: linear-gradient(to left, #000 60%, transparent 100%), linear-gradient(to bottom, #000 70%, transparent 100%), linear-gradient(to bottom left, transparent, #000 42%);
   mask-composite: intersect;
 }
+
+/* Uploaded notebook illustrations stay confined to the work artboard. */
+.work-sticker-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; clip-path: inset(0); }
+.work-doodle-sticker { position: absolute; width: var(--sticker-width); height: auto; max-width: none; pointer-events: auto; user-select: none; transform: scale(1) rotate(var(--sticker-angle)); transform-origin: center; transition: opacity .45s ease-out, transform .5s cubic-bezier(.34,1.56,.64,1); }
+.work-sticker-layer.is-ready .work-doodle-sticker { opacity: 0; transform: scale(.7) rotate(var(--sticker-angle)); transition-delay: var(--sticker-delay); }
+.work-sticker-layer.is-ready .work-doodle-sticker.revealed { opacity: 1; transform: scale(1) rotate(var(--sticker-angle)); }
+.work-sticker-layer .work-doodle-sticker:hover { transform: scale(1.08) rotate(var(--sticker-angle)); cursor: pointer; transition-delay: 0ms; }
+@media (max-width: 800px) {
+  .work-sticker-layer { position: relative; inset: auto; display: flex; align-items: center; justify-content: space-around; gap: 10px; padding: 16px 8px 24px; clip-path: none; }
+  .work-doodle-sticker { position: relative; left: auto !important; top: auto !important; width: min(var(--sticker-width), 14vw); flex-shrink: 0; }
+  #work .work-sticker-layer { order: initial; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .work-sticker-layer .work-doodle-sticker { transition: none; }
+  .work-sticker-layer.is-ready .work-doodle-sticker { opacity: 1; transform: rotate(var(--sticker-angle)); }
+}

@@ -527,3 +527,67 @@ if (recitalThumbnail) {
   });
   if (recitalThumbnail.complete && recitalThumbnail.naturalWidth === 0) thumbnailFallback();
 }
+
+
+// Keep the supplied stickers in free paper space, never over foreground copy.
+(() => {
+  const work = document.querySelector('#work');
+  const layer = work?.querySelector('.work-sticker-layer');
+  if (!layer) return;
+  const stickers = [...layer.querySelectorAll('.work-doodle-sticker')];
+  const mobile = matchMedia('(max-width: 800px)');
+  function placeStickers() {
+    if (mobile.matches) return;
+    const bounds = work.getBoundingClientRect();
+    const rect = element => {
+      const r = element.getBoundingClientRect();
+      return { x: r.left - bounds.left, y: r.top - bounds.top, w: r.width, h: r.height };
+    };
+    const cards = [...work.querySelectorAll('.experience-copy, .work-endorsement, .section-heading')].map(rect);
+    const [sentry, nina, quant, kellie] = cards.slice(1);
+    if (!kellie) return;
+    const goals = [
+      [sentry.x + sentry.w * .7, sentry.y + sentry.h + 24],
+      [nina.x + nina.w - 75, nina.y - 85],
+      [quant.x - 85, quant.y + 30],
+      [kellie.x - 75, kellie.y + 35],
+      [quant.x + quant.w * .6, quant.y + quant.h + 25]
+    ];
+    const occupied = [...cards];
+    stickers.forEach((sticker, i) => {
+      const w = sticker.offsetWidth, h = sticker.offsetHeight;
+      let best, score = Infinity;
+      for (let y = 18; y + h < bounds.height - 18; y += 12) {
+        for (let x = 18; x + w < bounds.width - 18; x += 12) {
+          if (occupied.some(r => x < r.x + r.w + 14 && x + w + 14 > r.x && y < r.y + r.h + 14 && y + h + 14 > r.y)) continue;
+          const distance = (x - goals[i][0]) ** 2 + (y - goals[i][1]) ** 2;
+          if (distance < score) { score = distance; best = { x, y, w, h }; }
+        }
+      }
+      if (best) {
+        sticker.style.left = `${best.x}px`;
+        sticker.style.top = `${best.y}px`;
+        occupied.push(best);
+      }
+    });
+  }
+  Promise.all(stickers.map(s => s.decode().catch(() => {}))).then(() => {
+    placeStickers();
+    layer.classList.add('is-ready');
+    if (!('IntersectionObserver' in window)) {
+      stickers.forEach(s => s.classList.add('revealed'));
+      return;
+    }
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: .15 });
+    stickers.forEach(s => observer.observe(s));
+  });
+  const resize = new ResizeObserver(placeStickers);
+  resize.observe(work);
+  document.fonts.ready.then(placeStickers);
+})();

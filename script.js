@@ -644,27 +644,39 @@ if (recitalThumbnail) {
     const card = work.querySelector('.sentry-row > .experience-copy').getBoundingClientRect();
     const calculator = work.querySelector('.quanthub-graphic-overlap').getBoundingClientRect();
     const quote = work.querySelector('.sentry-row .work-endorsement').getBoundingClientRect();
-    const noteCenterX = card.left + card.width * .35;
-    const end = quote.left < noteCenterX + 48 ? Math.min(calculator.top, quote.top) : calculator.top;
+    const clearance = 24;
     const ratio = 247 / 430;
-    let width = 96, x, y;
-    if (end - card.bottom >= 60) {
-      width = Math.min(width, (end - card.bottom - 24) / ratio);
-      x = card.left + card.width * .35 - width / 2;
-      y = (card.bottom + end - width * ratio) / 2;
-    } else {
-      // When the two source rectangles overlap vertically, use their open
-      // diagonal gap: right of Sentry and above the calculator/quote area.
-      width = Math.min(width, section.right - card.right - 36);
-      x = card.right + 18;
-      y = Math.min(calculator.top, quote.top) - width * ratio - 18;
+    const end = quote.left >= card.right ? calculator.top : Math.min(calculator.top, quote.top);
+    const height = end - card.bottom - clearance * 2;
+    const maxWidth = Math.min(288, card.width - clearance * 2, height / ratio);
+    // No fallback above or beside Sentry: if the fixed screenshots close this
+    // gap completely, omit this one decoration until there is room again.
+    note.hidden = true;
+    if (maxWidth < 72) return;
+    const obstacles = [...work.querySelectorAll('.work-doodle-sticker, .work-endorsement, .experience-copy, .work-graphic-container')]
+      .filter(element => element !== work.querySelector('.sentry-row > .experience-copy'))
+      .map(element => element.getBoundingClientRect());
+    const fits = (x, y, w, h) => !obstacles.some(r =>
+      x < r.right + 12 && x + w + 12 > r.left && y < r.bottom + 12 && y + h + 12 > r.top);
+    let placement;
+    for (let width = maxWidth; width >= 72 && !placement; width -= 4) {
+      const h = width * ratio;
+      const y = card.bottom + clearance + (height - h) / 2;
+      const candidates = [];
+      for (let x = card.left + clearance; x + width <= card.right - clearance; x += 4) candidates.push(x);
+      candidates.sort((a, b) => Math.abs(a + width / 2 - (card.left + card.width * .4)) - Math.abs(b + width / 2 - (card.left + card.width * .4)));
+      const x = candidates.find(x => fits(x, y, width, h));
+      if (x !== undefined) placement = { x, y, width };
     }
-    note.style.width = `${width}px`;
-    note.style.left = `${x - section.left}px`;
-    note.style.top = `${y - section.top}px`;
+    if (!placement) return;
+    note.style.width = `${placement.width}px`;
+    note.style.left = `${placement.x - section.left}px`;
+    note.style.top = `${placement.y - section.top}px`;
+    note.hidden = false;
   }
   new ResizeObserver(placeNote).observe(work);
   note.addEventListener('load', placeNote);
+  window.addEventListener('resize', placeNote, { passive: true });
   document.fonts.ready.then(placeNote);
   placeNote();
 })();

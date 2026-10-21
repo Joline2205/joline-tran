@@ -14,10 +14,10 @@ To edit or add a page:
 4. Run `python scripts/build-journal.py` from the repository root. The script uses only Python's standard library and generates `journal/<slug>/index.html`.
 5. Commit both the JSON and generated HTML. Add a relative homepage card link to `journal/<slug>/` when ready.
 
-The shared layout is `detail-template.html`; all detail-page design lives in `detail.css`. Homepage CSS and JavaScript are not loaded on detail pages. Thus the homepage stays light, and detail pages use the white native cursor with no music-note trail.
+The shared layout is `detail-template.html`; all detail-page design lives in `detail.css`. Homepage CSS and JavaScript are not loaded on detail pages. Thus the homepage stays light, and detail pages retain native browser cursor behavior with no music-note trail.
 
 Relative links support both GitHub Pages' `/joline-tran/` project prefix and a domain-root deployment. Return links go to `../../#projects`.
 
 The literacy project includes the supplied summary, date, and authors, with paired Paper and Presentation previews. Its two Drive preview URLs come directly from the supplied materials. Drive sharing permissions still determine who can view the documents; each embed has an “Open original” link as an alternative to the embedded viewer.
 
-The white cursor applies to the portfolio document. Google Drive controls the cursor and appearance inside its cross-origin preview frames.
+Google Drive controls the cursor and appearance inside its cross-origin preview frames.

@@ -60,9 +60,6 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.6; margin-top:
 .detail-footer img { width: 190px; height: auto; filter: brightness(0) invert(1); opacity: .75; }
 .skip-link { position: fixed; top: 12px; left: 12px; z-index: 2; padding: 12px 16px; background: var(--paper); transform: translateY(-200%); }
 .skip-link:focus { transform: none; }
-@media (hover: hover) and (pointer: fine) {
-  html, body, body *, body *::before, body *::after { cursor: url("../treble-clef-cursor-white.png") 17 3, auto !important; }
-}
 @media (max-width: 600px) {
   .detail-topbar { align-items: flex-start; flex-direction: column; gap: 20px; padding-block: 24px; }
   .detail-intro { padding: 44px 0 64px; }

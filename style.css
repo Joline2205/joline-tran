@@ -1281,11 +1281,11 @@ body { overflow-x: clip; }
 .map-pin.pin-lived { z-index: 2; }
 .map-pin.pin-lived:hover, .map-pin.pin-lived:focus-visible, .map-pin.pin-lived[aria-pressed="true"] { z-index: 3; }
 
-/* Native cursor: original supplied artwork, resized only at the SVG root. */
+/* Original supplied cursor artwork is exclusive to the hero on mouse devices. */
 @media (hover: hover) and (pointer: fine) {
-  :root { --site-cursor: url("treble-clef-cursor.svg") 17 3, auto; }
-  html, body, body *, body *::before, body *::after {
-    cursor: var(--site-cursor) !important;
+  #hero, #hero *, #hero::before, #hero::after,
+  #hero *::before, #hero *::after {
+    cursor: url("treble-clef-cursor.svg") 17 3, auto !important;
   }
 }
 
@@ -1381,15 +1381,6 @@ body { overflow-x: clip; }
 }
 
 
-/* Pre-rendered original artwork avoids SVG-filter cursor support differences. */
-@media (hover: hover) and (pointer: fine) {
-  #contact, #contact *, #contact::before, #contact::after,
-  #contact *::before, #contact *::after {
-    cursor: url("treble-clef-cursor-white.png") 17 3, auto !important;
-  }
-}
-
-
 /* Static illustrated Contact canvas: no spill observer, timer, or animation. */
 #contact.contact-section {
   --cup-left: clamp(180px, 23vw, 340px);
@@ -1450,10 +1441,11 @@ body { overflow-x: clip; }
   display: flex;
   justify-content: flex-end;
   margin-top: 48px;
+  margin-right: calc(20px - clamp(24px, 5vw, 64px));
 }
 .contact-signoff img {
   display: block;
-  width: clamp(260px, 24vw, 340px);
+  width: clamp(182px, 16.8vw, 238px);
   max-width: 100%;
   height: auto;
   filter: brightness(0) invert(1);

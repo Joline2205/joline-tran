@@ -890,48 +890,38 @@ if (recitalThumbnail) {
 })();
 
 
-// Reveal the blue beneath a stationary sheet: only its rough tear boundary moves.
+// Scroll draws the torn boundary across Contact's TOP, never down either side.
 const paperContact = document.querySelector('#contact');
-if (paperContact && window.CSS && CSS.supports('clip-path', 'url(#contact-paper-clip)')) {
-  const reducedRip = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const cut = document.querySelector('#contact-paper-cut');
-  const edge = document.querySelector('#contact-tear-edge');
-  const sheet = paperContact.querySelector('.contact-paper-cover');
-  let ripFrame = 0;
-  let lastRip = -1;
-  function renderRip() {
-    ripFrame = 0;
-    if (reducedRip.matches) {
-      paperContact.classList.remove('paper-rip-enabled');
-      return;
+if (paperContact && window.CSS && CSS.supports('clip-path', 'inset(0)')) {
+  const reducedTear = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const paperLip = paperContact.querySelector('.contact-torn-paper');
+  let tearFrame = 0;
+  let lastTear = -1;
+  function renderTear() {
+    tearFrame = 0;
+    let progress = 1;
+    if (!reducedTear.matches) {
+      const bounds = paperContact.getBoundingClientRect();
+      const start = innerHeight * .94;
+      const reachableEnd = innerHeight - (document.documentElement.scrollHeight - (bounds.top + scrollY)) + 4;
+      const end = Math.max(siteHeader ? siteHeader.offsetHeight + 24 : 100, innerHeight * .22, reachableEnd);
+      progress = Math.max(0, Math.min(1, (start - bounds.top) / (start - end)));
     }
-    const bounds = paperContact.getBoundingClientRect();
-    const start = innerHeight * .94;
-    // Short tablet layouts can reach the document bottom before the header line.
-    const reachableEnd = innerHeight - (document.documentElement.scrollHeight - (bounds.top + scrollY)) + 4;
-    const end = Math.max(siteHeader ? siteHeader.offsetHeight + 24 : 100, innerHeight * .22, reachableEnd);
-    const progress = Math.max(0, Math.min(1, (start - bounds.top) / (start - end)));
     const rounded = Math.round(progress * 10000) / 10000;
-    paperContact.classList.add('paper-rip-enabled');
-    if (rounded === lastRip) return;
-    lastRip = rounded;
-    // Only the paper overlay is cut; its nearly straight front has tiny fibers.
-    const x = -.01 + progress * 1.02;
-    cut.setAttribute('transform', `translate(${x} 0)`);
-    edge.setAttribute('transform', `translate(${x} 0)`);
-    paperContact.classList.toggle('paper-rip-complete', progress === 1);
-    paperContact.classList.toggle('paper-rip-unstarted', progress === 0);
+    if (rounded === lastTear) return;
+    lastTear = rounded;
+    paperContact.style.setProperty('--tear-unrevealed', `${(1 - rounded) * 100}%`);
   }
-  const queueRip = () => { if (!ripFrame) ripFrame = requestAnimationFrame(renderRip); };
+  const queueTear = () => { if (!tearFrame) tearFrame = requestAnimationFrame(renderTear); };
   const alignPaperGrain = () => {
     const canvas = document.querySelector('.work-canvas');
     const offset = canvas ? canvas.getBoundingClientRect().top - paperContact.getBoundingClientRect().top : 0;
-    sheet.style.backgroundPosition = `0 ${offset}px`;
-    lastRip = -1;
-    queueRip();
+    paperLip.style.backgroundPosition = `0 ${offset}px`;
+    lastTear = -1;
+    queueTear();
   };
-  window.addEventListener('scroll', queueRip, { passive: true });
+  window.addEventListener('scroll', queueTear, { passive: true });
   window.addEventListener('resize', alignPaperGrain, { passive: true });
-  reducedRip.addEventListener('change', () => { lastRip = -1; queueRip(); });
+  reducedTear.addEventListener('change', () => { lastTear = -1; queueTear(); });
   alignPaperGrain();
 }

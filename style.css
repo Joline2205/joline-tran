@@ -1373,33 +1373,26 @@ body { overflow-x: clip; }
   transition: none;
   isolation: isolate;
 }
-.paper-rip-defs { position: absolute; pointer-events: none; }
-.contact-paper-cover, .contact-tear-fibers { display: none; pointer-events: none; }
-#contact.paper-rip-enabled .contact-paper-cover {
-  display: block;
+/* Only a shallow horizontal paper lip is drawn across Contact's top edge.
+   The blue rectangle and all Contact content remain unmasked at every stage. */
+.contact-horizontal-tear {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  z-index: 3;
+  pointer-events: none;
+  clip-path: inset(0 var(--tear-unrevealed, 0%) 0 0);
+}
+.contact-torn-paper {
   position: absolute;
   inset: 0;
-  z-index: 4;
   background-color: var(--bg);
   background-image: radial-gradient(var(--paper-tooth) 1px,transparent 0),var(--paper-grain);
   background-size: 5px 5px, 300px 300px;
-  clip-path: url(#contact-paper-clip);
+  mask: url("paper-edges/matte-bottom-edge.svg") center / 100% 100% no-repeat;
 }
-#contact.paper-rip-enabled .contact-tear-fibers {
-  display: block;
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  overflow: hidden;
-  fill: none;
-}
-.tear-shadow { stroke: rgba(40,47,48,.12); stroke-width: 2px; }
-.tear-fiber { stroke: #f4f2eb; stroke-width: 1px; }
-#contact.paper-rip-complete .contact-paper-cover,
-#contact.paper-rip-complete .contact-tear-fibers { visibility: hidden; }
-#contact.paper-rip-unstarted .contact-tear-fibers { visibility: hidden; }
 .contact-cup-illustration {
   position: relative;
   flex: 0 0 76px;
@@ -1664,11 +1657,6 @@ body {
   mask-position: bottom, top;
   mask-repeat: no-repeat;
 }
-@media (max-width: 768px) {
-  .tear-shadow { stroke-width: 2px; }
-  .tear-fiber { stroke-width: 1px; }
-}
 @media (prefers-reduced-motion: reduce) {
-  #contact.paper-rip-enabled .contact-paper-cover,
-  #contact.paper-rip-enabled .contact-tear-fibers { display: none; }
+  .contact-horizontal-tear { clip-path: none; }
 }

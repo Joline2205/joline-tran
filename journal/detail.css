@@ -76,3 +76,29 @@ figcaption { color: var(--muted); font-size: 12px; line-height: 1.6; margin-top:
   html { scroll-behavior: auto; }
   a { transition: none; }
 }
+
+/* Paired research documents share one aligned row when each preview has room. */
+.detail-intro:has(+ .detail-materials-paired) {
+  padding-block: clamp(44px, 5vw, 72px) clamp(36px, 4vw, 56px);
+}
+.detail-intro:has(+ .detail-materials-paired) .detail-metadata {
+  flex-direction: column;
+  gap: 8px;
+  line-height: 1.5;
+}
+.detail-intro:has(+ .detail-materials-paired) .detail-description {
+  max-width: 1000px;
+}
+.detail-materials-paired {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 40px);
+}
+.detail-materials-paired .material { min-width: 0; margin-top: 0; }
+.detail-materials-paired .document-viewer iframe { height: clamp(580px, 75svh, 800px); }
+@media (max-width: 1023px) {
+  .detail-materials-paired { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+}
+@media (max-width: 600px) {
+  .detail-materials-paired .document-viewer iframe { height: clamp(520px, 76svh, 760px); }
+}

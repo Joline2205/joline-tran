@@ -68,6 +68,7 @@ def build():
         metadata = data.get('metadata', [])
         page = template.substitute(
             title=escape(title), heading=heading,
+            materials_class=" detail-materials-paired" if data.get("materials_layout") == "paired" else "",
             description_meta=f'<meta name="description" content="{escape(description, quote=True)}">' if description else '',
             description_markup=f'<p class="detail-description">{escape(description)}</p>' if description else '',
             metadata_markup='<ul class="detail-metadata">' + ''.join(f'<li>{escape(item)}</li>' for item in metadata) + '</ul>' if metadata else '',

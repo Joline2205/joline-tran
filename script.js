@@ -581,14 +581,23 @@ if (recitalThumbnail) {
         const pageEdge = side === 'left' ? -bounds.left : document.documentElement.clientWidth - bounds.left;
         const cardEdge = side === 'left' ? r.x : r.x + r.w;
         const available = Math.abs(cardEdge - pageEdge);
-        const edgePadding = available >= 100 ? 24 : 4;
+        const edgePadding = available >= 100 ? 32 : 4;
+        const cardGap = available >= 100 ? 16 : gap;
         const spanFactor = span / w;
-        w = Math.min(w * 3, Math.max(1, available - edgePadding - gap) / spanFactor);
+        w = Math.min(w * 3, Math.max(1, available - edgePadding - cardGap) / spanFactor);
         h = w * sticker.naturalHeight / sticker.naturalWidth;
         sticker.style.width = `${w}px`;
-        centerX = side === 'left'
-          ? (pageEdge + edgePadding + cardEdge - gap) / 2
-          : (cardEdge + gap + pageEdge - edgePadding) / 2;
+        // The entire rotated rectangle must fit, not just its center. Position
+        // inward from the screen edge while retaining a clear gap to the card.
+        const halfSpan = w * spanFactor / 2;
+        const nearEdge = side === 'left'
+          ? pageEdge + edgePadding + halfSpan
+          : cardEdge + cardGap + halfSpan;
+        const farEdge = side === 'left'
+          ? cardEdge - cardGap - halfSpan
+          : pageEdge - edgePadding - halfSpan;
+        const inward = side === 'left' ? farEdge : nearEdge;
+        centerX = Math.max(nearEdge, Math.min(farEdge, inward));
       }
       sticker.style.left = `${centerX - w / 2}px`;
       sticker.style.top = `${y - h / 2}px`;

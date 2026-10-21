@@ -624,7 +624,10 @@ if (recitalThumbnail) {
     const fittedWidth = Math.min(envelopeWidth, Math.max(1, rightSpace - 8 - edgePadding) / envelopeSpanFactor);
     const envelopeSpan = fittedWidth * envelopeSpanFactor;
     envelope.style.width = `${fittedWidth}px`;
-    envelope.style.left = `${ninaRect.x + ninaRect.w + 8 + (envelopeSpan - fittedWidth) / 2}px`;
+    const baseEnvelopeLeft = ninaRect.x + ninaRect.w + 8 + (envelopeSpan - fittedWidth) / 2;
+    const baseEnvelopeRight = bounds.left + baseEnvelopeLeft + fittedWidth / 2 + envelopeSpan / 2;
+    const extraEnvelopeGap = Math.min(20, Math.max(0, document.documentElement.clientWidth - 24 - baseEnvelopeRight));
+    envelope.style.left = `${baseEnvelopeLeft + extraEnvelopeGap}px`;
     moveCenterY('envelope', centerY(nina.querySelector('blockquote')) + 20);
     const quote = rect(kellie.querySelector('blockquote'));
     const author = rect(kellie.querySelector('figcaption'));
@@ -642,19 +645,26 @@ if (recitalThumbnail) {
   }
   Promise.all(stickers.map(s => s.decode().catch(() => {}))).then(() => {
     placeStickers();
-    layer.classList.add('is-ready');
-    if (!('IntersectionObserver' in window)) {
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    if (motion.matches || !('IntersectionObserver' in window)) {
       stickers.forEach(s => s.classList.add('revealed'));
       return;
     }
+    layer.classList.add('is-ready');
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('revealed');
         observer.unobserve(entry.target);
       });
-    }, { threshold: .15 });
+    }, { threshold: .2 });
     stickers.forEach(s => observer.observe(s));
+    motion.addEventListener('change', event => {
+      if (!event.matches) return;
+      observer.disconnect();
+      layer.classList.remove('is-ready');
+      stickers.forEach(s => s.classList.add('revealed'));
+    });
   });
   const resize = new ResizeObserver(placeStickers);
   resize.observe(work);
@@ -682,7 +692,7 @@ if (recitalThumbnail) {
     // The replacement has a wider composition. Preserve roughly the previous
     // visual area while fitting its original aspect ratio into the same gap.
     const previousWidth = Math.min(288, card.width - clearance * 2, height / previousRatio);
-    const maxWidth = Math.min(previousWidth * Math.sqrt(previousRatio / ratio), card.width - clearance * 2, height / ratio);
+    const maxWidth = Math.min(previousWidth * Math.sqrt(previousRatio / ratio) * 1.2, card.width - clearance * 2, height / ratio);
     // No fallback above or beside Sentry: if the fixed screenshots close this
     // gap completely, omit this one decoration until there is room again.
     note.hidden = true;
@@ -712,7 +722,34 @@ if (recitalThumbnail) {
   }
   new ResizeObserver(placeNote).observe(work);
   note.addEventListener('load', placeNote);
+  Promise.all([...work.querySelectorAll('.work-doodle-sticker')].map(image => image.decode().catch(() => {})))
+    .then(() => requestAnimationFrame(placeNote));
   window.addEventListener('resize', placeNote, { passive: true });
   document.fonts.ready.then(placeNote);
   placeNote();
+})();
+
+
+// Reveal the original word pixels along traced ink centerlines, once per load.
+(() => {
+  const note = document.querySelector('.work-gap-note');
+  if (!note) return;
+  const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  let observer, completion;
+  const finish = () => {
+    clearTimeout(completion);
+    note.classList.remove('writing-ready', 'is-writing');
+    note.classList.add('is-written');
+    observer?.disconnect();
+  };
+  if (motion.matches || !('IntersectionObserver' in window)) { finish(); return; }
+  note.classList.add('writing-ready');
+  observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    note.classList.add('is-writing');
+    observer.disconnect();
+    completion = setTimeout(finish, 1850);
+  }, { threshold: .25 });
+  observer.observe(note);
+  motion.addEventListener('change', event => { if (event.matches) finish(); });
 })();

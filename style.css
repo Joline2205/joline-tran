@@ -1255,19 +1255,18 @@ body { overflow-x: clip; }
   mask-composite: intersect;
 }
 
-/* Uploaded notebook illustrations stay confined to the work artboard. */
+/* Doodles reveal independently without changing their positioned boxes. */
 .work-sticker-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; overflow: visible; clip-path: none; contain: none; }
-.work-doodle-sticker { position: absolute; width: var(--sticker-width); height: auto; max-width: none; pointer-events: none; user-select: none; transform: scale(1) rotate(var(--sticker-angle)); transform-origin: center; transition: opacity .45s ease-out, transform .5s cubic-bezier(.34,1.56,.64,1); }
-.work-sticker-layer.is-ready .work-doodle-sticker { opacity: 0; transform: scale(.7) rotate(var(--sticker-angle)); transition-delay: var(--sticker-delay); }
-.work-sticker-layer.is-ready .work-doodle-sticker.revealed { opacity: 1; transform: scale(1) rotate(var(--sticker-angle)); }
-@media (max-width: 800px) {
-  .work-doodle-sticker { width: calc(var(--sticker-width) * .8); }
-}
+.work-doodle-sticker { position: absolute; width: var(--sticker-width); height: auto; max-width: none; pointer-events: none; user-select: none; opacity: var(--sticker-opacity, 1); transform: rotate(var(--sticker-angle)); transform-origin: center; transition: opacity .45s ease-out, transform .55s cubic-bezier(.22,1.25,.36,1); }
+.sticker-envelope, .sticker-hello { --sticker-opacity: .7; }
+.work-sticker-layer.is-ready .work-doodle-sticker { opacity: 0; transform: translateY(8px) scale(.8) rotate(calc(var(--sticker-angle) + 4deg)); transition: none; }
+.work-sticker-layer.is-ready .work-doodle-sticker.revealed { opacity: var(--sticker-opacity, 1); transform: rotate(var(--sticker-angle)); transition: opacity .45s ease-out, transform .55s cubic-bezier(.22,1.25,.36,1); transition-delay: var(--sticker-delay); }
+@media (max-width: 800px) { .work-doodle-sticker { width: calc(var(--sticker-width) * .8); } }
 @media (prefers-reduced-motion: reduce) {
-  .work-sticker-layer .work-doodle-sticker { transition: none; }
-  .work-sticker-layer.is-ready .work-doodle-sticker { opacity: 1; transform: rotate(var(--sticker-angle)); }
+  .work-sticker-layer .work-doodle-sticker,
+  .work-sticker-layer.is-ready .work-doodle-sticker,
+  .work-sticker-layer.is-ready .work-doodle-sticker.revealed { transition: none; opacity: var(--sticker-opacity, 1); transform: rotate(var(--sticker-angle)); }
 }
-
 
 /* Supplied script artwork replaces the hero's typeset interaction hint. */
 .hero-hover-graphic { position: absolute; bottom: 20px; right: 40px; width: 210px; height: auto; aspect-ratio: 430 / 247; z-index: 5; pointer-events: none; animation: hint-breathe 4s ease-in-out infinite alternate; }
@@ -1280,11 +1279,25 @@ body { overflow-x: clip; }
 }
 
 /* Independent addition: its positioning never participates in card layout. */
-.work-gap-note { position: absolute; width: 364px; height: auto; aspect-ratio: 698 / 251; z-index: 5; pointer-events: none; user-select: none; }
+.work-gap-note { position: absolute; width: 437px; height: auto; aspect-ratio: 698 / 251; z-index: 5; pointer-events: none; user-select: none; }
 
-/* Soften only the three requested annotations, including after scroll reveal. */
+/* Only the original ink forming “vibe codes” participates in pen drawing. */
 .work-gap-note { opacity: .7; }
-.work-sticker-layer .sticker-envelope,
-.work-sticker-layer .sticker-hello,
-.work-sticker-layer.is-ready .sticker-envelope.revealed,
-.work-sticker-layer.is-ready .sticker-hello.revealed { opacity: .7; }
+.vibe-artwork { display: block; width: 100%; height: auto; }
+.vibe-lettering { mask: none; }
+.writing-ready .vibe-lettering { mask: url(#vibe-pen-mask); }
+.writing-ready .vibe-ink-stroke { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.is-writing .vibe-ink-stroke { animation: draw-vibe-ink var(--ink-duration) linear var(--ink-delay) both; }
+@keyframes draw-vibe-ink { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .writing-ready .vibe-lettering { mask: none; }
+  .vibe-ink-stroke { animation: none !important; stroke-dashoffset: 0 !important; }
+}
+
+.vibe-rest-layer, .vibe-word-layer { display: none; }
+.writing-ready .vibe-rest-layer, .writing-ready .vibe-word-layer { display: inline; }
+.writing-ready .vibe-finished-art { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .writing-ready .vibe-rest-layer, .writing-ready .vibe-word-layer { display: none; }
+  .writing-ready .vibe-finished-art { display: inline; }
+}

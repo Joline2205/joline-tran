@@ -573,8 +573,23 @@ if (recitalThumbnail) {
         if (side === 'right' && obstacle.x >= r.x + r.w)
           space = Math.min(space, obstacle.x - r.x - r.w);
       });
-      const { w, h, span } = size(sticker, space - gap - 4);
-      const centerX = side === 'left' ? r.x - gap - span / 2 : r.x + r.w + gap + span / 2;
+      let { w, h, span } = size(sticker, space - gap - 4);
+      let centerX = side === 'left' ? r.x - gap - span / 2 : r.x + r.w + gap + span / 2;
+      if (['tam', 'icp', 'hello'].includes(name)) {
+        // Triple the previous fitted width, using the full page margin rather
+        // than squeezing the annotation into the section's internal gutter.
+        const pageEdge = side === 'left' ? -bounds.left : document.documentElement.clientWidth - bounds.left;
+        const cardEdge = side === 'left' ? r.x : r.x + r.w;
+        const available = Math.abs(cardEdge - pageEdge);
+        const edgePadding = available >= 100 ? 24 : 4;
+        const spanFactor = span / w;
+        w = Math.min(w * 3, Math.max(1, available - edgePadding - gap) / spanFactor);
+        h = w * sticker.naturalHeight / sticker.naturalWidth;
+        sticker.style.width = `${w}px`;
+        centerX = side === 'left'
+          ? (pageEdge + edgePadding + cardEdge - gap) / 2
+          : (cardEdge + gap + pageEdge - edgePadding) / 2;
+      }
       sticker.style.left = `${centerX - w / 2}px`;
       sticker.style.top = `${y - h / 2}px`;
     }
@@ -613,6 +628,8 @@ if (recitalThumbnail) {
   });
   const resize = new ResizeObserver(placeStickers);
   resize.observe(work);
+  // The centered section can keep its width while the outer page margins grow.
+  window.addEventListener('resize', placeStickers, { passive: true });
   document.fonts.ready.then(placeStickers);
 })();
 

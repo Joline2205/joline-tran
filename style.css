@@ -1256,7 +1256,7 @@ body { overflow-x: clip; }
 }
 
 /* Uploaded notebook illustrations stay confined to the work artboard. */
-.work-sticker-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; clip-path: inset(0); }
+.work-sticker-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; overflow: visible; }
 .work-doodle-sticker { position: absolute; width: var(--sticker-width); height: auto; max-width: none; pointer-events: none; user-select: none; transform: scale(1) rotate(var(--sticker-angle)); transform-origin: center; transition: opacity .45s ease-out, transform .5s cubic-bezier(.34,1.56,.64,1); }
 .work-sticker-layer.is-ready .work-doodle-sticker { opacity: 0; transform: scale(.7) rotate(var(--sticker-angle)); transition-delay: var(--sticker-delay); }
 .work-sticker-layer.is-ready .work-doodle-sticker.revealed { opacity: 1; transform: scale(1) rotate(var(--sticker-angle)); }

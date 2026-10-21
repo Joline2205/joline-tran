@@ -1489,3 +1489,60 @@ body { overflow-x: clip; }
 /* Reuse the existing short-lived notes; never create a cursor-following element. */
 .cursor-particles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 20; }
 .music-particle.is-contact-note { filter: brightness(0) invert(1); }
+
+
+/* Mobile is a separate composition; the detailed desktop artboard is unchanged. */
+@media (max-width: 768px) {
+  .mobile-decorative-arrow { display: none !important; }
+  #work .work-sticker-layer, #work .work-gap-note { display: none; }
+  .reinforcement-sticker .sticker-rim { display: none; }
+
+  /* Keep a clear handwritten lane immediately above the keyboard. */
+  #hero { min-height: max(85svh, 700px); }
+  .hero-heading { padding-bottom: 150px; pointer-events: none; }
+  .hero-heading > .local-time, .hero-heading > .eyebrow,
+  .hero-heading > .hero-title, .hero-heading > .hero-bottom { pointer-events: auto; }
+  .hero-hover-graphic { left: 20px; right: auto; bottom: 0; width: 182px; }
+  .photo-headshot { right: 16px; bottom: 86px; }
+  .photo-travel { left: 18px; bottom: 116px; }
+  .photo-recital { top: 22px; right: 20px; }
+  .photo-coffee { top: 28px; left: 24px; }
+  .photo-running { top: 66px; right: auto; left: calc(50% - 30px); }
+  .ambient-one { inset: auto auto 82px 130px; }
+  .ambient-four { inset: auto auto 162px 140px; }
+  .ambient-three { top: 115px; }
+  .ambient-five { inset: 104px auto auto 112px; }
+  .rest-eighth { inset: auto auto 100px 46%; }
+  .rest-half { left: 40%; bottom: 210px; }
+
+  /* Foreground card, cropped work artifact, then its manager's endorsement. */
+  #work .experience-rows { gap: 40px; }
+  #work .experience-row { display: flex; flex-direction: column; gap: 0; }
+  #work .sentry-row > .experience-story,
+  #work .quanthub-row > .experience-story {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    margin-top: -56px;
+    padding-top: 0;
+    z-index: auto;
+  }
+  #work .sentry-graphic-overlap,
+  #work .quanthub-graphic-overlap {
+    width: 100%;
+    height: 160px;
+    max-height: none;
+    margin: 0;
+    transform: none;
+    overflow: hidden;
+    opacity: var(--graphic-opacity);
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  }
+  #work .sentry-row .sentry-graphic-overlap { margin-top: 0; }
+  #work .quanthub-graphic-overlap { height: 150px; }
+  #work .work-graphic-img { width: max(100%, 620px); height: auto; }
+  #work .calculators-graphic { position: relative; left: -60px; }
+  #work .sentry-row .experience-story > .work-endorsement { margin: -8px 0 0 12px; }
+  #work .quanthub-row .experience-story > .work-endorsement { margin: -8px 12px 0 0; }
+}

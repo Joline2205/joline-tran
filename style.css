@@ -1333,3 +1333,20 @@ body { overflow-x: clip; }
   /* The existing stacked gap is too short for legible hand-drawn icons. */
   #work .sentry-row .sentry-graphic-overlap { margin-top: 48px; }
 }
+
+/* Supplied QuantHub annotations: placement follows the actual card geometry. */
+.quanthub-annotation {
+  position: absolute;
+  height: auto;
+  max-width: none;
+  pointer-events: none;
+  user-select: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .45s ease-out;
+}
+.quanthub-annotation.is-positioned { visibility: visible; }
+.quanthub-annotation.revealed { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .quanthub-annotation { transition: none; }
+}

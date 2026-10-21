@@ -831,3 +831,55 @@ if (recitalThumbnail) {
   window.addEventListener('resize', placeTools, { passive: true });
   document.fonts.ready.then(placeTools);
 })();
+
+// Keep the original Prospecting and Top Down artwork tied to QuantHub, not the viewport.
+(() => {
+  const work = document.querySelector('#work');
+  const card = work?.querySelector('.quanthub-row .experience-copy');
+  const prospecting = work?.querySelector('.annotation-prospecting');
+  const topDown = work?.querySelector('.annotation-top-down');
+  if (!card || !prospecting || !topDown) return;
+  function placeAnnotations() {
+    const section = work.getBoundingClientRect();
+    const tile = card.getBoundingClientRect();
+    const role = card.querySelector('.experience-role');
+    const text = role.firstChild;
+    const strategy = text.textContent.indexOf('STRATEGY');
+    const range = document.createRange();
+    range.setStart(text, strategy);
+    range.setEnd(text, strategy + 1);
+    const start = range.getBoundingClientRect();
+    const precedingQuote = work.querySelector('.sentry-row .work-endorsement').getBoundingClientRect();
+    const sharesColumn = precedingQuote.left < tile.right && precedingQuote.right > tile.left;
+    const freeHeight = sharesColumn ? Math.max(1, tile.top - precedingQuote.bottom - 16) : Infinity;
+    const width = Math.min(180, tile.width * .4, freeHeight * 288 / 86);
+    const height = width * 86 / 288;
+    prospecting.style.width = `${width}px`;
+    prospecting.style.left = `${Math.min(start.left, tile.right - width - 16) - section.left}px`;
+    prospecting.style.top = `${tile.top - section.top - height - (sharesColumn ? 8 : 18)}px`;
+    // The outer margin is narrow on small screens; shrink this new annotation
+    // rather than moving the existing card or clipping the supplied artwork.
+    const available = document.documentElement.clientWidth - tile.right;
+    const edge = available >= 100 ? 24 : 4;
+    const gap = available >= 100 ? 12 : 4;
+    const sideWidth = Math.max(1, Math.min(66, available - edge - gap));
+    topDown.style.width = `${sideWidth}px`;
+    topDown.style.left = `${tile.right - section.left + gap}px`;
+    topDown.style.top = `${tile.bottom - section.top - sideWidth * 133 / 75}px`;
+    [prospecting, topDown].forEach(image => image.classList.add('is-positioned'));
+  }
+  const reveal = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      reveal.unobserve(entry.target);
+    }
+  }), { threshold: .2 });
+  [prospecting, topDown].forEach(image => reveal.observe(image));
+  Promise.all([prospecting.decode(), topDown.decode()].map(promise => promise.catch(() => {})))
+    .then(() => requestAnimationFrame(placeAnnotations));
+  const resize = new ResizeObserver(placeAnnotations);
+  resize.observe(work);
+  resize.observe(card);
+  window.addEventListener('resize', placeAnnotations, { passive: true });
+  document.fonts.ready.then(placeAnnotations);
+})();

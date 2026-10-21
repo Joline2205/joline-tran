@@ -366,7 +366,10 @@ if (travelMap) {
     tooltipPin = pin;
     tooltip.querySelector('strong').textContent = pin.dataset.city;
     tooltip.querySelector('.tooltip-country').textContent = pin.dataset.country;
-    tooltip.querySelector('.tooltip-context').textContent = pin.dataset.context;
+    const date = pin.dataset.year
+      ? `${pin.dataset.yearLabel ? pin.dataset.yearLabel.toLowerCase() + ' ' : ''}${pin.dataset.year}`
+      : '';
+    tooltip.querySelector('.tooltip-context').textContent = [pin.dataset.context, date].filter(Boolean).join(' · ');
     tooltip.hidden = false;
     pin.setAttribute('aria-describedby', 'map-tooltip');
     positionTooltip(pin);
@@ -394,7 +397,7 @@ if (travelMap) {
     cityDetails.hidden = false;
     cityDetails.querySelector('.city-detail-title').textContent = `${pin.dataset.city}, ${pin.dataset.country}`;
     cityDetails.querySelector('.city-category').textContent = pin.dataset.kind === 'lived' ? `Lived · ${pin.dataset.duration}` : 'Explored';
-    cityDetails.querySelector('.city-year').textContent = pin.dataset.year ? `Year: ${pin.dataset.year}` : 'Year not recorded';
+    cityDetails.querySelector('.city-year').textContent = pin.dataset.year ? `${pin.dataset.yearLabel || 'Year'}: ${pin.dataset.year}` : 'Year not recorded';
     cityDetails.querySelector('.city-context').textContent = pin.dataset.context;
     showTooltip(pin);
   }

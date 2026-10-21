@@ -1270,11 +1270,14 @@ body { overflow-x: clip; }
 
 
 /* Supplied script artwork replaces the hero's typeset interaction hint. */
-.hero-hover-graphic { position: absolute; bottom: 20px; right: 40px; width: 150px; height: 86px; z-index: 5; pointer-events: none; animation: hint-breathe 4s ease-in-out infinite alternate; }
+.hero-hover-graphic { position: absolute; bottom: 20px; right: 40px; width: 210px; height: auto; aspect-ratio: 430 / 247; z-index: 5; pointer-events: none; animation: hint-breathe 4s ease-in-out infinite alternate; }
 .hero-hover-graphic svg { display: block; width: 100%; height: auto; }
 @media (max-width: 768px) {
-  .hero-hover-graphic { bottom: 12px; right: 20px; width: 130px; height: auto; aspect-ratio: 150 / 86; }
+  .hero-hover-graphic { bottom: 12px; right: 20px; width: 182px; height: auto; aspect-ratio: 430 / 247; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-hover-graphic { animation: none; opacity: .85; }
 }
+
+/* Independent addition: its positioning never participates in card layout. */
+.work-gap-note { position: absolute; width: 96px; height: auto; aspect-ratio: 430 / 247; z-index: 5; pointer-events: none; user-select: none; }

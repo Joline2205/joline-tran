@@ -615,3 +615,39 @@ if (recitalThumbnail) {
   resize.observe(work);
   document.fonts.ready.then(placeStickers);
 })();
+
+
+// Center only the new note in the available Sentry/calculator paper gap.
+(() => {
+  const work = document.querySelector('#work');
+  const note = work?.querySelector('.work-gap-note');
+  if (!note) return;
+  function placeNote() {
+    const section = work.getBoundingClientRect();
+    const card = work.querySelector('.sentry-row > .experience-copy').getBoundingClientRect();
+    const calculator = work.querySelector('.quanthub-graphic-overlap').getBoundingClientRect();
+    const quote = work.querySelector('.sentry-row .work-endorsement').getBoundingClientRect();
+    const noteCenterX = card.left + card.width * .35;
+    const end = quote.left < noteCenterX + 48 ? Math.min(calculator.top, quote.top) : calculator.top;
+    const ratio = 247 / 430;
+    let width = 96, x, y;
+    if (end - card.bottom >= 60) {
+      width = Math.min(width, (end - card.bottom - 24) / ratio);
+      x = card.left + card.width * .35 - width / 2;
+      y = (card.bottom + end - width * ratio) / 2;
+    } else {
+      // When the two source rectangles overlap vertically, use their open
+      // diagonal gap: right of Sentry and above the calculator/quote area.
+      width = Math.min(width, section.right - card.right - 36);
+      x = card.right + 18;
+      y = Math.min(calculator.top, quote.top) - width * ratio - 18;
+    }
+    note.style.width = `${width}px`;
+    note.style.left = `${x - section.left}px`;
+    note.style.top = `${y - section.top}px`;
+  }
+  new ResizeObserver(placeNote).observe(work);
+  note.addEventListener('load', placeNote);
+  document.fonts.ready.then(placeNote);
+  placeNote();
+})();

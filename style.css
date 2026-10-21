@@ -1698,3 +1698,45 @@ body {
 .city-category { color: var(--muted); }
 .city-category[data-category="lived"], .city-category[data-category="home"] { background: var(--accent); border-color: var(--accent); color: #fff; }
 .city-year[hidden], .city-context[hidden], .city-category[hidden], .tooltip-context[hidden] { display: none; }
+
+/* Responsive Contact annotations: the reveal's cover and clip are unchanged. */
+#contact .contact-grid { row-gap: 0; }
+#contact .contact-signoff { grid-column: 2; grid-row: 2; }
+@media (min-width: 768px) {
+  #contact .contact-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
+  #contact .handwritten-email { justify-content: flex-end; }
+}
+@media (max-width: 767px) {
+  #contact .contact-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 16px;
+  }
+  #contact .contact-grid > :first-child { grid-column: 1 / -1; grid-row: 1; }
+  #contact .contact-links { display: contents; }
+  #contact .contact-socials {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: center;
+    width: max-content;
+    gap: clamp(14px, 5vw, 28px);
+    margin-top: 30px;
+    margin-bottom: 40px;
+  }
+  #contact .handwritten-email {
+    grid-column: 1;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 8px 0;
+  }
+  #contact .handwritten-personal-email { grid-row: 3; }
+  #contact .handwritten-gatech-email { grid-row: 4; }
+  #contact .handwritten-personal-email img { width: clamp(112px, 35vw, 140px); }
+  #contact .handwritten-gatech-email img { width: clamp(110px, 34vw, 136px); }
+  #contact .contact-signoff {
+    grid-column: 2;
+    grid-row: 3 / 5;
+    align-self: end;
+    margin: 0;
+  }
+  #contact .contact-signoff img { width: clamp(108px, 31vw, 132px); }
+}

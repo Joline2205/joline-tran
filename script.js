@@ -176,8 +176,9 @@ if (magneticHero) {
   window.addEventListener('resize', resetMagnet, { passive: true });
 }
 
-// One throttled site-wide trail; the original note timing and motion stay unchanged.
-{
+// The existing throttled trail spawns only over the hero; notes fade naturally on exit.
+const noteHero = document.querySelector('#hero');
+if (noteHero) {
   const particleLayer = document.createElement('div');
   particleLayer.className = 'cursor-particles';
   particleLayer.setAttribute('aria-hidden', 'true');
@@ -215,15 +216,17 @@ if (magneticHero) {
     liveNotes.clear();
     lastNoteTime = -Infinity;
   }
-  document.addEventListener('mousemove', (event) => {
+  noteHero.addEventListener('mousemove', (event) => {
     if (reducedNotes.matches || !notePointer.matches || document.hidden) return;
     const now = performance.now();
     if (now - lastNoteTime < 200 || liveNotes.size >= 4) return;
     if (event.clientX < 0 || event.clientX > innerWidth || event.clientY < 0 || event.clientY > innerHeight) return;
-    const inContact = Boolean(event.target instanceof Element && event.target.closest('#contact'));
+    const bounds = noteHero.getBoundingClientRect();
+    const headerBottom = siteHeader ? siteHeader.getBoundingClientRect().bottom : 0;
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < Math.max(bounds.top, headerBottom) || event.clientY > bounds.bottom) return;
     lastNoteTime = now;
     const note = document.createElement('img');
-    note.className = `music-particle${inContact ? ' is-contact-note' : ''}`;
+    note.className = 'music-particle';
     note.setAttribute('aria-hidden', 'true');
     note.alt = '';
     note.src = noteAssets[noteIndex++ % noteAssets.length];
@@ -246,7 +249,6 @@ if (magneticHero) {
     liveNotes.set(note, setTimeout(() => removeNote(note), duration + 100));
   }, { passive: true });
   document.documentElement.addEventListener('mouseleave', clearNotes);
-  window.addEventListener('scroll', clearNotes, { passive: true });
   window.addEventListener('blur', clearNotes);
   reducedNotes.addEventListener('change', clearNotes);
   notePointer.addEventListener('change', clearNotes);
@@ -255,36 +257,19 @@ if (magneticHero) {
   document.addEventListener('visibilitychange', () => { if (document.hidden) clearNotes(); });
 }
 
-// Reveal the illustrated spill once; reduced motion gets the same settled composition.
-const coffeeContact = document.querySelector('#contact');
-if (coffeeContact) {
-  const reducedPour = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let settleTimer;
-  const settle = () => {
-    clearTimeout(settleTimer);
-    coffeeContact.classList.add('is-settled');
-  };
-  const pour = () => {
-    if (coffeeContact.classList.contains('is-poured')) return;
-    coffeeContact.classList.add('is-poured');
-    if (reducedPour.matches) settle();
-    else settleTimer = setTimeout(settle, 1600);
-  };
-  coffeeContact.querySelector('.coffee-spill').addEventListener('animationend', event => {
-    if (event.animationName === 'illustrated-coffee-spill') settle();
-  });
-  reducedPour.addEventListener('change', event => {
-    if (event.matches && coffeeContact.classList.contains('is-poured')) settle();
-  });
+// Match the hero's custom line, drawing only across the visible desktop word once.
+const aboutStrike = document.querySelector('.about-dumb-strike');
+if (aboutStrike) {
+  const strikeOnce = () => aboutStrike.classList.add('is-struck');
   if ('IntersectionObserver' in window) {
-    const coffeeObserver = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= .35)) {
-        pour();
-        coffeeObserver.disconnect();
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= .6)) {
+        strikeOnce();
+        observer.disconnect();
       }
-    }, { threshold: .35 });
-    coffeeObserver.observe(coffeeContact);
-  } else pour();
+    }, { threshold: .6 });
+    observer.observe(aboutStrike);
+  } else strikeOnce();
 }
 
 // Touch and keyboard users can hold a photo open; hover remains the default preview.

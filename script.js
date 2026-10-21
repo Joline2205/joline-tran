@@ -545,16 +545,14 @@ if (recitalThumbnail) {
     const cards = [...work.querySelectorAll('.experience-copy, .work-endorsement, .section-heading')].map(rect);
     const [sentry, nina, quant, kellie] = cards.slice(1);
     if (!kellie) return;
-    // Section proportions establish the composition; card bounds protect text
-    // when content wraps at narrower widths. Preserve the supplied image bytes.
-    const tam = [bounds.width * .22, Math.max(bounds.height * .13, sentry.y + sentry.h + 22)];
-    const envelope = [nina.x + 18, nina.y - 62];
+    // Blue marks in the reference are relocation guides, not extra artwork.
+    // Follow their arrowheads while anchoring offsets to the unchanged cards.
     const goals = {
-      'sticker-tam': tam,
-      'sticker-bottom-up': [(tam[0] + envelope[0]) / 2, (tam[1] + envelope[1]) / 2],
-      'sticker-envelope': envelope,
-      'sticker-icp': [quant.x - 70, quant.y - 50],
-      'sticker-hello': [Math.max(18, kellie.x - 72), kellie.y - 48]
+      'sticker-tam': [bounds.width * .045, sentry.y + sentry.h + 20],
+      'sticker-bottom-up': [bounds.width * .38, nina.y + nina.h * .35],
+      'sticker-envelope': [nina.x + 18, nina.y - 62],
+      'sticker-icp': [quant.x + quant.w + 16, quant.y + quant.h * .18],
+      'sticker-hello': [kellie.x - 76, kellie.y + kellie.h * .3]
     };
     if (mobile.matches) {
       // Keep small illustrations in the screenshot gaps, never in a flow row.

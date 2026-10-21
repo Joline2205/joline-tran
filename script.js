@@ -345,7 +345,7 @@ if (travelMap) {
   const picker = travelSection.querySelector('#travel-place');
   const cityDetails = travelSection.querySelector('.city-detail-content');
   const emptyDetails = travelSection.querySelector('.city-empty');
-  const views = { world: [0, 0, 1000, 420], 'north-america': [40, 65, 350, 147], europe: [400, 40, 360, 151.2] };
+  const views = { world: [0, 0, 1000, 420], 'north-america': [40, 65, 350, 147], europe: [400, 40, 360, 151.2], asia: [720, 55, 260, 190] };
   let selectedPin = null;
   let tooltipPin = null;
   function hideTooltip() {

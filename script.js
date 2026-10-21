@@ -886,3 +886,26 @@ if (recitalThumbnail) {
   window.addEventListener('resize', placeAnnotations, { passive: true });
   document.fonts.ready.then(placeAnnotations);
 })();
+
+
+// One calm pour: the uploaded wave silhouette and solid fill are the same layer.
+const coffeeContact = document.querySelector('#contact');
+if (coffeeContact && 'IntersectionObserver' in window) {
+  const reducedPour = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (!reducedPour.matches) {
+    coffeeContact.classList.add('spill-ready');
+    const pourObserver = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        coffeeContact.classList.add('is-poured');
+        pourObserver.disconnect();
+      }
+    }, { threshold: 0, rootMargin: '0px 0px -80px 0px' });
+    pourObserver.observe(coffeeContact);
+    reducedPour.addEventListener('change', () => {
+      if (reducedPour.matches) {
+        coffeeContact.classList.add('is-poured');
+        pourObserver.disconnect();
+      }
+    });
+  }
+}

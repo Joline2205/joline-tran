@@ -395,6 +395,11 @@ if (travelMap) {
     currentGroup = group;
     emptyDetails.textContent = group === 'states' ? 'Select a state, area, or map pin to see its details.' : 'Select a city or a map pin to see its details.';
     const options = allPlaceOptions.filter(option => locationInfo(pins[Number(option.value)]).group === group);
+    if (group === 'states') options.sort((a, b) => {
+      const aArea = pins[Number(a.value)].dataset.kind === 'district';
+      const bArea = pins[Number(b.value)].dataset.kind === 'district';
+      return Number(aArea) - Number(bArea) || a.textContent.localeCompare(b.textContent, 'en');
+    });
     const label = group === 'states' ? 'Choose a state or area' : 'Choose a city';
     const prompt = placeholder.cloneNode(true);
     prompt.textContent = label;

@@ -185,9 +185,23 @@ if (noteHero) {
   noteHero.append(particleLayer);
   const reducedNotes = window.matchMedia('(prefers-reduced-motion: reduce)');
   const notePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-  const glyphs = ['♩', '♪'];
+  const noteAssets = [
+    'music-notes/hand-drawn-note-1.svg',
+    'music-notes/hand-drawn-note-2.svg',
+    'music-notes/hand-drawn-note-3.svg'
+  ];
+  const cachedNotes = [];
+  function preloadNotes() {
+    if (cachedNotes.length || reducedNotes.matches || !notePointer.matches) return;
+    noteAssets.forEach(src => {
+      const image = new Image();
+      image.src = src;
+      cachedNotes.push(image);
+    });
+  }
+  preloadNotes();
   const liveNotes = new Map();
-  let glyphIndex = 0;
+  let noteIndex = 0;
   let lastNoteTime = -Infinity;
   function removeNote(note) {
     clearTimeout(liveNotes.get(note));
@@ -210,21 +224,21 @@ if (noteHero) {
     const headerBottom = siteHeader ? siteHeader.getBoundingClientRect().bottom : 0;
     if (bounds.bottom <= headerBottom || event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < Math.max(bounds.top, headerBottom) || event.clientY > bounds.bottom) return;
     lastNoteTime = now;
-    const palette = ['#6B8B9B', '#AFC2CD', '#333B42'];
-    const note = document.createElement('span');
+    const note = document.createElement('img');
     note.className = 'music-particle';
     note.setAttribute('aria-hidden', 'true');
-    note.textContent = glyphs[glyphIndex++ % glyphs.length];
+    note.alt = '';
+    note.src = noteAssets[noteIndex++ % noteAssets.length];
+    note.decoding = 'async';
     const duration = 1000;
     const size = 24 + Math.random() * 4;
-    // Keep exact tip coordinates even at the screen edges; the layer clips drift.
-    const x = event.clientX - bounds.left;
-    // The baton hotspot (27, 5) is its tip, so event coordinates anchor the trail.
-    const y = event.clientY - bounds.top;
+    // Start just beside the treble clef's visible edge, close to its hotspot.
+    // The existing layer still clips drift at the hero boundaries.
+    const x = event.clientX - bounds.left + 10;
+    const y = event.clientY - bounds.top + 8;
     note.style.left = `${x}px`;
     note.style.top = `${y}px`;
-    note.style.fontSize = `${size}px`;
-    note.style.color = palette[Math.floor(Math.random() * palette.length)];
+    note.style.height = `${size}px`;
     note.style.setProperty('--note-duration', `${duration}ms`);
     note.style.setProperty('--note-drift', `${Math.random() * 24 - 12}px`);
     note.style.setProperty('--note-rise', '-40px');
@@ -239,6 +253,8 @@ if (noteHero) {
   window.addEventListener('blur', clearNotes);
   reducedNotes.addEventListener('change', clearNotes);
   notePointer.addEventListener('change', clearNotes);
+  notePointer.addEventListener('change', preloadNotes);
+  reducedNotes.addEventListener('change', preloadNotes);
   document.addEventListener('visibilitychange', () => { if (document.hidden) clearNotes(); });
 }
 

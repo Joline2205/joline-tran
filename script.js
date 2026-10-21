@@ -612,7 +612,7 @@ if (recitalThumbnail) {
       const h = parseFloat(element.style.width) * element.naturalHeight / element.naturalWidth;
       element.style.top = `${y - h / 2}px`;
     };
-    moveCenterY('tam', centerY(sentry.querySelector('.experience-narrative p:last-child')));
+    moveCenterY('tam', centerY(sentry.querySelector('.experience-narrative p:last-child')) - 20);
     moveCenterY('icp', rect(quant.querySelector('.experience-narrative')).y);
     const envelope = find('envelope');
     const envelopeWidth = parseFloat(envelope.style.width);
@@ -625,7 +625,7 @@ if (recitalThumbnail) {
     const envelopeSpan = fittedWidth * envelopeSpanFactor;
     envelope.style.width = `${fittedWidth}px`;
     envelope.style.left = `${ninaRect.x + ninaRect.w + 8 + (envelopeSpan - fittedWidth) / 2}px`;
-    moveCenterY('envelope', centerY(nina.querySelector('blockquote')));
+    moveCenterY('envelope', centerY(nina.querySelector('blockquote')) + 20);
     const quote = rect(kellie.querySelector('blockquote'));
     const author = rect(kellie.querySelector('figcaption'));
     beside('hello', kellie, 'left', (quote.y + quote.h + author.y) / 2);

@@ -1292,10 +1292,6 @@ body { overflow-x: clip; }
 /* Four independent annotations, positioned from the dashboard by script. */
 .work-tool-doodle { visibility: hidden; --sticker-opacity: .4; }
 .work-tool-doodle.is-placed { visibility: visible; }
-@media (max-width: 800px) {
-  /* The existing stacked gap is too short for legible hand-drawn icons. */
-  #work .sentry-row .sentry-graphic-overlap { margin-top: 48px; }
-}
 
 /* Supplied QuantHub annotations: placement follows the actual card geometry. */
 .quanthub-annotation {
@@ -1474,7 +1470,7 @@ body { overflow-x: clip; }
   .hero-heading { padding-bottom: 150px; pointer-events: none; }
   .hero-heading > .local-time, .hero-heading > .eyebrow,
   .hero-heading > .hero-title, .hero-heading > .hero-bottom { pointer-events: auto; }
-  .hero-hover-graphic { left: 20px; right: auto; bottom: 0; width: 182px; }
+  .hero-hover-graphic { left: auto; right: 20px; bottom: 0; width: 182px; }
   .photo-headshot { right: 16px; bottom: 86px; }
   .photo-travel { left: 18px; bottom: 116px; }
   .photo-recital { top: 22px; right: 20px; }
@@ -1495,28 +1491,10 @@ body { overflow-x: clip; }
     position: relative;
     width: 100%;
     max-width: none;
-    margin-top: -56px;
+    margin-top: 24px;
     padding-top: 0;
     z-index: auto;
   }
-  #work .sentry-graphic-overlap,
-  #work .quanthub-graphic-overlap {
-    width: 100%;
-    height: 160px;
-    max-height: none;
-    margin: 0;
-    transform: none;
-    overflow: hidden;
-    opacity: var(--graphic-opacity);
-    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-  }
-  #work .sentry-row .sentry-graphic-overlap { margin-top: 0; }
-  #work .quanthub-graphic-overlap { height: 150px; }
-  #work .work-graphic-img { width: max(100%, 620px); height: auto; }
-  #work .calculators-graphic { position: relative; left: -60px; }
-  #work .sentry-row .experience-story > .work-endorsement { margin: -8px 0 0 12px; }
-  #work .quanthub-row .experience-story > .work-endorsement { margin: -8px 12px 0 0; }
 }
 
 
@@ -1530,30 +1508,11 @@ body { overflow-x: clip; }
 }
 
 
-/* Artifact sheets have no independent layout height on phones. */
+/* Phone Work Experience has no screenshot layer or reserved screenshot space. */
 @media (max-width: 767px) {
-  #work .experience-row { position: relative; isolation: isolate; }
+  #work .sentry-graphic-overlap, #work .quanthub-graphic-overlap { display: none; }
   #work .sentry-row > .experience-story,
-  #work .quanthub-row > .experience-story { position: static; margin-top: 32px; }
-  #work .sentry-row .sentry-graphic-overlap,
-  #work .quanthub-row .quanthub-graphic-overlap {
-    position: absolute;
-    top: -20px;
-    left: -6px;
-    width: calc(100% + 12px);
-    height: calc(var(--artifact-card-height) + 40px);
-    margin: 0;
-    mask-image: none;
-    -webkit-mask-image: none;
-    z-index: 1;
-  }
-  #work .work-graphic-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: left top;
-  }
-  #work .calculators-graphic { left: 0; object-position: 18% top; }
+  #work .quanthub-row > .experience-story { margin-top: 24px; }
   #work .sentry-row .experience-story > .work-endorsement { margin: 0 0 0 12px; }
   #work .quanthub-row .experience-story > .work-endorsement { margin: 0 12px 0 0; }
   #contact .contact-paper-edge, #contact .contact-cup-connection { display: none; }
@@ -1588,29 +1547,11 @@ body { overflow-x: clip; }
     grid-area: 2 / 1 / auto / -1;
     width: 100%;
     max-width: none;
-    margin-top: 32px;
+    margin-top: 24px;
     padding-top: 0;
     z-index: auto;
   }
-  #work .sentry-row .sentry-graphic-overlap,
-  #work .quanthub-row .quanthub-graphic-overlap {
-    position: absolute;
-    top: -18px;
-    left: -8px;
-    width: calc(100% - var(--tablet-pocket) + 16px);
-    height: calc(var(--artifact-card-height) + 36px);
-    max-height: none;
-    margin: 0;
-    transform: none;
-    overflow: hidden;
-    opacity: var(--graphic-opacity);
-    mask-image: none;
-    -webkit-mask-image: none;
-    z-index: 1;
-  }
-  #work .quanthub-row .quanthub-graphic-overlap { left: calc(var(--tablet-pocket) - 8px); }
-  #work .work-graphic-img { width: 100%; height: 100%; object-fit: cover; object-position: left top; }
-  #work .calculators-graphic { left: 0; object-position: 18% top; }
+  #work .sentry-graphic-overlap, #work .quanthub-graphic-overlap { display: none; }
   #work .sentry-row .experience-story > .work-endorsement,
   #work .quanthub-row .experience-story > .work-endorsement {
     width: calc(100% - var(--tablet-pocket));
@@ -1618,9 +1559,9 @@ body { overflow-x: clip; }
   }
   #work .sentry-row .experience-story > .work-endorsement { margin-left: auto; }
   #work .work-sticker-layer { display: block; }
-  #work .work-sticker-layer > :not(.sticker-tam):not(.sticker-icp):not(.sticker-hello),
+  #work .work-sticker-layer > :not(.sticker-tam):not(.sticker-icp):not(.sticker-hello):not(.sticker-envelope),
   #work .work-gap-note { display: none; }
-  #work .sticker-tam, #work .sticker-icp, #work .sticker-hello { display: block; }
+  #work .sticker-tam, #work .sticker-icp, #work .sticker-hello, #work .sticker-envelope { display: block; }
 
   #hero {
     display: flex;

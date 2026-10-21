@@ -568,6 +568,7 @@ if (recitalThumbnail) {
         element.style.top = `${r.y + r.h * fraction - width * ratio / 2}px`;
       };
       placeInPocket('tam', sentry, 'right', 96, .55);
+      placeInPocket('envelope', nina, 'left', 80, .5);
       placeInPocket('icp', quant, 'left', 92, .48);
       placeInPocket('hello', kellie, 'right', 104, .55);
       return;
@@ -884,22 +885,4 @@ if (recitalThumbnail) {
   resize.observe(card);
   window.addEventListener('resize', placeAnnotations, { passive: true });
   document.fonts.ready.then(placeAnnotations);
-})();
-
-
-// Size each background sheet from its real card; it never reserves a flow row.
-(() => {
-  const rows = [...document.querySelectorAll('#work .experience-row')];
-  const cards = rows.map(row => row.querySelector('.experience-copy'));
-  const compact = () => innerWidth < 768 || tabletComposition.matches;
-  const updateSheets = () => rows.forEach((row, i) => {
-    if (compact()) row.style.setProperty('--artifact-card-height', `${cards[i].offsetHeight}px`);
-    else row.style.removeProperty('--artifact-card-height');
-  });
-  const observer = new ResizeObserver(updateSheets);
-  cards.forEach(card => observer.observe(card));
-  window.addEventListener('resize', updateSheets, { passive: true });
-  tabletComposition.addEventListener('change', updateSheets);
-  document.fonts.ready.then(updateSheets);
-  updateSheets();
 })();

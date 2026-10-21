@@ -915,7 +915,8 @@ if (paperContact && window.CSS && CSS.supports('clip-path', 'url(#contact-paper-
     paperContact.classList.add('paper-rip-enabled');
     if (rounded === lastRip) return;
     lastRip = rounded;
-    const x = -.12 + progress * 1.24;
+    // Only the paper overlay is cut; its nearly straight front has tiny fibers.
+    const x = -.01 + progress * 1.02;
     cut.setAttribute('transform', `translate(${x} 0)`);
     edge.setAttribute('transform', `translate(${x} 0)`);
     paperContact.classList.toggle('paper-rip-complete', progress === 1);

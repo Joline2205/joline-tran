@@ -605,6 +605,27 @@ if (recitalThumbnail) {
     beside('tam', sentry, 'left', centerY(sentry.querySelector('.tags')));
     beside('envelope', nina, 'left', centerY(nina.querySelector('blockquote')));
     beside('icp', quant, 'right', centerY(quant.querySelector('.company-title')));
+    // Position-only adjustments: retain each width calculated above, and move
+    // its existing box to the new text landmark without rerunning size fitting.
+    const moveCenterY = (name, y) => {
+      const element = find(name);
+      const h = parseFloat(element.style.width) * element.naturalHeight / element.naturalWidth;
+      element.style.top = `${y - h / 2}px`;
+    };
+    moveCenterY('tam', centerY(sentry.querySelector('.experience-narrative p:last-child')));
+    moveCenterY('icp', rect(quant.querySelector('.experience-narrative')).y);
+    const envelope = find('envelope');
+    const envelopeWidth = parseFloat(envelope.style.width);
+    const angle = Math.abs(parseFloat(envelope.style.getPropertyValue('--sticker-angle'))) * Math.PI / 180;
+    const envelopeSpanFactor = Math.cos(angle) + envelope.naturalHeight / envelope.naturalWidth * Math.sin(angle);
+    const ninaRect = rect(nina);
+    const rightSpace = document.documentElement.clientWidth - bounds.left - ninaRect.x - ninaRect.w;
+    const edgePadding = rightSpace >= 100 ? 32 : 4;
+    const fittedWidth = Math.min(envelopeWidth, Math.max(1, rightSpace - 8 - edgePadding) / envelopeSpanFactor);
+    const envelopeSpan = fittedWidth * envelopeSpanFactor;
+    envelope.style.width = `${fittedWidth}px`;
+    envelope.style.left = `${ninaRect.x + ninaRect.w + 8 + (envelopeSpan - fittedWidth) / 2}px`;
+    moveCenterY('envelope', centerY(nina.querySelector('blockquote')));
     const quote = rect(kellie.querySelector('blockquote'));
     const author = rect(kellie.querySelector('figcaption'));
     beside('hello', kellie, 'left', (quote.y + quote.h + author.y) / 2);
@@ -673,7 +694,9 @@ if (recitalThumbnail) {
       const y = card.bottom + clearance + (height - h) / 2;
       const candidates = [];
       for (let x = card.left + clearance; x + width <= card.right - clearance; x += 4) candidates.push(x);
-      candidates.sort((a, b) => Math.abs(a + width / 2 - (card.left + card.width * .4)) - Math.abs(b + width / 2 - (card.left + card.width * .4)));
+      const financialTag = work.querySelector('.sentry-row .tags span:nth-child(2)').getBoundingClientRect();
+      const targetX = (financialTag.left + financialTag.right) / 2 + 12;
+      candidates.sort((a, b) => Math.abs(a + width / 2 - targetX) - Math.abs(b + width / 2 - targetX));
       const x = candidates.find(x => fits(x, y, width, h));
       if (x !== undefined) placement = { x, y, width };
     }

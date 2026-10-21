@@ -537,7 +537,6 @@ if (recitalThumbnail) {
   const stickers = [...layer.querySelectorAll('.work-doodle-sticker')];
   const mobile = matchMedia('(max-width: 800px)');
   function placeStickers() {
-    if (mobile.matches) return;
     const bounds = work.getBoundingClientRect();
     const rect = element => {
       const r = element.getBoundingClientRect();
@@ -546,18 +545,27 @@ if (recitalThumbnail) {
     const cards = [...work.querySelectorAll('.experience-copy, .work-endorsement, .section-heading')].map(rect);
     const [sentry, nina, quant, kellie] = cards.slice(1);
     if (!kellie) return;
-    // Match each illustration to its requested landmark rather than its DOM order.
-    const tam = [sentry.x + sentry.w * .32, sentry.y + sentry.h + 24];
-    const envelope = [nina.x + 18, nina.y - 66];
+    // Section proportions establish the composition; card bounds protect text
+    // when content wraps at narrower widths. Preserve the supplied image bytes.
+    const tam = [bounds.width * .22, Math.max(bounds.height * .13, sentry.y + sentry.h + 22)];
+    const envelope = [nina.x + 18, nina.y - 62];
     const goals = {
       'sticker-tam': tam,
       'sticker-bottom-up': [(tam[0] + envelope[0]) / 2, (tam[1] + envelope[1]) / 2],
       'sticker-envelope': envelope,
-      'sticker-icp': [quant.x - 70, quant.y - 26],
-      'sticker-hello': [kellie.x - 72, kellie.y + 24]
+      'sticker-icp': [quant.x - 70, quant.y - 50],
+      'sticker-hello': [Math.max(18, kellie.x - 72), kellie.y - 48]
     };
+    if (mobile.matches) {
+      // Keep small illustrations in the screenshot gaps, never in a flow row.
+      goals['sticker-tam'] = [bounds.width * .18, sentry.y + sentry.h + 20];
+      goals['sticker-envelope'] = [bounds.width * .72, nina.y - 55];
+      goals['sticker-bottom-up'] = [bounds.width * .5, nina.y - 110];
+      goals['sticker-icp'] = [bounds.width * .75, quant.y - 64];
+      goals['sticker-hello'] = [20, kellie.y - 48];
+    }
     const occupied = [...cards];
-    stickers.forEach((sticker, i) => {
+    stickers.forEach(sticker => {
       const w = sticker.offsetWidth, h = sticker.offsetHeight;
       const goal = goals[[...sticker.classList].find(name => name in goals)];
       let best, score = Infinity;

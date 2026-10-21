@@ -1261,19 +1261,13 @@ body { overflow-x: clip; }
 .work-sticker-layer.is-ready .work-doodle-sticker { opacity: 0; transform: scale(.7) rotate(var(--sticker-angle)); transition-delay: var(--sticker-delay); }
 .work-sticker-layer.is-ready .work-doodle-sticker.revealed { opacity: 1; transform: scale(1) rotate(var(--sticker-angle)); }
 @media (max-width: 800px) {
-  .work-sticker-layer { position: relative; inset: auto; display: flex; align-items: center; justify-content: space-around; gap: 10px; padding: 16px 8px 24px; clip-path: none; }
-  .work-doodle-sticker { position: relative; left: auto !important; top: auto !important; width: min(var(--sticker-width), 14vw); flex-shrink: 0; }
-  #work .work-sticker-layer { order: initial; }
+  .work-doodle-sticker { width: calc(var(--sticker-width) * .8); }
 }
 @media (prefers-reduced-motion: reduce) {
   .work-sticker-layer .work-doodle-sticker { transition: none; }
   .work-sticker-layer.is-ready .work-doodle-sticker { opacity: 1; transform: rotate(var(--sticker-angle)); }
 }
 
-.sticker-tint-defs { position: absolute; pointer-events: none; }
-.sticker-tam, .sticker-icp { filter: url(#sticker-ice); }
-.sticker-envelope, .sticker-hello { filter: url(#sticker-slate); }
-.sticker-bottom-up { filter: url(#sticker-cream); }
 
 /* Supplied script artwork replaces the hero's typeset interaction hint. */
 .hero-hover-graphic { position: absolute; bottom: 20px; right: 40px; width: 150px; height: 86px; z-index: 5; pointer-events: none; animation: hint-breathe 4s ease-in-out infinite alternate; }

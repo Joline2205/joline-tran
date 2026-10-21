@@ -3,16 +3,20 @@ const root = document.documentElement;
 const tabletComposition = window.matchMedia('(min-width: 768px) and (max-width: 1199px), (min-width: 1200px) and (max-width: 1366px) and (hover: none) and (pointer: coarse)');
 document.querySelector('#year').textContent = new Date().getFullYear();
 
-// Each answer toggles the same twist; switching answers keeps the receipt open.
+// Each answer shares the twist and reveals its own original personal artifact.
 const quiz = document.querySelector('.truth-quiz');
 if (quiz) {
   const options = [...quiz.querySelectorAll('.quiz-option')];
   const result = quiz.querySelector('.quiz-result');
+  const visuals = [...quiz.querySelectorAll('[data-choice-visual]')];
   let selectedOption = null;
   options.forEach((option) => {
     option.addEventListener('click', () => {
       selectedOption = selectedOption === option ? null : option;
       options.forEach((other) => other.setAttribute('aria-pressed', String(other === selectedOption)));
+      visuals.forEach(visual => {
+        visual.hidden = !selectedOption || visual.dataset.choiceVisual !== selectedOption.dataset.choice;
+      });
       result.hidden = selectedOption === null;
     });
   });

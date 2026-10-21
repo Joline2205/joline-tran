@@ -1431,23 +1431,8 @@ body { overflow-x: clip; }
   transform-origin: 65% 75%;
 }
 .contact-cup-illustration img { display: block; width: 100%; height: auto; filter: brightness(0) invert(1); }
-/* Complete supplied sign-off, in normal flow below the Contact content. */
+/* Content-height Contact no longer reserves a separate sign-off row. */
 #contact.contact-section { padding-bottom: 24px; }
-.contact-signoff {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 48px;
-  margin-right: calc(20px - clamp(24px, 5vw, 64px));
-}
-.contact-signoff img {
-  display: block;
-  width: clamp(182px, 16.8vw, 238px);
-  max-width: 100%;
-  height: auto;
-  filter: brightness(0) invert(1);
-}
 /* Reuse the existing short-lived notes; never create a cursor-following element. */
 .cursor-particles { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 20; }
 
@@ -1722,7 +1707,6 @@ body {
 
 /* Responsive Contact annotations: the reveal's cover and clip are unchanged. */
 #contact .contact-grid { row-gap: 0; }
-#contact .contact-signoff { grid-column: 2; grid-row: 2; }
 @media (min-width: 768px) {
   #contact .contact-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); }
   #contact .handwritten-email { justify-content: flex-end; }
@@ -1753,13 +1737,6 @@ body {
   #contact .handwritten-gatech-email { grid-row: 4; }
   #contact .handwritten-personal-email img { width: clamp(112px, 35vw, 140px); }
   #contact .handwritten-gatech-email img { width: clamp(110px, 34vw, 136px); }
-  #contact .contact-signoff {
-    grid-column: 2;
-    grid-row: 3 / 5;
-    align-self: end;
-    margin: 0;
-  }
-  #contact .contact-signoff img { width: clamp(108px, 31vw, 132px); }
 }
 
 /* Atlanta alone shares the hero-name source of truth, including its quiet halo. */
@@ -1774,3 +1751,17 @@ body {
 #projects .journal-project-link .draft-action { margin-top: 0; }
 .quiz-instruction { font-size: 12px; line-height: 1.7; color: var(--muted); margin: 12px 0 0; }
 .stay-progress.stay-home { background: var(--wash); }
+
+/* Original personal artifacts, one per selected truth. */
+.quiz-choice-visual { display: block; width: min(100%, 320px); height: auto; margin: 20px auto 0; border-radius: 3px; }
+.quiz-choice-visual[hidden] { display: none; }
+.site-footer .footer { align-items: center; }
+.footer-signature {
+  display: block;
+  flex: 0 1 150px;
+  width: 150px;
+  min-width: 0;
+  aspect-ratio: 698 / 251;
+  background: currentColor;
+  mask: url("signature.svg") center / contain no-repeat;
+}

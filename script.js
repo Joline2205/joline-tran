@@ -1,5 +1,6 @@
 'use strict';
 const root = document.documentElement;
+const tabletComposition = window.matchMedia('(min-width: 768px) and (max-width: 1199px), (min-width: 1200px) and (max-width: 1366px) and (hover: none) and (pointer: coarse)');
 document.querySelector('#year').textContent = new Date().getFullYear();
 
 // Each answer reveals the same twist; reset restores the initial state and focus.
@@ -551,6 +552,26 @@ if (recitalThumbnail) {
     if (!sentry || !nina || !quant || !kellie) return;
     const centerY = element => { const r = rect(element); return r.y + r.h / 2; };
     const find = name => layer.querySelector(`.sticker-${name}`);
+    if (tabletComposition.matches) {
+      // The tablet grid reserves side pockets, not additional vertical rows.
+      const gutter = parseFloat(getComputedStyle(work).paddingLeft);
+      const placeInPocket = (name, card, side, desired, fraction) => {
+        const element = find(name), r = rect(card);
+        const left = side === 'right' ? r.x + r.w + 16 : gutter + 16;
+        const right = side === 'right' ? bounds.width - gutter - 16 : r.x - 16;
+        const ratio = element.naturalHeight / element.naturalWidth;
+        const angle = Math.abs(parseFloat(element.style.getPropertyValue('--sticker-angle'))) * Math.PI / 180;
+        const spanFactor = Math.cos(angle) + ratio * Math.sin(angle);
+        const width = Math.min(desired, Math.max(1, right - left) / spanFactor);
+        element.style.width = `${width}px`;
+        element.style.left = `${(left + right - width) / 2}px`;
+        element.style.top = `${r.y + r.h * fraction - width * ratio / 2}px`;
+      };
+      placeInPocket('tam', sentry, 'right', 96, .55);
+      placeInPocket('icp', quant, 'left', 92, .48);
+      placeInPocket('hello', kellie, 'right', 104, .55);
+      return;
+    }
     const gap = 8;
     // Include rotation in the fit calculation so even the outer ink remains
     // outside the card, inside the section, and centered on its landmark.
@@ -863,4 +884,22 @@ if (recitalThumbnail) {
   resize.observe(card);
   window.addEventListener('resize', placeAnnotations, { passive: true });
   document.fonts.ready.then(placeAnnotations);
+})();
+
+
+// Size each background sheet from its real card; it never reserves a flow row.
+(() => {
+  const rows = [...document.querySelectorAll('#work .experience-row')];
+  const cards = rows.map(row => row.querySelector('.experience-copy'));
+  const compact = () => innerWidth < 768 || tabletComposition.matches;
+  const updateSheets = () => rows.forEach((row, i) => {
+    if (compact()) row.style.setProperty('--artifact-card-height', `${cards[i].offsetHeight}px`);
+    else row.style.removeProperty('--artifact-card-height');
+  });
+  const observer = new ResizeObserver(updateSheets);
+  cards.forEach(card => observer.observe(card));
+  window.addEventListener('resize', updateSheets, { passive: true });
+  tabletComposition.addEventListener('change', updateSheets);
+  document.fonts.ready.then(updateSheets);
+  updateSheets();
 })();

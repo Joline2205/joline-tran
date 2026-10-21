@@ -1325,3 +1325,11 @@ body { overflow-x: clip; }
     cursor: var(--site-cursor) !important;
   }
 }
+
+/* Four independent annotations, positioned from the dashboard by script. */
+.work-tool-doodle { visibility: hidden; }
+.work-tool-doodle.is-placed { visibility: visible; }
+@media (max-width: 800px) {
+  /* The existing stacked gap is too short for legible hand-drawn icons. */
+  #work .sentry-row .sentry-graphic-overlap { margin-top: 48px; }
+}

@@ -777,3 +777,57 @@ if (recitalThumbnail) {
   observer.observe(note);
   motion.addEventListener('change', event => { if (event.matches) finish(); });
 })();
+
+
+// Scatter the supplied tool drawings above their dashboard, never over its UI.
+(() => {
+  const work = document.querySelector('#work');
+  const tools = [...(work?.querySelectorAll('.work-tool-doodle') || [])];
+  if (!tools.length) return;
+  const graphic = work.querySelector('.sentry-graphic-overlap');
+  const card = work.querySelector('.sentry-row > .experience-copy');
+  const fractions = [0, .28, .57, 1];
+  function placeTools() {
+    const section = work.getBoundingClientRect();
+    const dashboard = graphic.getBoundingClientRect();
+    const tile = card.getBoundingClientRect();
+    const stacked = matchMedia('(max-width: 800px)').matches;
+    const left = stacked ? dashboard.left + 12 : tile.right + 20;
+    let right = Math.min(stacked ? dashboard.right - 12 : section.right - 36, document.documentElement.clientWidth - 16);
+    if (stacked) {
+      // The existing UP/BOTTOM illustration owns the right side of this gap.
+      // Fit only the new drawings into the remaining paper space to its left.
+      const triangle = work.querySelector('.sticker-bottom-up');
+      const width = parseFloat(triangle.style.width) || triangle.offsetWidth;
+      const height = width * triangle.naturalHeight / triangle.naturalWidth;
+      const angle = Math.abs(parseFloat(triangle.style.getPropertyValue('--sticker-angle'))) * Math.PI / 180;
+      const rotatedWidth = width * Math.cos(angle) + height * Math.sin(angle);
+      const triangleLeft = section.left + parseFloat(triangle.style.left) + (width - rotatedWidth) / 2;
+      if (Number.isFinite(triangleLeft)) right = Math.min(right, triangleLeft - 16);
+    }
+    const available = Math.max(1, right - left);
+    const scale = stacked ? Math.min(.55, available / 600) : Math.min(1, available / 760);
+    const gaps = stacked ? [16, 10, 20, 13] : [28, 12, 24, 16];
+    tools.forEach((tool, i) => {
+      if (!tool.naturalWidth) return;
+      const width = parseFloat(tool.style.getPropertyValue('--sticker-width')) * scale;
+      const height = width * tool.naturalHeight / tool.naturalWidth;
+      const angle = Math.abs(parseFloat(tool.style.getPropertyValue('--sticker-angle'))) * Math.PI / 180;
+      const visualWidth = width * Math.cos(angle) + height * Math.sin(angle);
+      const visualHeight = height * Math.cos(angle) + width * Math.sin(angle);
+      const x = left + fractions[i] * (available - visualWidth);
+      const y = dashboard.top - gaps[i] - visualHeight;
+      tool.style.width = `${width}px`;
+      tool.style.left = `${x - section.left + (visualWidth - width) / 2}px`;
+      tool.style.top = `${y - section.top + (visualHeight - height) / 2}px`;
+      tool.classList.add('is-placed');
+    });
+  }
+  Promise.all([...work.querySelectorAll('.work-doodle-sticker')].map(tool => tool.decode().catch(() => {})))
+    .then(() => requestAnimationFrame(placeTools));
+  const observer = new ResizeObserver(placeTools);
+  observer.observe(work);
+  observer.observe(graphic);
+  window.addEventListener('resize', placeTools, { passive: true });
+  document.fonts.ready.then(placeTools);
+})();

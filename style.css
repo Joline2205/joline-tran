@@ -834,10 +834,10 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--pape
 }
 :root { --rest-color: #7a92a2; --rest-opacity: .55; }
 .hero-rests { position: absolute; inset: 0px; z-index: 1; pointer-events: none; user-select: none; }
-.music-rest { position: absolute; display: block; fill: currentcolor; color: var(--rest-color); opacity: var(--rest-opacity); pointer-events: none; user-select: none; animation: 14s ease-in-out 0s infinite alternate none running rest-drift; }
+.music-rest { position: absolute; display: block; height: auto; max-width: none; fill: currentcolor; color: var(--rest-color); opacity: var(--rest-opacity); pointer-events: none; user-select: none; animation: 14s ease-in-out 0s infinite alternate none running rest-drift; }
 .rest-quarter { right: 12px; top: 26%; animation-duration: 16s; animation-delay: -4s; }
 .rest-eighth { right: 26%; bottom: 33%; animation-duration: 13s; animation-delay: -7s; }
-.rest-half { left: 13%; bottom: 35px; animation-duration: 15s; animation-delay: -9s; }
+.rest-half { left: 13%; bottom: 35px; margin-bottom: 8px; animation-duration: 15s; animation-delay: -9s; }
 .rest-sixteenth { right: 38%; top: 25px; animation-duration: 12s; animation-delay: -2s; }
 @keyframes rest-drift {
   0% { transform: translateY(-6px); }

@@ -1304,3 +1304,16 @@ body { overflow-x: clip; }
 /* The thank-you note reuses the recital accordion's existing visual treatment. */
 .program-thanks-copy { margin: 0; }
 .program-content a { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 2px; }
+
+/* About narrative shares the existing pale-blue card surface and ink palette. */
+#about .bio { padding: clamp(24px, 3vw, 32px); background: var(--quote-fill); border-radius: 4px; box-shadow: 0 14px 30px -10px rgba(0,0,0,.08); }
+#about .bio p { color: var(--ink); }
+#about .bio p:last-child { margin-bottom: 0; }
+.truth-quiz .quiz-options { padding-top: 28px; }
+/* State dots are 60% of the existing 6px explored-city markers. */
+.map-pin.pin-state { width: 10px; height: 10px; z-index: 0; }
+.map-pin.pin-state > span { width: 3.6px; height: 3.6px; background: #fff; border: .5px solid rgba(107,139,155,.5); box-shadow: none; }
+.map-pin.pin-state:hover, .map-pin.pin-state:focus-visible, .map-pin.pin-state[aria-pressed="true"] { z-index: 1; }
+.map-pin.pin-state:hover > span, .map-pin.pin-state:focus-visible > span, .map-pin.pin-state[aria-pressed="true"] > span { box-shadow: none; }
+.map-pin.pin-lived { z-index: 2; }
+.map-pin.pin-lived:hover, .map-pin.pin-lived:focus-visible, .map-pin.pin-lived[aria-pressed="true"] { z-index: 3; }

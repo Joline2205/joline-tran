@@ -343,7 +343,7 @@ if (travelMap) {
   const picker = travelSection.querySelector('#travel-place');
   const cityDetails = travelSection.querySelector('.city-detail-content');
   const emptyDetails = travelSection.querySelector('.city-empty');
-  const views = { world: [0, 0, 1000, 420], europe: [400, 40, 360, 151.2] };
+  const views = { world: [0, 0, 1000, 420], 'north-america': [40, 65, 350, 147], europe: [400, 40, 360, 151.2] };
   let selectedPin = null;
   let tooltipPin = null;
   function hideTooltip() {
@@ -396,8 +396,13 @@ if (travelMap) {
     emptyDetails.hidden = true;
     cityDetails.hidden = false;
     cityDetails.querySelector('.city-detail-title').textContent = `${pin.dataset.city}, ${pin.dataset.country}`;
-    cityDetails.querySelector('.city-category').textContent = pin.dataset.kind === 'lived' ? `Lived · ${pin.dataset.duration}` : 'Explored';
-    cityDetails.querySelector('.city-year').textContent = pin.dataset.year ? `${pin.dataset.yearLabel || 'Year'}: ${pin.dataset.year}` : 'Year not recorded';
+    const isStateOrDistrict = pin.dataset.kind === 'state' || pin.dataset.kind === 'district';
+    cityDetails.querySelector('.city-category').textContent = pin.dataset.kind === 'lived' ? `Lived · ${pin.dataset.duration}`
+      : pin.dataset.kind === 'state' ? 'Visited state'
+      : pin.dataset.kind === 'district' ? 'Visited district' : 'Explored';
+    const year = cityDetails.querySelector('.city-year');
+    year.hidden = isStateOrDistrict;
+    year.textContent = isStateOrDistrict ? '' : pin.dataset.year ? `${pin.dataset.yearLabel || 'Year'}: ${pin.dataset.year}` : 'Year not recorded';
     cityDetails.querySelector('.city-context').textContent = pin.dataset.context;
     showTooltip(pin);
   }
@@ -425,7 +430,7 @@ if (travelMap) {
       return;
     }
     const pin = pins[Number(picker.value)];
-    if (pin.hidden) setView('world');
+    if (pin.hidden) setView(pin.dataset.kind === 'state' || pin.dataset.kind === 'district' ? 'north-america' : 'world');
     selectPin(pin);
   });
   travelMap.querySelectorAll('[data-map-view]').forEach((button) => {

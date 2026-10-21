@@ -3,7 +3,7 @@ const root = document.documentElement;
 const tabletComposition = window.matchMedia('(min-width: 768px) and (max-width: 1199px), (min-width: 1200px) and (max-width: 1366px) and (hover: none) and (pointer: coarse)');
 document.querySelector('#year').textContent = new Date().getFullYear();
 
-// Each answer reveals the same twist; reset restores the initial state and focus.
+// Each answer toggles the same twist; switching answers keeps the receipt open.
 const quiz = document.querySelector('.truth-quiz');
 if (quiz) {
   const options = [...quiz.querySelectorAll('.quiz-option')];
@@ -11,16 +11,10 @@ if (quiz) {
   let selectedOption = null;
   options.forEach((option) => {
     option.addEventListener('click', () => {
-      options.forEach((other) => other.setAttribute('aria-pressed', String(other === option)));
-      selectedOption = option;
-      result.hidden = false;
+      selectedOption = selectedOption === option ? null : option;
+      options.forEach((other) => other.setAttribute('aria-pressed', String(other === selectedOption)));
+      result.hidden = selectedOption === null;
     });
-  });
-  quiz.querySelector('.quiz-reset').addEventListener('click', () => {
-    result.hidden = true;
-    options.forEach((option) => option.setAttribute('aria-pressed', 'false'));
-    if (selectedOption) selectedOption.focus();
-    selectedOption = null;
   });
 }
 

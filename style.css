@@ -127,10 +127,9 @@ html { scroll-behavior: auto; }
 .quiz-option[aria-pressed="true"] > span { color: var(--accent); }
 .quiz-result { margin-top: 16px; padding: 20px; background: var(--wash); border: 1px solid var(--line); border-radius: 4px; animation: 0.35s ease 0s 1 normal both running quiz-reveal; }
 .quiz-result[hidden] { display: none; }
+.quiz-marathon-receipt { display: block; width: min(100%, 320px); height: auto; margin-top: 20px; border-radius: 3px; }
+.about-grid:has(.quiz-result:not([hidden])) > .bio { align-self: start; }
 .quiz-result p { font-size: 12px; line-height: 1.9; margin: 0px 0px 16px; }
-.quiz-reset { border-top: 0px; border-right: 0px; border-left: 0px; border-image: none; border-bottom: 1px solid var(--line); background: none; color: var(--muted); padding: 4px 0px; font-size: 11px; }
-.quiz-reset:hover { color: var(--accent); border-color: var(--accent); }
-.quiz-reset > span { margin-left: 12px; }
 .contact-grid h2 { font-size: 36px; line-height: 1.2; letter-spacing: -1.3px; }
 @keyframes quiz-reveal {
   0% { opacity: 0; transform: translateY(6px); }

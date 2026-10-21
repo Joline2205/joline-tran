@@ -258,7 +258,7 @@ if (noteHero) {
   document.addEventListener('visibilitychange', () => { if (document.hidden) clearNotes(); });
 }
 
-// Pour once at 35% visibility, then disconnect to avoid scroll-triggered resets.
+// Reveal the illustrated spill once; reduced motion gets the same settled composition.
 const coffeeContact = document.querySelector('#contact');
 if (coffeeContact) {
   const reducedPour = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -271,26 +271,23 @@ if (coffeeContact) {
     if (coffeeContact.classList.contains('is-poured')) return;
     coffeeContact.classList.add('is-poured');
     if (reducedPour.matches) settle();
-    else settleTimer = setTimeout(settle, 3100);
+    else settleTimer = setTimeout(settle, 1600);
   };
-  // The finite ripple completes after the 1.4s fill, leaving a static flooded state.
-  coffeeContact.querySelector('.coffee-wave').addEventListener('animationend', (event) => {
-    if (event.animationName === 'waveFlow') settle();
+  coffeeContact.querySelector('.coffee-spill').addEventListener('animationend', event => {
+    if (event.animationName === 'illustrated-coffee-spill') settle();
   });
-  reducedPour.addEventListener('change', (event) => {
+  reducedPour.addEventListener('change', event => {
     if (event.matches && coffeeContact.classList.contains('is-poured')) settle();
   });
   if ('IntersectionObserver' in window) {
-    const coffeeObserver = new IntersectionObserver((entries) => {
-      if (entries.some((entry) => entry.isIntersecting && entry.intersectionRatio >= 0.35)) {
+    const coffeeObserver = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= .35)) {
         pour();
         coffeeObserver.disconnect();
       }
-    }, { threshold: 0.35 });
+    }, { threshold: .35 });
     coffeeObserver.observe(coffeeContact);
-  } else {
-    pour();
-  }
+  } else pour();
 }
 
 // Touch and keyboard users can hold a photo open; hover remains the default preview.

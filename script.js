@@ -303,7 +303,7 @@ function updateGlasgowProgress(now = new Date()) {
   const pin = document.querySelector('.map-pin[data-city="Glasgow"]');
   if (pin) {
     pin.dataset.duration = label;
-    pin.setAttribute('aria-label', `Glasgow, ${pin.dataset.country} · ${label} · ${pin.dataset.context}`);
+    pin.setAttribute('aria-label', `Glasgow, ${pin.dataset.country} · Lived · ${label} · ${pin.dataset.context} · ${pin.dataset.year}`);
     if (pin.getAttribute('aria-pressed') === 'true') {
       const category = document.querySelector('.city-category');
       if (category && category.textContent !== `Lived · ${label}`) category.textContent = `Lived · ${label}`;
@@ -359,19 +359,61 @@ if (travelMap) {
     tooltip.style.left = `${left}px`;
     tooltip.style.top = `${top}px`;
   }
+  function locationInfo(pin) {
+    const d = pin.dataset;
+    const area = d.kind === 'state' || d.kind === 'district';
+    const category = d.residence === 'home' ? 'Home'
+      : d.residence === 'lived' || d.kind === 'lived' ? 'Lived'
+      : d.kind === 'state' ? 'Visited state'
+      : d.kind === 'district' ? 'Visited area' : 'Explored';
+    const label = area && !d.residence ? ''
+      : category === 'Lived' && !area && d.duration ? `Lived · ${d.duration}` : category;
+    const year = !area && !d.studyTravel && d.year
+      ? `${d.yearLabel ? d.yearLabel + ': ' : ''}${d.year}` : '';
+    return { category, label, year, context: d.context || '', group: area ? 'states' : 'cities' };
+  }
   function showTooltip(pin) {
     hideTooltip();
     tooltipPin = pin;
     tooltip.querySelector('strong').textContent = pin.dataset.city;
     tooltip.querySelector('.tooltip-country').textContent = pin.dataset.country;
-    const date = pin.dataset.year
-      ? `${pin.dataset.yearLabel ? pin.dataset.yearLabel.toLowerCase() + ' ' : ''}${pin.dataset.year}`
-      : '';
-    tooltip.querySelector('.tooltip-context').textContent = [pin.dataset.context, date].filter(Boolean).join(' · ');
+    const info = locationInfo(pin);
+    const tooltipContext = tooltip.querySelector('.tooltip-context');
+    tooltipContext.textContent = [info.label, info.context, info.year].filter(Boolean).join(' · ');
+    tooltipContext.hidden = !tooltipContext.textContent;
     tooltip.hidden = false;
     pin.setAttribute('aria-describedby', 'map-tooltip');
     positionTooltip(pin);
   }
+  // Short native lists avoid the old popup's scroll arrow beside the states heading.
+  const placeGroups = travelSection.querySelector('.place-groups');
+  const allPlaceOptions = [...picker.options].slice(1);
+  const placeholder = picker.options[0].cloneNode(true);
+  let currentGroup = '';
+  function setPlaceGroup(group) {
+    if (currentGroup === group) return;
+    currentGroup = group;
+    emptyDetails.textContent = group === 'states' ? 'Select a state, area, or map pin to see its details.' : 'Select a city or a map pin to see its details.';
+    const options = allPlaceOptions.filter(option => locationInfo(pins[Number(option.value)]).group === group);
+    const label = group === 'states' ? 'Choose a state or area' : 'Choose a city';
+    const prompt = placeholder.cloneNode(true);
+    prompt.textContent = label;
+    picker.replaceChildren(prompt, ...options);
+    travelSection.querySelector('.place-label').textContent = label;
+    placeGroups.querySelectorAll('button').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.placeGroup === group)));
+  }
+  setPlaceGroup('cities');
+  placeGroups.hidden = false;
+  placeGroups.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+    if (button.dataset.placeGroup === currentGroup) return;
+    setPlaceGroup(button.dataset.placeGroup);
+    picker.value = '';
+    selectedPin = null;
+    pins.forEach(pin => pin.setAttribute('aria-pressed', 'false'));
+    hideTooltip();
+    cityDetails.hidden = true;
+    emptyDetails.hidden = false;
+  }));
   function setView(name) {
     const [x, y, width, height] = views[name];
     geography.setAttribute('viewBox', views[name].join(' '));
@@ -390,18 +432,22 @@ if (travelMap) {
   function selectPin(pin) {
     selectedPin = pin;
     pins.forEach((other) => other.setAttribute('aria-pressed', String(other === pin)));
+    const info = locationInfo(pin);
+    setPlaceGroup(info.group);
     picker.value = String(pins.indexOf(pin));
     emptyDetails.hidden = true;
     cityDetails.hidden = false;
     cityDetails.querySelector('.city-detail-title').textContent = `${pin.dataset.city}, ${pin.dataset.country}`;
-    const isStateOrDistrict = pin.dataset.kind === 'state' || pin.dataset.kind === 'district';
-    cityDetails.querySelector('.city-category').textContent = pin.dataset.kind === 'lived' ? `Lived · ${pin.dataset.duration}`
-      : pin.dataset.kind === 'state' ? 'Visited state'
-      : pin.dataset.kind === 'district' ? 'Visited district' : 'Explored';
+    const category = cityDetails.querySelector('.city-category');
+    category.textContent = info.label;
+    category.hidden = !info.label;
+    category.dataset.category = info.category.toLowerCase();
     const year = cityDetails.querySelector('.city-year');
-    year.hidden = isStateOrDistrict;
-    year.textContent = isStateOrDistrict ? '' : pin.dataset.year ? `${pin.dataset.yearLabel || 'Year'}: ${pin.dataset.year}` : 'Year not recorded';
-    cityDetails.querySelector('.city-context').textContent = pin.dataset.context;
+    year.hidden = !info.year;
+    year.textContent = info.year;
+    const context = cityDetails.querySelector('.city-context');
+    context.hidden = !info.context;
+    context.textContent = info.context;
     showTooltip(pin);
   }
   pins.forEach((pin) => {

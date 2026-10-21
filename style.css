@@ -1660,3 +1660,12 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .contact-horizontal-tear { clip-path: none; }
 }
+
+/* City Notes keeps one native selector, with short, clearly grouped option lists. */
+.place-groups { display: flex; align-items: center; flex-wrap: wrap; gap: 18px; margin: -4px 0 16px; }
+.place-groups[hidden] { display: none; }
+.place-groups button { padding: 5px 0; border: 0; border-bottom: 1px solid transparent; background: none; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.place-groups button[aria-pressed="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.city-category { color: var(--muted); }
+.city-category[data-category="lived"], .city-category[data-category="home"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+.city-year[hidden], .city-context[hidden], .city-category[hidden], .tooltip-context[hidden] { display: none; }

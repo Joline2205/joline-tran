@@ -504,7 +504,6 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--pape
 @media (prefers-reduced-motion: reduce) {
 .geo-orb .orb-surface { transition: none; }
 }
-.hero, #hero, .hero-section, .site-header { cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'><path d='M3 29L26 6' stroke='%23C5D5DF' stroke-width='1.5' stroke-linecap='round'/><path d='M2 30c-.8-.8-.5-2 .5-3l1.8-1.8 2.5 2.5L5 29.5c-1 1-2.2 1.3-3 .5z' fill='%236B8B9B'/><circle cx='27' cy='5' r='1' fill='%23FFFFFF'/></svg>") 27 5, auto; }
 #hero a[href], #hero button { cursor: pointer; }
 .music-particle { position: absolute; z-index: 10; pointer-events: none; user-select: none; line-height: 1; opacity: 0.75; font-family: Georgia, "Times New Roman", serif; animation: note-float var(--note-duration,1000ms) ease-out both; will-change: transform, opacity; }
 @keyframes note-float {
@@ -1317,3 +1316,11 @@ body { overflow-x: clip; }
 .map-pin.pin-state:hover > span, .map-pin.pin-state:focus-visible > span, .map-pin.pin-state[aria-pressed="true"] > span { box-shadow: none; }
 .map-pin.pin-lived { z-index: 2; }
 .map-pin.pin-lived:hover, .map-pin.pin-lived:focus-visible, .map-pin.pin-lived[aria-pressed="true"] { z-index: 3; }
+
+/* Native cursor: original supplied artwork, resized only at the SVG root. */
+@media (hover: hover) and (pointer: fine) {
+  :root { --site-cursor: url("treble-clef-cursor.svg") 17 3, auto; }
+  html, body, body *, body *::before, body *::after {
+    cursor: var(--site-cursor) !important;
+  }
+}

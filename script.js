@@ -535,51 +535,65 @@ if (recitalThumbnail) {
   const layer = work?.querySelector('.work-sticker-layer');
   if (!layer) return;
   const stickers = [...layer.querySelectorAll('.work-doodle-sticker')];
-  const mobile = matchMedia('(max-width: 800px)');
   function placeStickers() {
     const bounds = work.getBoundingClientRect();
     const rect = element => {
       const r = element.getBoundingClientRect();
       return { x: r.left - bounds.left, y: r.top - bounds.top, w: r.width, h: r.height };
     };
-    const cards = [...work.querySelectorAll('.experience-copy, .work-endorsement, .section-heading')].map(rect);
-    const [sentry, nina, quant, kellie] = cards.slice(1);
-    if (!kellie) return;
-    // Blue marks in the reference are relocation guides, not extra artwork.
-    // Follow their arrowheads while anchoring offsets to the unchanged cards.
-    const goals = {
-      'sticker-tam': [bounds.width * .045, sentry.y + sentry.h + 20],
-      'sticker-bottom-up': [bounds.width * .38, nina.y + nina.h * .35],
-      'sticker-envelope': [nina.x + 18, nina.y - 62],
-      'sticker-icp': [quant.x + quant.w + 16, quant.y + quant.h * .18],
-      'sticker-hello': [kellie.x - 76, kellie.y + kellie.h * .3]
-    };
-    if (mobile.matches) {
-      // Keep small illustrations in the screenshot gaps, never in a flow row.
-      goals['sticker-tam'] = [bounds.width * .18, sentry.y + sentry.h + 20];
-      goals['sticker-envelope'] = [bounds.width * .72, nina.y - 55];
-      goals['sticker-bottom-up'] = [bounds.width * .5, nina.y - 110];
-      goals['sticker-icp'] = [bounds.width * .75, quant.y - 64];
-      goals['sticker-hello'] = [20, kellie.y - 48];
+    const sentry = work.querySelector('.sentry-row > .experience-copy');
+    const nina = work.querySelector('.sentry-row .work-endorsement');
+    const quant = work.querySelector('.quanthub-row .experience-copy');
+    const kellie = work.querySelector('.quanthub-row .work-endorsement');
+    if (!sentry || !nina || !quant || !kellie) return;
+    const centerY = element => { const r = rect(element); return r.y + r.h / 2; };
+    const find = name => layer.querySelector(`.sticker-${name}`);
+    const gap = 8;
+    // Include rotation in the fit calculation so even the outer ink remains
+    // outside the card, inside the section, and centered on its landmark.
+    function size(sticker, maximum) {
+      const angle = parseFloat(sticker.style.getPropertyValue('--sticker-angle')) * Math.PI / 180;
+      const ratio = sticker.naturalHeight / sticker.naturalWidth;
+      const span = Math.abs(Math.cos(angle)) + ratio * Math.abs(Math.sin(angle));
+      const desired = parseFloat(sticker.style.getPropertyValue('--sticker-width'));
+      const w = Math.min(desired, Math.max(1, maximum) / span);
+      const h = w * ratio;
+      sticker.style.width = `${w}px`;
+      return { w, h, span: w * span };
     }
-    const occupied = [...cards];
-    stickers.forEach(sticker => {
-      const w = sticker.offsetWidth, h = sticker.offsetHeight;
-      const goal = goals[[...sticker.classList].find(name => name in goals)];
-      let best, score = Infinity;
-      for (let y = 18; y + h < bounds.height - 18; y += 12) {
-        for (let x = 18; x + w < bounds.width - 18; x += 12) {
-          if (occupied.some(r => x < r.x + r.w + 14 && x + w + 14 > r.x && y < r.y + r.h + 14 && y + h + 14 > r.y)) continue;
-          const distance = (x - goal[0]) ** 2 + (y - goal[1]) ** 2;
-          if (distance < score) { score = distance; best = { x, y, w, h }; }
-        }
-      }
-      if (best) {
-        sticker.style.left = `${best.x}px`;
-        sticker.style.top = `${best.y}px`;
-        occupied.push(best);
-      }
-    });
+    function beside(name, card, side, y) {
+      const sticker = find(name), r = rect(card);
+      let space = side === 'left' ? r.x : bounds.width - r.x - r.w;
+      const halfHeight = parseFloat(sticker.style.getPropertyValue('--sticker-width')) * sticker.naturalHeight / sticker.naturalWidth / 2 + 4;
+      [sentry, nina, quant, kellie].filter(other => other !== card).forEach(other => {
+        const obstacle = rect(other);
+        if (y + halfHeight <= obstacle.y || y - halfHeight >= obstacle.y + obstacle.h) return;
+        if (side === 'left' && obstacle.x + obstacle.w <= r.x)
+          space = Math.min(space, r.x - obstacle.x - obstacle.w);
+        if (side === 'right' && obstacle.x >= r.x + r.w)
+          space = Math.min(space, obstacle.x - r.x - r.w);
+      });
+      const { w, h, span } = size(sticker, space - gap - 4);
+      const centerX = side === 'left' ? r.x - gap - span / 2 : r.x + r.w + gap + span / 2;
+      sticker.style.left = `${centerX - w / 2}px`;
+      sticker.style.top = `${y - h / 2}px`;
+    }
+    beside('tam', sentry, 'left', centerY(sentry.querySelector('.tags')));
+    beside('envelope', nina, 'left', centerY(nina.querySelector('blockquote')));
+    beside('icp', quant, 'right', centerY(quant.querySelector('.company-title')));
+    const quote = rect(kellie.querySelector('blockquote'));
+    const author = rect(kellie.querySelector('figcaption'));
+    beside('hello', kellie, 'left', (quote.y + quote.h + author.y) / 2);
+
+    // Lift the entire existing triangle into the clear strip below Sentry,
+    // above the calculator tables; no background or card geometry is changed.
+    const triangle = find('bottom-up');
+    const sr = rect(sentry), nr = rect(nina);
+    const availableHeight = Math.max(24, nr.y - (sr.y + sr.h) - 20);
+    const ratio = triangle.naturalHeight / triangle.naturalWidth;
+    const { w, h } = size(triangle, Math.min(60, availableHeight / ratio));
+    triangle.style.left = `${sr.x + sr.w * .8 - w / 2}px`;
+    triangle.style.top = `${sr.y + sr.h + 10}px`;
   }
   Promise.all(stickers.map(s => s.decode().catch(() => {}))).then(() => {
     placeStickers();

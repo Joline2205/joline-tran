@@ -645,17 +645,13 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--pape
 .is-poured .coffee-spill, .is-poured .coffee-wave { animation: auto ease 0s 1 normal none running none; transform: none; }
 }
 :root { --hint-color: #7a8a99; }
-.hero-hint { position: absolute; bottom: 20px; right: 40px; z-index: 5; pointer-events: none; margin: 0px; font-size: 0.8rem; font-style: italic; letter-spacing: 0.03em; line-height: 1.5; color: var(--hint-color); animation: 4s ease-in-out 0s infinite alternate none running hint-breathe; }
+
 @keyframes hint-breathe {
   0% { opacity: 0.45; }
   100% { opacity: 0.85; }
 }
-@media (max-width: 640px) {
-.hero-hint { right: 20px; }
-}
-@media (prefers-reduced-motion: reduce) {
-.hero-hint { animation: auto ease 0s 1 normal none running none; opacity: 0.75; }
-}
+
+
 .button { border: 1px solid var(--line); border-radius: 3px; transition: background-color 0.3s, border-color 0.3s, color 0.3s; }
 .button.primary { border-color: var(--ink); }
 .button:hover { background-color: var(--wash); border-color: var(--accent); }
@@ -822,7 +818,7 @@ body { background-color: var(--bg); background-image: radial-gradient(var(--pape
 .ambient-three { width: 28px; height: 28px; inset: 130px 20px auto auto; --mobile-period: 9s; }
 .ambient-four { width: 35px; height: 35px; inset: auto 40% 34px auto; --mobile-period: 12s; }
 .ambient-five { width: 30px; height: 30px; inset: 155px auto auto 8px; --mobile-period: 8s; }
-.hero-hint { bottom: 17px; right: 20px; font-size: 0.7rem; z-index: 6; }
+
 }
 @keyframes mobile-integrated-float {
   0% { transform: translate3d(-4px, -6px, 0px); }
@@ -1278,3 +1274,13 @@ body { overflow-x: clip; }
 .sticker-tam, .sticker-icp { filter: url(#sticker-ice); }
 .sticker-envelope, .sticker-hello { filter: url(#sticker-slate); }
 .sticker-bottom-up { filter: url(#sticker-cream); }
+
+/* Supplied script artwork replaces the hero's typeset interaction hint. */
+.hero-hover-graphic { position: absolute; bottom: 20px; right: 40px; width: 150px; height: 86px; z-index: 5; pointer-events: none; animation: hint-breathe 4s ease-in-out infinite alternate; }
+.hero-hover-graphic svg { display: block; width: 100%; height: auto; }
+@media (max-width: 768px) {
+  .hero-hover-graphic { bottom: 12px; right: 20px; width: 130px; height: auto; aspect-ratio: 150 / 86; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-hover-graphic { animation: none; opacity: .85; }
+}

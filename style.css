@@ -1783,3 +1783,42 @@ body {
   padding-inline: clamp(24px, 5vw, 64px);
 }
 .map-views { flex-wrap: wrap; }
+
+/* A shallow horizontal-edge indentation and local surface tension, not a curl.
+   The vertical progress clip stays perfectly straight and untextured. */
+.contact-paper-cover {
+  --paper-grip-x: calc(var(--paper-removed, 100%) + 24px);
+  mask-image: radial-gradient(ellipse 30px var(--paper-grip-depth, .01px) at var(--paper-grip-x) 0,
+    transparent calc(100% - .5px), #000 100%);
+}
+.contact-paper-cover::after {
+  content: "";
+  position: absolute;
+  left: var(--paper-grip-x);
+  top: 1px;
+  width: 86px;
+  height: 58px;
+  pointer-events: none;
+  transform: translateX(-28px) skewX(7deg);
+  transform-origin: top left;
+  opacity: var(--paper-grip-strength, 0);
+  background:
+    radial-gradient(ellipse 28px 8px at 32px 2px, rgba(35,40,44,.065), transparent 100%),
+    radial-gradient(ellipse 23px 14px at 46px 13px, rgba(255,255,255,.38), transparent 100%),
+    radial-gradient(ellipse 2px 21px at 35px 10px, rgba(35,40,44,.035), transparent 100%);
+}
+@media (max-width: 767px) {
+  #contact .contact-socials {
+    --social-icon-height: 19px;
+    margin-top: 46px;
+    margin-bottom: 22px;
+  }
+  #contact .handwritten-personal-email { grid-column: 1; grid-row: 3; }
+  #contact .handwritten-gatech-email { grid-column: 2; grid-row: 3; justify-content: flex-end; }
+  #contact .handwritten-personal-email img { width: min(100%, 140px); }
+  #contact .handwritten-gatech-email img { width: min(100%, 136px); }
+  .contact-paper-cover::after { width: 68px; height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-paper-cover::after { content: none; }
+}

@@ -968,6 +968,10 @@ if (paperContact && window.CSS && CSS.supports('clip-path', 'inset(0)')) {
     lastTear = rounded;
     paperContact.style.setProperty('--tear-unrevealed', `${(1 - rounded) * 100}%`);
     paperContact.style.setProperty('--paper-removed', `${rounded * 100}%`);
+    // Local pressure fades in/out with the tear, never animating independently.
+    const grip = Math.sin(Math.PI * rounded);
+    paperContact.style.setProperty('--paper-grip-strength', grip.toFixed(4));
+    paperContact.style.setProperty('--paper-grip-depth', `${Math.max(.01, grip * 3).toFixed(3)}px`);
     paperContact.classList.toggle('paper-reveal-ready', !reducedTear.matches);
     paperContact.classList.toggle('paper-reveal-complete', rounded === 1);
   }

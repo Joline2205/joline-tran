@@ -35,13 +35,11 @@ if (typingTitle) {
   const prefix = document.querySelector('#typewriter-prefix');
   const name = document.querySelector('#typewriter-name');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const strike = document.querySelector('.animated-strike');
   const segments = [{ element: prefix, text: "Hi, I'm " }, { element: name, text: 'Joline' }];
   let typingTimer;
   function finishTyping() {
     clearTimeout(typingTimer);
     segments.forEach(({ element, text }) => { element.textContent = text; });
-    if (strike) strike.classList.add('is-struck');
     typingTitle.classList.remove('is-typing');
     typingTitle.classList.add('typing-complete');
   }
@@ -55,7 +53,6 @@ if (typingTitle) {
       segment.element.textContent += segment.text[characterIndex++];
       if (characterIndex === segment.text.length) {
         segmentIndex++;
-        if (segmentIndex === 1 && strike) strike.classList.add('is-struck');
         characterIndex = 0;
       }
       if (segmentIndex < segments.length) {
